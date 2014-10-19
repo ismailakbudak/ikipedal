@@ -6,8 +6,8 @@
                               margin: 4px;
                               background-color:  #eee; }
                 .msg{   padding: 10px; text-align: center;}
-                .block{        border-color: #eee; 
-                	             border-width: 5px; 
+                .block{        border-color: #eee;
+                	             border-width: 5px;
                 	             border-radius: 10px;
                                 -webkit-transition: 0.5s ease-in-out all;
                                 -moz-transition: 0.5s ease-in-out all;
@@ -25,8 +25,8 @@
                                      display: block;
                                      padding: 0px 0px;
                                      margin-bottom: -1px;
-                                     background-color:  #eee; 
-                                     border-width: 5px; 
+                                     background-color:  #eee;
+                                     border-width: 5px;
                                      border-radius: 7px;
                                      border: 1px solid #ddd;  }
                 .badge{ background-color: #E65300; }
@@ -37,7 +37,7 @@
           <div class="col-lg-12">
             <div class="bs-example">
                 <ul class="list-group">
-                    <?php
+                    <?
                          $block_number = 0;
                          foreach ($blocks as $block) {
                              $block_number++;
@@ -49,7 +49,7 @@
                                                                 </div>
                                                                 <div class='col-lg-9 name' style='text-align: center; padding-top:20px'>
                                                                     ".$block['name'] . " " .$block['surname'] ."
-                                                                </div>    
+                                                                </div>
                                              </div>
                                              <div class='col-lg-6 msg'>
                                                       ". lang('m.block-ex')  . $block['explain'] ."
@@ -58,13 +58,13 @@
                                                   <div class='col-lg-10'>
                                                       ".  tr(date_format(date_create(  $block['created_at']  ), ' l jS F Y H:i'), $this->lang->lang() ) ."
                                                    </div>
-                                                   <div class='col-lg-1' data-block_id='". $this->encrypt->encode($block['block_id']) ."' > 
+                                                   <div class='col-lg-1' data-block_id='". $this->encrypt->encode($block['block_id']) ."' >
                                                           <a href='#' class='delete-block'  >
-                                                               <i title='". lang("remove") ."' class='text-danger glyphicon glyphicon-remove' ></i> 
+                                                               <i title='". lang("remove") ."' class='text-danger glyphicon glyphicon-remove' ></i>
                                                            </a>
                                                    </div>
                                              </div>
-                                        </div>                    
+                                        </div>
                                     </li>";
                          	  echo  $val;
                          }
@@ -75,11 +75,10 @@
                                               <h4> ". lang("m.empty-block") ." <a href='". new_url('message/block') ."' style='margin:10px' title='". lang('refresh') ."' ><i class='glyphicon glyphicon-refresh'></i> </a> </h4>
                                          </div>
                                      </div>";
-                         }                           
-                    ?>            
+                         }
+                    ?>
                 </ul>
             </div>
           </div>
-        </div> 
-       <script src="<?php echo   public_url() . 'scripts/partial/messages/block.js' ?>"></script> 
- 
+        </div>
+       <script src="<?php echo public_url() . 'scripts/partial/messages/block.js'?>"></script>

@@ -7,7 +7,7 @@
          .icon3:hover{ font-size: 19px; color:rgb(214, 255, 0); }
          .icon:hover{ font-size: 16px; color:rgb(214, 255, 0);}
          .yellow{ color:rgb(214, 255, 0);}
-         
+
          .green{color: #009900; font-weight: bold; }
          .orange{color: #CC9900; font-weight: bold;}
          .red{color: #990000; font-weight: bold;}
@@ -15,10 +15,10 @@
          .row-ofer{margin: 0px; width: 100%; }
          .safari .edit-row{float:left; }
          .panel-body{background-color: rgb(245, 245, 245); padding:2px;}
-         
-         /* for button set */  
+
+         /* for button set */
          .btn-group-justified { padding-bottom: 20px; width: 49%;  }
-             
+
          .panel-primary {  border-color: #eee; border-width: 5px; border-radius: 7px;
                           -webkit-transition: 0.5s ease-in-out all;
                           -moz-transition: 0.5s ease-in-out all;
@@ -40,48 +40,48 @@
                            width: 140px;
                            text-align: center;
                            border-width: 2px;
-                           border-radius: 50px;   
+                           border-radius: 50px;
                            font-size: 15px;
                            font-weight: 300;
                            text-overflow: ellipsis;
                            float:left;
                          }
-         .dod{ width:5px; float:left; margin-left: 3px; margin-right: 3px; padding-top:6px; }                       
-         .sol{float: left; padding-left: 7px; padding-top:7px; color: orange} 
-         .sol2{float: left; padding-top:7px;  color: orange} 
+         .dod{ width:5px; float:left; margin-left: 3px; margin-right: 3px; padding-top:6px; }
+         .sol{float: left; padding-left: 7px; padding-top:7px; color: orange}
+         .sol2{float: left; padding-top:7px;  color: orange}
          .time{width:63px; float:left; padding-left: 3px }
          .width-200{ width: 200px; text-align: right; float: right; padding-bottom: 3px }
          .panel-heading-my { background-color: #324F6F !important; }
           /* for return days  */
          .day-label{font-size: 13px; padding: 0px;}
-         .ui-button-text { padding: .35em 1.2em !important; }    
+         .ui-button-text { padding: .35em 1.2em !important; }
          .popover-content{width: 250px;}
          .popover-content .row{ margin: 0px;  padding: 0px;   }
          .tip{ margin-bottom: 2px; margin-right: 5px;}
    </style>
-      
-      <legend  class=""> 
-            <?php  
+
+      <legend  class="">
+            <?
                 $count = 0;                                   // use for buttonset
-                $lang = $this->lang->lang();                  // which language 
-                if(  strcmp($active_side, "#upcoming") == 0 )   
+                $lang = $this->lang->lang();                  // which language
+                if(  strcmp($active_side, "#upcoming") == 0 )
                     echo lang('io.title');
                 else
-                    echo lang('io.titlePassed');  
-            ?>  
+                    echo lang('io.titlePassed');
+            ?>
       </legend>
-      <div class="last-offer" > 
+      <div class="last-offer" >
 
-            <?php 
+            <?
                    foreach ($offers as $value) {
                        if( strcmp($value['trip_type'], "1") == 0 ){
-                                 echo rutinTrip($value, $lang, $count); 
-                       } 
+                                 echo rutinTrip($value, $lang, $count);
+                       }
                        else{
                            if( $value['round_trip'] )
                                  echo twoTrip($value, $lang);
-                           else 
-                                 echo oneTrip($value, $lang);  
+                           else
+                                 echo oneTrip($value, $lang);
                        }
                    }
                   if( count($offers) == 0 ){
@@ -92,22 +92,21 @@
                                        <h4> ". lang("o.empty") ." <a href='". $url_refresh ."' style='margin:10px' title='". lang('refresh') ."' ><i class='glyphicon glyphicon-refresh'></i> </a> </h4>
                                   </div>
                               </div>";
-                  }        
+                  }
             ?>
-      </div><!--  <div class="last offer" /> -->  
-         
+      </div><!--  <div class="last offer" /> -->
+
       <!-- Delete offer modal
-      ===============================================================--> 
+      ===============================================================-->
       <div id="delete-modal" class="modal fade" tabindex="-1" data-id="-1"; data-backdrop="static" data-keyboard="false" style="display: none;">
              <div class="modal-body">
-                   <p><?= lang("io.commit") ?></p>
+                   <p><?=lang("io.commit")?></p>
              </div>
              <div class="modal-footer">
-                   <button type="button" data-dismiss="modal" class="btn width-100"><?= lang("g.cancel") ?></button>
-                   <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?= lang("g.yes") ?></button>
+                   <button type="button" data-dismiss="modal" class="btn width-100"><?=lang("g.cancel")?></button>
+                   <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?=lang("g.yes")?></button>
              </div>
       </div>
       <div id="loader">  </div>
-      <script type="text/javascript" > er.blank_date = '<?= lang("o.blank_date")?>'; er.same_date = '<?= lang("o.same_date") ?>'; er.choose_day = '<?= lang("o.choose_day") ?>'; return_days_count = '<?= $count ?>'; </script>
-      <script src="<?php echo   public_url() . 'scripts/partial/index-offers.js'  ?>"></script>  
-      
+      <script type="text/javascript" > er.blank_date = '<?=lang("o.blank_date")?>'; er.same_date = '<?=lang("o.same_date")?>'; er.choose_day = '<?=lang("o.choose_day")?>'; return_days_count = '<?=$count?>'; </script>
+      <script src="<? echo   public_url() . 'scripts/partial/index-offers.js'  ?>"></script>
