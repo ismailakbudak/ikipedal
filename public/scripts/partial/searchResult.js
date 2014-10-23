@@ -1,4 +1,5 @@
 (function($) {
+    
 
   /*************************  Bitti   **********************************/
   //$( "[rel=popover]" ).popover('show');
@@ -243,40 +244,7 @@
 
   }
 
-  $("#createAlert").on('click', function() {
-
-    $.ajax({
-      type: "POST",
-      dataType: "text",
-      url: base_url + 'alert/createAlert',
-      data: {
-        date: $("#datepickerAlert").val()
-      },
-      cache: false,
-      success: function(answer) {
-        if (strcmp(enviroment, 'development') == 0) {
-          alert(answer);
-        }
-        result = JSON.parse(answer);
-        if (strcmp(result.status, 'success') == 0) {
-          BasariMesaj(result.text)
-        } // show bottom alert 
-        else if (strcmp(result.status, 'fail') == 0) {
-          HataMesaj(result.text)
-        } // show bottom alert
-        else if (strcmp(result.status, 'error') == 0) {
-          HataMesaj(result.message)
-        } // show bottom alert
-        else {
-          HataMesaj(er.error_send)
-        } // show bottom alert   
-      },
-      error: function() {
-        HataMesaj(er.error_send);
-      }
-    });
-
-  });
+  
 
   if (place2.status != 1 || strcmp("", destination) == 0)
     $("#change-direct").prop('disabled', true);

@@ -19,6 +19,7 @@ class Profil extends CI_Controller {
 	 **/
 	public function __construct() {
 		parent::__construct();
+		$this->lang->load('profil');
 	}
 
 	/******************************************     Public Functions with views *******************************************************/
@@ -30,7 +31,7 @@ class Profil extends CI_Controller {
 	 **/
 	public function index() {
 		$data = $this->login->loginKontrol();// check user login
-		$this->lang->load('profil_controller');// load profil_controller language file
+
 		$this->load->model('users');// load users model for database action
 		$this->load->model('offersdb');// load offersdb model for database action
 		$this->load->model('messages');// load messages model for database action
@@ -86,8 +87,7 @@ class Profil extends CI_Controller {
 	 **/
 	public function profile($page = '') {
 		$data = $this->login->loginKontrol();// check user login
-		$this->lang->load('profil_controller');// load profil_controller language file
-		$this->lang->load('profil');
+
 		$data['active'] = '#profile';
 		$this->load->model('users');// load users mode lfor database action
 		$page = trim($page);// get page name from url
@@ -148,7 +148,7 @@ class Profil extends CI_Controller {
 	 **/
 	public function updateAlerts() {
 		$this->login->loginKontrol2();
-		$this->lang->load('profil_controller');// load profil_controller language file
+
 		$this->form->check("element", 'element', 'required|alpha|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$this->load->model('alerts');// load alerts model for database action
@@ -199,7 +199,7 @@ class Profil extends CI_Controller {
 	 **/
 	public function upload() {
 		$data = $this->login->loginKontrol();// check user login
-		$this->lang->load('profil_controller');// load profil_controller language file
+
 		$data['active_side'] = '#foto';// active sidebar menu
 		$path = realpath(getcwd() . "/public/assets/");// get path for upload
 		$config['upload_path'] = $path;// upload path
@@ -288,7 +288,7 @@ class Profil extends CI_Controller {
 	 **/
 	public function warning_readed_process() {
 		$this->login->loginKontrol2();// check admin logged in
-		$this->lang->load('profil_controller');// load profil_controller language file
+
 		$this->form->check(' id ', 'id', 'required|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$id = my_decode($this->input->post('id', TRUE));// decode car id

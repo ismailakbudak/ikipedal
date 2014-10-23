@@ -25,6 +25,9 @@ class User extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('users');// load users model for database action
+		$this->lang->load('user_sidebar');
+		$this->lang->load('user');// load user language file
+
 	}
 
 	/**
@@ -38,8 +41,7 @@ class User extends CI_Controller {
 		if (!isset($user_id)) {
 			show_404();
 		}
-		$this->lang->load('user_sidebar');
-		$this->lang->load('user');// load user language file
+
 		$userid = my_decode($user_id);
 		$this->load->model('offersdb');
 		$this->load->model('ratings_db');// load ratings_db model for database action
@@ -106,7 +108,7 @@ class User extends CI_Controller {
 	 *
 	 **/
 	public function getUserWithName() {
-		$this->lang->load('user');// load user language file
+
 		$this->form->check(lang('uc.name'), 'name', 'required|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$name = $this->input->post('name', TRUE);// get post data
@@ -157,7 +159,7 @@ class User extends CI_Controller {
 	 *
 	 **/
 	public function getUserWithTel() {
-		$this->lang->load('user');// load user language file
+
 		$this->form->check(lang('uc.tel-no'), 'tel', 'required|regex_match[/^([0-9 ])+$/i]|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$tel = $this->input->post('tel', TRUE);// get post data
@@ -211,7 +213,7 @@ class User extends CI_Controller {
 	 *
 	 **/
 	public function verify() {
-		$this->lang->load('user');
+
 		$email = $this->security->xss_clean($this->input->get('onay'));
 		if (isset($email)) {
 			$email = my_decode($email);
@@ -245,7 +247,7 @@ class User extends CI_Controller {
 	 *
 	 **/
 	public function password() {
-		$this->lang->load('user');
+
 		$email = $this->security->xss_clean($this->input->get('new'));
 		if (isset($email)) {
 			$new = $email;
@@ -275,7 +277,7 @@ class User extends CI_Controller {
 	 *
 	 **/
 	public function new_password() {
-		$this->lang->load('user');
+
 		$this->form->check(lang("u.new_data"), 'new_data', 'required|xss_clean');// control post parameter
 		$this->form->check(lang("u.newPassword"), 'newPassword', 'required|min_length[6]|max_length[20]|alpha_numeric|xss_clean');// control post parameter
 		if ($this->form->get_result()) {// everything is ok
@@ -330,7 +332,7 @@ class User extends CI_Controller {
 		//    echo $value['id'] . "<br>";
 		// }
 		//exit;
-		$this->lang->load('user');// load user language file
+
 		$this->form->check(lang('uc.name'), 'name', 'required|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			if (isset($start) && $start != 0 && is_numeric($start)) {

@@ -162,3 +162,150 @@ $lang['ou.'] = "";
 
 
 ?>
+
+<?
+
+$lang['o.blank_date'] = "Tarih Seçmediniz..";
+$lang['o.same_date']  = "Dönüş saati gidiş saatinden en az 3 saat sonra olmalıdır..";
+$lang['o.choose_day'] = "Lütfen dönüş günleri seçiniz..";
+$lang['o.empty'     ] = "Henüz hiç bir teklifiniz yok..";
+// for offer show look list
+$lang['ovl.empty'   ] = "Henüz kayıtlı üyelerimizden hiç kimse teklifinizi incelemedi..";
+$lang['ovl.times'   ] = " defa ";
+$lang['ovl.looks'   ] = " Teklifinize göz atanların listesi :";
+$lang['ovl.notmember'] = "Üye olmayan kullanıcı";
+
+// for index offer
+$lang['io.title'] 			 	    = "Bu sayfada güncel teklifleriniz yer alır..";
+$lang['io.titlePassed']             = "Bu sayfada tarihi geçmiş teklifleriniz yer alır.";
+$lang['io.titleonetime']	 	    = "Tek Seferlik Seyahat";
+$lang['io.titleupdate']  	 	    = "Güncelle";
+$lang['io.titledelete']  		    = "Sil";
+$lang['io.titleshow']  			    = "Gözat";
+$lang['io.titleshowlist']  		    = "Bu Seyahate Göz Atanların Listesi";
+$lang['io.titlecopy']  			    = "Bu Seyahatin Kopyasını Oluştur";
+$lang['io.titleclose']  		    = "Kapat";
+$lang['io.titletripdate']  		    = "Seyahat Tarihi";
+$lang['io.titletriphour']  		    = "Seyahat Saati";
+$lang['io.titlereturndate']  	    = "Dönüş Tarihi";
+$lang['io.titlereturndateinfo']     = "Dönüş Tarihi Dönüş Seyahatiniz Yoksa Boş Bırakabilirsiniz";
+$lang['io.titlereturnhour']  	    = "Dönüş Saati";
+$lang['io.titledeparturedate']      = "Hareket Tarihi";
+$lang['io.titledeparturetime']      = "Hareket Saati";
+$lang['io.titleroute']  		    = "Seyahat Güzergahı";
+$lang['io.titletriplength']  	    = "Seyahat Uzunluğu";
+$lang['io.titletriptime']  		    = "Tahmini Seyahat Süresi";
+$lang['io.titlereturndateadd']      = "Dönüş Zamanı Ekle";
+$lang['io.titleprice']  		    = "Seyahat fiyatı; Kırmızı aşırı yüksek, Sarı normal, Yeşil ise düşük fiyatı temsil eder.";
+// for two way
+$lang['io.titletwoway'] 	 		= "Gidiş Dönüş Seyahati";
+// for rutin
+$lang['io.titlerutin']  			= "Rutin Seyahat";
+$lang['io.titlestartrutintrip'] 	= "Rutin Seyahat Başlangıç Tarihi";
+$lang['io.titlefinishrutintrip']	= "Rutin Seyahat Bitiş Tarihi";
+$lang['io.titlestartdate']  		= "Başlangıç Tarihi";
+$lang['io.titletravelday']  		= "Seyahat Günleri";
+$lang['io.titlefinishdate']  		= "Bitiş Tarihi ";
+$lang['io.titletraveldayreturn']  	= "Seyahat Dönüş Günleri";
+$lang['io.pldeparture0']  			= "Gidiş";
+$lang['io.plreturn0']  				= "Dönüş";
+$lang['io.pldeparture1']  			= "Başlangıç";
+$lang['io.plreturn1']  				= "Bitiş";
+
+$lang['io.pldeparture']  			= "Gidiş";
+$lang['io.plreturn']  				= "Dönüş";
+
+$lang['io.copy'] 	 				= "Kopyala";
+$lang['io.countshow']  				= "Kişi Bu Seyahati İnceledi";
+$lang['io.leftseat']  				= " Koltuk Kaldı ";
+$lang['io.titleplusseat']  			= "Koltuk Sayısını Arttır";
+$lang['io.titleminusseat']  		= "Koltuk Sayısını Azalt";
+$lang['io.save']  					= "Kaydet";
+$lang['io.start']  					= "Başlangıç";
+$lang['io.plfinish']  				= "Bitiş";
+// offerhead
+$lang['oh.up'] 				        = "Güncel Teklifler";
+$lang['oh.pass'] 				    = "Önceki Teklifler";
+$lang['io.title']                   = "Bu sayfada güncel teklifleriz yer alır";
+$lang['io.titlereturndaysadd']      = "Dönüş günleri ekle";
+$lang['io.mon'] 					= "Pazartesi";
+$lang['io.tue'] 					= "Salı";
+$lang['io.wed'] 					= "Çarşamba";
+$lang['io.thu'] 					= "Perşembe";
+$lang['io.fri'] 					= "Cuma";
+$lang['io.sat'] 					= "Cumartesi";
+$lang['io.sun'] 					= "Pazar";
+$lang['io.tripdaysTitle'] 		    = "Seyahat Gidiş Günleri";
+// for modal
+$lang['io.commit'                 ] = "Bu teklifi silmek istediğinize emin misiniz?";
+$lang['io.commitTitle'            ] = "Onay";
+$lang['od.green'                  ] = "Yeşil";
+$lang['od.low'                    ] = " düşük, ";
+$lang['od.orange'                 ] = " Turuncu ";
+$lang['od.normal'                 ] = " normal ve";
+$lang['od.red'                    ] = " Kırmızı ";
+$lang['od.high'                   ] = " yüksek fiyatları belirtir..";
+$lang['oi.sending'                ] = "Mesajınız gönderiliyor..";
+
+
+?>
+
+<?php
+
+// for controller
+$lang['oc.id'] = " teklif id ";
+$lang['oc.return_date'] = " dönüş tarihi ";
+$lang['oc.return_time'] = " dönüş zamanı ";
+$lang['oc.inputName'] = " etkinlik ismi ";
+$lang['oc.event_type'] = " etkinlik tipi ";
+$lang['oc.departure'] = "hareket";
+$lang['oc.return'] = "dönüş";
+$lang['oc.start'] = "başlangıç";
+$lang['oc.finish'] = "bitiş";
+
+// for offer controller
+$lang['oc.successcopy'] = "Teklifiniz başarılı bir şekilde kopyalandı... ";
+$lang['oc.successAddReturnDays'] = "Dönüş günleri başarılı bir şekilde eklendi..";
+$lang['oc.moreseat'] = "Daha fazla koltuk sayısı giremezsiniz..";
+$lang['oc.lessseat'] = "Daha az koltuk sayısı giremezsiniz..";
+$lang['oc.user_id'] = "kullanıcı id";
+$lang['oc.message'] = "mesaj";
+$lang['oc.send-error'] = "Kendinize mesaj gönderemezsiniz...";
+$lang['oc.try-again'] = "Bir hata oluştu işlem gerçekleştirilemdi. Daha sonra tekrar deneyiniz.. ";
+$lang['oc.send-success'] = "Mesajınız başarılı bir şekilde iletildi...";
+$lang['oc.send-fail'] = "Beklenmedik bir hata oluştu, mesajınız iletilemedi...";
+$lang['oc.block'] = "Bu kullanıcı sizi iletişim kurmaya engellemiştir...";
+$lang['oc.date-invalid'] = " Hareket tarihi gecersiz....";
+
+// for offerajax controller
+$lang['oc.round_trip'] = " yolculuk yönleri ";
+$lang['oc.trip_type'] = " yolculuk tipi ";
+$lang['oc.origin'] = " başlangıç noktası ";
+$lang['oc.destination'] = " varış noktası ";
+$lang['oc.way_points'] = " güzergah  ";
+$lang['oc.departure_date'] = " hareket tarihi ";
+$lang['oc.departure_time'] = " hareket zamanı";
+$lang['oc.departure_days'] = " hareket günleri ";
+$lang['oc.return_days'] = " dönüş günleri";
+
+// for offerAjax complete
+$lang['oc.inputPrices'] = "ücretler";
+$lang['oc.inputPricesColor'] = "ücret rengleri";
+$lang['oc.DistancesWay'] = "uzaklıklar";
+$lang['oc.TimesWay'] = "zamanlar";
+$lang['oc.car_id'] = "araç";
+$lang['oc.luggage_id'] = "bagaj";
+$lang['oc.leave_time_id'] = "ayrılış zamanı";
+$lang['oc.price_per_pass'] = "ücret";
+$lang['oc.number_of_seats'] = "kolyuk sayısı";
+$lang['oc.realDistance'] = "gerçek uzaklık";
+$lang['oc.realTime'] = "gerçek zaman";
+$lang['oc.totalDistance'] = "toplam seyahat uzunluğu";
+$lang['oc.totalTime'] = "toplam seyahat zaman";
+$lang['oc.price_per_color'] = "ücret rengi";
+$lang['oc.explain_departure'] = "açıklama";
+$lang['oc.explain_return'] = "dönüş açıklaması";
+$lang['oc.locations'] = " lokasyon ";
+$lang['oc.expectedPrices'] = " beklenen fiyatlar";
+
+?>

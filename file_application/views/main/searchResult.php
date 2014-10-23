@@ -234,6 +234,7 @@
              var destination = '<?=$destination?>' ,  loading  = " <img src='<?=public_url()?>styles/images/loading2.gif' width='35' height='35' > <?=lang('loading')?> ",    get = '<?=$getDataUrl?>' ,   optionTimemin = '<?=$min * 60 * 60?>' ,  optionTimemax = '<?=$max * 60 * 60?>' ,   optionSaatMin = '<?=$min?>' ,  optionSaatMax = '<?=$max?>' ;
              var place1 = { x:'<?=$x1?>', y:'<?=$y1?>', status:'<?=$status1?>' }, place2 = { x:'<?=$x2?>',  y:'<?=$y2?>', status:'<?=$status2?>' };
         </script>
+        <script src="<?php echo public_url() . 'scripts/partial/alerts.js'?>"></script>
         <script src="<?php echo public_url() . 'scripts/partial/searchResult.js'?>"></script>
 
 

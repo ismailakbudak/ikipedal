@@ -24,7 +24,7 @@ $this->load->view('include/head');
                               <li><a href="<?php echo new_url() . 'main/works';?>"   >
                                  <i class="glyphicon glyphicon-book one"></i> <?=lang('g.how')?></a>
                               </li>
-                              <li><a id="buttonOfferRide"  href="<?php echo new_url() . 'main/offerRide';?>"  >
+                              <li><a id="buttonOfferRide"  href="<?php echo new_url() . 'offers/newest';?>"  >
                                      <i class="glyphicon glyphicon-briefcase one"></i> <?=lang('g.offer')?> </a>
                               </li>
                               <li>

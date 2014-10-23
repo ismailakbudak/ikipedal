@@ -33,6 +33,8 @@ class Offer extends CI_Controller {
 		$this->load->model('way_points');// load way_points model for database action
 		$this->load->model('look_at');// load look_at model for database action
 		$this->load->model('rutin_trips');// load rutin_trips model for database action
+		$this->lang->load('offers');// load offer_controller language file
+
 	}
 
 	/*****  for Views method
@@ -44,8 +46,7 @@ class Offer extends CI_Controller {
 	 *  @return HTML view
 	 **/
 	public function index() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->data['active_side'] = '#upcoming';// active sidebar menu
 		$offers = $this->offersdb->GetUserOffer($this->userid);// get users up-date offers   $user_id, $numrows, $start
 		if (is_array($offers)) {
@@ -86,8 +87,7 @@ class Offer extends CI_Controller {
 	 *  @return HTML view
 	 **/
 	public function passed() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->data['active_side'] = '#passed';// active sidebar menu
 		$offers = $this->offersdb->GetUserOfferOutofDate($this->userid);// get users up-date offers $user_id, $numrows, $start
 		if (is_array($offers)) {
@@ -132,11 +132,8 @@ class Offer extends CI_Controller {
 		if (!isset($offerid))// check offerid is set
 		{show_404();
 		}
-//redirect( "offer" );
 
 		$this->data['active_side'] = '';// active sidebar menu
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');
 
 		$offer_id = base64_decode(urldecode($offerid));
 		$where = array('user_id' => $this->userid, 'id' => $offer_id);
@@ -195,9 +192,6 @@ class Offer extends CI_Controller {
 		{show_404();
 		}
 
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');
-		$this->lang->load('offer');
 		$offer_id = base64_decode(urldecode($offerid));// decode offer_id
 		$offer = $this->offersdb->GetOffer($offer_id);// get offer
 		if (is_array($offer) && count($offer) > 0) {
@@ -277,8 +271,6 @@ class Offer extends CI_Controller {
 	 *  @return HTML view
 	 **/
 	function updateToUpdate() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
 
 		$offer_data = $this->offersdb->get_offer_data($this->userid);
 		if (is_array($offer_data) && count($offer_data) > 0) {
@@ -302,9 +294,6 @@ class Offer extends CI_Controller {
 	 **/
 	function update2() {
 
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');
-		$this->lang->load('offer');
 		$offer_data = $this->offersdb->get_offer_data($this->userid);// get offer updated data
 		if (is_array($offer_data) && count($offer_data) > 0) {
 			$offer = $this->offersdb->GetOffer($offer_data['ride_offer_id']);// get offer
@@ -345,8 +334,7 @@ class Offer extends CI_Controller {
 	 *  @return JSON output status: success, fail, error
 	 **/
 	function contactDriver() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->form->check(lang('oc.user_id'), 'user_id', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.message'), 'message', 'required|min_length[20]|max_length[400]|xss_clean');// check post data
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
@@ -403,8 +391,7 @@ class Offer extends CI_Controller {
 	 *  @return JSON output status: success, fail, error
 	 **/
 	private function sendEmail($sender_userid, $receiver_user_id, $offer_id) {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->load->model('users');
 		$this->load->model('notifications');
 		$sender = $this->users->GetUser($sender_userid);// get user information
@@ -448,7 +435,6 @@ class Offer extends CI_Controller {
 	 **/
 	public function createOffer1Update() {
 
-		$this->lang->load('offer_controller');// load car_controller language file
 		$this->form->check(lang('oc.round_trip'), 'round_trip', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.origin'), 'origin', 'required|max_length[100]|xss_clean');// check post data
 		$this->form->check(lang('oc.destination'), 'destination', 'required|max_length[100]|xss_clean');// check post data
@@ -503,7 +489,6 @@ class Offer extends CI_Controller {
 	 **/
 	public function createOffer2Update() {
 
-		$this->lang->load('offer_controller');// load car_controller language file
 		$this->form->check(lang('oc.round_trip'), 'round_trip', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.origin'), 'origin', 'required|max_length[100]|xss_clean');// check post data
 		$this->form->check(lang('oc.destination'), 'destination', 'required|max_length[100]|xss_clean');// check post data
@@ -563,8 +548,7 @@ class Offer extends CI_Controller {
 	 *  @return JSON status : success, fail, error
 	 **/
 	function updateOfferAjax() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->load->helper("offers");
 		$this->load->helper("ajax");
 		$this->form->check(lang('oc.inputPrices'), 'inputPrices', 'regex_match[/^([0-9 ?])+$/i]|xss_clean');// check post data
@@ -781,8 +765,7 @@ class Offer extends CI_Controller {
 	 *
 	 **/
 	public function increaseSeatCount() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$offer_id = base64_decode(urldecode($this->input->post('offer_id', TRUE)));
@@ -828,8 +811,7 @@ class Offer extends CI_Controller {
 	 *
 	 **/
 	public function decreaseSeatCount() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$offer_id = base64_decode(urldecode($this->input->post('offer_id', TRUE)));
@@ -875,8 +857,7 @@ class Offer extends CI_Controller {
 	 *
 	 **/
 	public function deleteOffer() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
 		if ($this->form->get_result()) {
 			$offer_id = base64_decode(urldecode($this->input->post('offer_id', TRUE)));// post offerid
@@ -912,8 +893,7 @@ class Offer extends CI_Controller {
 	 *   @return  JSON output status : success, fail, error
 	 **/
 	public function addReturnDate() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.return_date'), 'return_date', 'required|is_date|exact_length[10]|xss_clean');// check post data
 		$this->form->check(lang('oc.return_time'), 'return_time', 'required|is_time|exact_length[5] |xss_clean');// check post data
@@ -956,8 +936,6 @@ class Offer extends CI_Controller {
 	 *   @return  JSON output status : success, fail, error
 	 **/
 	public function addReturnDays() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
 
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.return_days'), 'return_days', 'required|is_day|xss_clean');// check post data
@@ -1021,8 +999,7 @@ class Offer extends CI_Controller {
 	 *  @return JSON otput  status : success, fail, error
 	 **/
 	public function copyOffer() {
-		$this->lang->load('offer_controller');// load offer_controller language file
-		$this->lang->load('offerinfo');// load offerinfo language file
+
 		$this->form->check(lang('oc.id'), 'offer_id', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.departure_date'), 'departure_date', 'required|is_date|exact_length[10]|xss_clean');// check post data
 		$this->form->check(lang('oc.departure_time'), 'departure_time', 'required|is_time|exact_length[5] |xss_clean');// check post data

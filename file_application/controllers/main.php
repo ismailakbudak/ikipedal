@@ -18,6 +18,7 @@ class Main extends CI_Controller {
 	 **/
 	public function __construct() {
 		parent::__construct();
+		$this->lang->load('main');
 	}
 
 	/**
@@ -34,23 +35,12 @@ class Main extends CI_Controller {
 
 		$this->load->helper('search');
 		$this->load->model('offersdb');// load offers model
-		$this->load->model('searched');// load searched model
 
-		$this->lang->load('main');
-		$this->lang->load('offerinfo');
+		$this->lang->load('offers');
 
 		$offers = $this->offersdb->GetOfersForMain();
-		$result = $this->searched->GetMost();
 		if (!is_array($offers)) {
 			$offers = array('last' => array(), 'today' => array(), 'best' => array());
-		}
-
-		if (!is_array($result)) {
-			$mostSearched = array();
-			$mostCreated = array();
-		} else {
-			$mostSearched = $result['mostSearched'];
-			$mostCreated = $result['mostCreated'];
 		}
 
 		foreach ($offers as &$value) {
@@ -60,8 +50,8 @@ class Main extends CI_Controller {
 		}
 
 		$data['offers'] = $offers;
-		$data['mostSearched'] = $mostSearched;
-		$data['mostCreated'] = $mostCreated;
+		$data['mostSearched'] = array();
+		$data['mostCreated'] = array();
 
 		$this->login->general($data);// call general load view
 		$this->load->view('main/main');// load views
@@ -70,31 +60,12 @@ class Main extends CI_Controller {
 	}
 
 	/**
-	 * Teklif verme sayfasının ilk bölümü
-	 *
-	 * @return HTML view
-	 **/
-	public function offerRide() {
-		$this->load->model('event_types');// load offers model
-		$types = $this->event_types->Get();
-		if (is_array($types)) {
-			$this->lang->load('offer');
-			$this->login->general();// call general load view
-			$data['event_types'] = $types;
-			$this->load->view('main/offerRide', $data);// load view
-			$this->load->view('include/footer');// load view
-		} else {
-			show_404();
-		}
-	}
-
-	/**
 	 * Nasıl sayfası yüklenir
 	 *
 	 * @return HTML view
 	 **/
 	public function works() {
-		$this->lang->load('main');
+
 		$this->login->general();// load views
 		$this->load->view('main/works');// load views
 		$this->load->view('include/footer');// load views
@@ -106,7 +77,7 @@ class Main extends CI_Controller {
 	 *  @return HTML view
 	 **/
 	public function offers() {
-		$this->lang->load('main');
+
 		$this->login->general();// load views
 		$this->load->view('main/search');// load views
 		$this->load->view('include/footer');// load views

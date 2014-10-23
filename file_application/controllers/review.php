@@ -30,6 +30,7 @@ class Review extends CI_Controller {
 		$this->data['active'] = '#reviews';// active profil menu
 		$this->load->model('messages');// load messages model  for database action
 		$this->load->model('ratings_db');// load messages model  for database action
+		$this->lang->load('review');// load messages language file
 	}
 
 	/**
@@ -40,7 +41,7 @@ class Review extends CI_Controller {
 	 *
 	 **/
 	public function index() {
-		$this->lang->load('review');// load messages language file for main
+
 		$this->data['active_rating'] = '#receive';// active review menu
 		$receive = $this->ratings_db->GetUserRatingsWithUser($this->user_id);
 		$groupedRatings = $this->ratings_db->GetGroupedRatings($this->user_id);
@@ -52,7 +53,7 @@ class Review extends CI_Controller {
 			$this->data['receive'] = $receive;
 			$this->data['avg'] = $avg;
 			$this->data['groupedRatings'] = $groupedRatings;
-			$this->loadView('review/receive');// load views
+			$this->loadView('review/index');// load views
 		} else {
 			show_404('hata');
 		}
@@ -66,7 +67,7 @@ class Review extends CI_Controller {
 	 *
 	 **/
 	public function given() {
-		$this->lang->load('review');// load messages language file for main
+
 		$this->data['active_rating'] = '#given';// active review menu
 		$given = $this->ratings_db->GetUserGivenRatingsWithUser($this->user_id);
 		if (is_array($given)) {
@@ -86,7 +87,7 @@ class Review extends CI_Controller {
 	 *
 	 **/
 	public function leaveRating() {
-		$this->lang->load('review');// load messages language file for main
+
 		$this->data['active_rating'] = '#give-rate';// active review menu
 		$this->loadView('review/leaveRating');// load views
 
@@ -104,7 +105,7 @@ class Review extends CI_Controller {
 		{show_404();
 		}
 		$this->lang->load('user_sidebar');
-		$this->lang->load('review');// load messages language file for main
+
 		$rate_userid = base64_decode(urldecode($user_id));
 		$this->load->model('users');
 		$user = $this->users->GetUserAllInfo($rate_userid);// get user information
@@ -152,7 +153,7 @@ class Review extends CI_Controller {
 	 *  @return   JSON output status: success, fail, error
 	 **/
 	public function giveRateAction() {
-		$this->lang->load('review');// load messages language file for main
+
 		$this->form->check(lang('rc.userid'), 'who_give', 'required|xss_clean');// check post data
 		$this->form->check(lang('rc.userid'), 'who_receive', 'required|xss_clean');// check post data
 		$this->form->check(lang('rc.star'), 'star', 'required|greater_than[0]|less_than[6]|xss_clean');// check post data
@@ -217,7 +218,7 @@ class Review extends CI_Controller {
 		$this->load->model('users');
 		$this->load->model('offersdb');
 		$this->load->model('notifications');
-		$this->lang->load('review');// load messages language file for main
+
 		$sender = $this->users->GetUser($given_userid);// get user information
 		$receiver = $this->users->GetUser($received_userid);// get user information
 		$notification = $this->notifications->GetNotification($received_userid);// get user _notifiactions
