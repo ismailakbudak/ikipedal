@@ -176,7 +176,6 @@
                 </div>
 
               <?
-                 $this->lang->load('user_sidebar');
                  echo getSideBar($side_user, lang("m.talk"), $this->lang->lang());
               ?>
           </div>

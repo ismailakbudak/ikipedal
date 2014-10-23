@@ -49,7 +49,7 @@
 
                               <div class="col-lg-8 border" style="padding-top: 20px; "  >
                                <?
-                                       $this->lang->load('user_sidebar');
+
                                        $name = $user['name'] . " " . $user['surname'];
                                        $val =  link_tag( public_url('styles/side_bar.css') );
                                        $val.="<div class='row row-side'>

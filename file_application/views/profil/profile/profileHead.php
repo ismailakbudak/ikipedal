@@ -1,5 +1,5 @@
 
-    <?    $this->lang->load('profil'); ?>
+
     <style type="text/css">
         .top-length{ margin-top:30px;    }
         .bottomlength{ margin-bottom:150px !important; }

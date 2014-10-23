@@ -98,7 +98,7 @@
           DistancesWay: DistancesWay,
           TimesWay: TimesWay
         },
-        url = 'offersAjax/createOffer1',
+        url = 'offersAjax/createEvent',
         result = JSON.parse(AjaxSendJson(url, dataForm));
 
       if (strcmp(result.status, 'success') == 0) {

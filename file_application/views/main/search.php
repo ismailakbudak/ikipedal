@@ -1,5 +1,4 @@
-<?    $this->lang->load('main'); ?>
-     <!--  Map css  -->
+<!--  Map css  -->
 <?php echo link_tag(public_url() . 'styles/map-main.css');?>
      <style >
        .width-400{width: 300px; margin-top: 5px; }

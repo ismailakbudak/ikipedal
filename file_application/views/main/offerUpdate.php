@@ -1,5 +1,4 @@
-<?    $this->lang->load('offer'); ?>
-    <!-- container
+<!-- container
     ================================== -->
      <!--  Map css  -->
 <?php echo link_tag(public_url() . 'styles/map-main.css');?>
@@ -252,22 +251,22 @@ for ($i = 0; $i < 24; $i++) {
                                                         <select class="form-control input-sm" id="datepickerEndTimeSecond">
 <?php
 for ($i = 0; $i < 60; $i += 10) {
-    if ($i == 0) {
-        if ('00' == $min) {
-            echo "<option selected value='00'> 0$i </option>";
-        } else {
+	if ($i == 0) {
+		if ('00' == $min) {
+			echo "<option selected value='00'> 0$i </option>";
+		} else {
 
-            echo "<option value='00'> 0$i </option>";
+			echo "<option value='00'> 0$i </option>";
 
-        }
-    } else {
-        if ($i == $min) {
-            echo "<option selected value='{$i}'> $i </option>";
-        } else {
+		}
+	} else {
+		if ($i == $min) {
+			echo "<option selected value='{$i}'> $i </option>";
+		} else {
 
-            echo "<option value='{$i}'> $i </option>";
-        }
-    }
+			echo "<option value='{$i}'> $i </option>";
+		}
+	}
 }
 
 ?>
@@ -305,25 +304,25 @@ for ($i = 0; $i < 60; $i += 10) {
                                                                     <select class="form-control input-sm" id="weekDaysStartHour">
 <?php
 $times = explode(':', $test['departure_time']);
-$hour  = $times[0];
-$min   = $times[1];
+$hour = $times[0];
+$min = $times[1];
 
 for ($i = 0; $i < 24; $i++) {
-    if ($i < 10) {
-        if ($i == $hour) {
-            echo "<option selected value='0{$i}'> 0$i </option>";
-        } else {
+	if ($i < 10) {
+		if ($i == $hour) {
+			echo "<option selected value='0{$i}'> 0$i </option>";
+		} else {
 
-            echo "<option value='0{$i}'> 0$i </option>";
-        }
-    } else {
-        if ($i == $hour) {
-            echo "<option selected value='{$i}'> $i </option>";
-        } else {
+			echo "<option value='0{$i}'> 0$i </option>";
+		}
+	} else {
+		if ($i == $hour) {
+			echo "<option selected value='{$i}'> $i </option>";
+		} else {
 
-            echo "<option value='{$i}'> $i </option>";
-        }
-    }
+			echo "<option value='{$i}'> $i </option>";
+		}
+	}
 }
 
 ?>
@@ -334,22 +333,22 @@ for ($i = 0; $i < 24; $i++) {
                                                                      <select class="form-control input-sm" id="weekDaysStartMinute">
 <?php
 for ($i = 0; $i < 60; $i += 10) {
-    if ($i == 0) {
-        if ('00' == $min) {
-            echo "<option selected value='00'> 0$i </option>";
-        } else {
+	if ($i == 0) {
+		if ('00' == $min) {
+			echo "<option selected value='00'> 0$i </option>";
+		} else {
 
-            echo "<option value='00'> 0$i </option>";
+			echo "<option value='00'> 0$i </option>";
 
-        }
-    } else {
-        if ($i == $min) {
-            echo "<option selected value='{$i}'> $i </option>";
-        } else {
+		}
+	} else {
+		if ($i == $min) {
+			echo "<option selected value='{$i}'> $i </option>";
+		} else {
 
-            echo "<option value='{$i}'> $i </option>";
-        }
-    }
+			echo "<option value='{$i}'> $i </option>";
+		}
+	}
 }
 
 ?>
@@ -383,25 +382,25 @@ for ($i = 0; $i < 60; $i += 10) {
                                                                     <select class="form-control input-sm" id="weekDaysReturnHour">
 <?php
 $times = explode(':', $test['return_time']);
-$hour  = $times[0];
-$min   = $times[1];
+$hour = $times[0];
+$min = $times[1];
 
 for ($i = 0; $i < 24; $i++) {
-    if ($i < 10) {
-        if ($i == $hour) {
-            echo "<option selected value='0{$i}'> 0$i </option>";
-        } else {
+	if ($i < 10) {
+		if ($i == $hour) {
+			echo "<option selected value='0{$i}'> 0$i </option>";
+		} else {
 
-            echo "<option value='0{$i}'> 0$i </option>";
-        }
-    } else {
-        if ($i == $hour) {
-            echo "<option selected value='{$i}'> $i </option>";
-        } else {
+			echo "<option value='0{$i}'> 0$i </option>";
+		}
+	} else {
+		if ($i == $hour) {
+			echo "<option selected value='{$i}'> $i </option>";
+		} else {
 
-            echo "<option value='{$i}'> $i </option>";
-        }
-    }
+			echo "<option value='{$i}'> $i </option>";
+		}
+	}
 }
 
 ?>
@@ -412,22 +411,22 @@ for ($i = 0; $i < 24; $i++) {
                                                                      <select class="form-control input-sm" id="weekDaysReturnMinute">
 <?php
 for ($i = 0; $i < 60; $i += 10) {
-    if ($i == 0) {
-        if ('00' == $min) {
-            echo "<option selected value='00'> 0$i </option>";
-        } else {
+	if ($i == 0) {
+		if ('00' == $min) {
+			echo "<option selected value='00'> 0$i </option>";
+		} else {
 
-            echo "<option value='00'> 0$i </option>";
+			echo "<option value='00'> 0$i </option>";
 
-        }
-    } else {
-        if ($i == $min) {
-            echo "<option selected value='{$i}'> $i </option>";
-        } else {
+		}
+	} else {
+		if ($i == $min) {
+			echo "<option selected value='{$i}'> $i </option>";
+		} else {
 
-            echo "<option value='{$i}'> $i </option>";
-        }
-    }
+			echo "<option value='{$i}'> $i </option>";
+		}
+	}
 }
 
 ?>

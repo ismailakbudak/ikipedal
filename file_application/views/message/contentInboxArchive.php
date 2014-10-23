@@ -81,8 +81,8 @@
 
 <?php
 foreach ($conversation as $message) {
-    if ($message['is_answer']) {
-        echo "<li class='list-group-item  '>
+	if ($message['is_answer']) {
+		echo "<li class='list-group-item  '>
                                                   <div class='row'>
                                                         <div  class='msg-comment-receiver'>
                                                             <div class='row'> {$message['message']}</div>
@@ -97,8 +97,8 @@ foreach ($conversation as $message) {
                                                        </div>
                                                   </div>
                                              </li>";
-    } else {
-        echo "<li class='list-group-item  '>
+	} else {
+		echo "<li class='list-group-item  '>
                                                 <div class='row'>
                                                       <div class='col-xs-2 msg-photo-container-left'>
                                                            <a href='" . new_url("user/show/" . urlencode(base64_encode($sender['id']))) . "'>
@@ -116,11 +116,11 @@ foreach ($conversation as $message) {
                                                       </div>
                                                 </div>
                                            </li>";
-    }
+	}
 
 }
 if (count($conversation) == 0) {
-    echo " <div class='bs-example'>
+	echo " <div class='bs-example'>
                                          <div class='alert alert-dismissable alert-info'>
                                               <button type='button' class='close' data-dismiss='alert' title='" . lang('close') . "' >&times;</button>
                                               <h4> " . lang("m.empty") . " <a href='" . new_url('message/inboxArchive/' . $message['offer_id'] . "/" . $message['sender_id']) . "' style='margin:10px' title='" . lang('refresh') . "' >
@@ -156,7 +156,7 @@ if (count($conversation) == 0) {
                 </div>
 
                 <?
-                      $this->lang->load('user_sidebar');
+
                       echo getSideBar( $side_user, lang("m.talk") ,$this->lang->lang() );
                 ?>
           </div>

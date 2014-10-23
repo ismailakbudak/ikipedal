@@ -1,5 +1,5 @@
 <!-- For Map css  -->
-     <?  $this->lang->load('main');?>
+
 <?=link_tag(public_url() . 'styles/map-main.css');?>
      <?=link_tag(public_url() . 'styles/searchResult.css');?>
 

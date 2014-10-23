@@ -1,5 +1,4 @@
-<?    $this->lang->load('offer'); ?>
-    <!-- container
+<!-- container
     ================================== -->
      <!--  Map css  -->
 <?=link_tag(public_url('styles/map-main.css'));?>

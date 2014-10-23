@@ -36,6 +36,9 @@ class Main extends CI_Controller {
 		$this->load->model('offersdb');// load offers model
 		$this->load->model('searched');// load searched model
 
+		$this->lang->load('main');
+		$this->lang->load('offerinfo');
+
 		$offers = $this->offersdb->GetOfersForMain();
 		$result = $this->searched->GetMost();
 		if (!is_array($offers)) {
@@ -75,6 +78,7 @@ class Main extends CI_Controller {
 		$this->load->model('event_types');// load offers model
 		$types = $this->event_types->Get();
 		if (is_array($types)) {
+			$this->lang->load('offer');
 			$this->login->general();// call general load view
 			$data['event_types'] = $types;
 			$this->load->view('main/offerRide', $data);// load view
@@ -85,29 +89,12 @@ class Main extends CI_Controller {
 	}
 
 	/**
-	 * Teklif verme sayfasının ilk bölümüne dönüş
-	 *
-	 * @return HTML view
-	 **/
-	public function offerUpdate() {
-		// if user do not create first offer option redirect them to there
-		if ($this->session->userdata('offer') && $this->session->userdata('offer') == "1") {
-			$data['test'] = $this->session->all_userdata();// send userdata to view
-			$this->login->general($data);// load views
-			$this->load->view('main/offerUpdate');// load views
-			$this->load->view('include/footer');// load views
-		} else {
-
-			$this->offerRide();
-		}
-	}
-
-	/**
 	 * Nasıl sayfası yüklenir
 	 *
 	 * @return HTML view
 	 **/
 	public function works() {
+		$this->lang->load('main');
 		$this->login->general();// load views
 		$this->load->view('main/works');// load views
 		$this->load->view('include/footer');// load views
@@ -119,6 +106,7 @@ class Main extends CI_Controller {
 	 *  @return HTML view
 	 **/
 	public function offers() {
+		$this->lang->load('main');
 		$this->login->general();// load views
 		$this->load->view('main/search');// load views
 		$this->load->view('include/footer');// load views

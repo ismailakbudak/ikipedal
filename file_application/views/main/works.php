@@ -1,5 +1,4 @@
 
-    <? $this->lang->load('main'); ?>
     <style type="text/css">
       .list-group-item{ text-align: center;   font-size: 35px; font-weight: bold; padding-top: 65px; padding-bottom: 35px; min-height: 200px; }
       .list-group-item.or{ min-height: 40px; padding-top: 10px; padding-bottom: 10px;  border: 1px solid #ddd; }

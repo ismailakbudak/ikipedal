@@ -1,6 +1,6 @@
 
 <?
-      $this->lang->load('user_sidebar');
+
       $username = $user['name'];
       $name = $user['name'] . " " . $user['surname'];
       $surname = $user['surname'];

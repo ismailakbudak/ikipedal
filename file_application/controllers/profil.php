@@ -38,7 +38,8 @@ class Profil extends CI_Controller {
 		$this->load->model('ratings_db');// load ratings_db model for database action
 		$this->load->model('look_at');// load look_at model for database action
 		$this->lang->load('dashboard');// load dasboard language file
-
+		$this->lang->load('user_sidebar'
+		);
 		$userid = $this->encrypt->decode($this->session->userdata('userid'));// decode userid
 		$user = $this->users->GetUserAllInfo($userid);
 		$warnings = $this->users->GetUserWarnings($userid);
@@ -86,7 +87,7 @@ class Profil extends CI_Controller {
 	public function profile($page = '') {
 		$data = $this->login->loginKontrol();// check user login
 		$this->lang->load('profil_controller');// load profil_controller language file
-
+		$this->lang->load('profil');
 		$data['active'] = '#profile';
 		$this->load->model('users');// load users mode lfor database action
 		$page = trim($page);// get page name from url

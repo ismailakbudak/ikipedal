@@ -110,7 +110,7 @@
         <div class="row row-side">
 	        <div class="col-lg-4">
 	           <?
-	                    $this->lang->load('user_sidebar');
+
 	                    $username = $user['name'];
 				        $surname = $user['surname'];
 				        $date = date('Y');

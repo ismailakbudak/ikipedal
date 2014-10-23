@@ -1,8 +1,7 @@
-<?  $this->lang->load('main'); ?>
-     <!--  Map css  -->
+<!--  Map css  -->
 <?=link_tag(public_url() . 'styles/map-main.css');?>
 <?
-            $this->lang->load('offerinfo');
+
 
             // Create date2 only mounth adn year
             function dateConvertSlider( $date2, $lang ) {
@@ -149,7 +148,7 @@
       <div class="row">
 <?php
 if (isset($val)) {
-    echo $val;
+	echo $val;
 }
 
 $alt = "sd";
