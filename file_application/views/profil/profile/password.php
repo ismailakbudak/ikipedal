@@ -15,8 +15,8 @@
                                                <span class="input-group-addon " ><i class="glyphicon glyphicon-lock " ></i></span>
                                           </div>
                                       </div>
-                                 </div>     
-                                <div class="form-group-30">  
+                                 </div>
+                                <div class="form-group-30">
                                      <div>
                                           <div class="form-group margin-4">
                                               <label for="inputEmail" class="col-lg-4 control-label"> <?=lang("ps.newp")?> :</label>
@@ -32,9 +32,9 @@
                                               <div class="input-group col-lg-6">
                                                    <input type="password" class="form-control" id="inputPasswordAgain" placeholder=" <?=lang("ps.ppagain")?> ">
                                                    <span class="input-group-addon " ><i class="glyphicon glyphicon-lock " ></i></span>
-                                              </div>   
+                                              </div>
                                           </div>
-                                      </div>     
+                                      </div>
                                 </div>
                                 </br>
                                 <div class="form-group-30 ">
@@ -44,8 +44,8 @@
                                          </div>
                                 </div>
                       </fieldset>
-                 </form> 
+                 </form>
               </div>
           </div>
        </div>
-      <script src="<?php echo   public_url() . 'scripts/partial/profil/profil.js' ?>"></script>
+      <script src="<?php echo public_url() . 'scripts/partial/profil/profil.js'?>"></script>

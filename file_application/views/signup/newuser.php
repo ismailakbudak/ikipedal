@@ -1,6 +1,6 @@
 
     <!-- container
-    ================================== --> 
+    ================================== -->
     <div class="container">
     <!-- Modal newuser
     =====================================================-->
@@ -8,35 +8,35 @@
           <div class="col-lg-4" ></div>
           <div class="col-lg-5 well" >
                 <div  id="message" >
-                         <?php 
+                         <?
                              if( isset($val) )
-                                echo $val; 
+                                echo $val;
                          ?>
                 </div>
-                <ul class="nav navbar-nav navbar-right " > 
+                <ul class="nav navbar-nav navbar-right " >
                  <li class="dropdown">
                               <? if( strcmp(lang('lang'), "tr") == 0 ){ ?>
-                                <a tabindex="2" style="padding: 0px 13px 0px 13px;"  href="<?=  base_url(). $this->lang->switch_uri('en')  ?>">
+                                <a tabindex="2" style="padding: 0px 13px 0px 13px;"  href="<?=base_url() . $this->lang->switch_uri('en')?>">
                                     <i class="en-32"></i> </a>
                               <? }else{ ?>
-                                <a tabindex="1"  style="padding: 0px 13px 0px 13px;" href="<?= base_url(). $this->lang->switch_uri('tr') ?>">
+                                <a tabindex="1"  style="padding: 0px 13px 0px 13px;" href="<?=base_url() . $this->lang->switch_uri('tr')?>">
                                     <i class="tr-32"></i>  </a>
                               <? }  ?>
                  </li>
-               </ul>  
-                 
+               </ul>
+
                <legend style="margin-top: 20px" ><i class="text-primary glyphicon glyphicon-user one" ></i> <?=lang('g.signupface')?> <strong class="text-primary"> <?=lang('g.tensec')?>  <i class="glyphicon glyphicon-time "></i></strong></legend>
                <div  class="row mrn-lr-20">
                	     <!--
                        <fb:login-button show-faces="true" id="faceLoginHeaderNonUser" class="btn form-control " scope="email,user_birthday" width="300" max-rows="1"> <?=lang('g.facelogin')?>  </fb:login-button>
-                     -->  
-                     <button id="faceSignupNewuser" class="btn btn-primary form-control" ><img src="<?= public_url() ?>styles/images/facebook-back.png"  width="26" height="26"  style="padding-top: 0px; margin-top: -4px; margin-left: -16px; width: 26px; height: 26px;" />  <?=lang('g.signupwithface')?> </button>  
+                     -->
+                     <button id="faceSignupNewuser" class="btn btn-primary form-control" ><img src="<?=public_url()?>styles/images/facebook-back.png"  width="26" height="26"  style="padding-top: 0px; margin-top: -4px; margin-left: -16px; width: 26px; height: 26px;" />  <?=lang('g.signupwithface')?> </button>
                </div>
-               <h4><?=lang('g.or')?></h4>  
+               <h4><?=lang('g.or')?></h4>
                <legend><i class="text-primary glyphicon glyphicon-user one" ></i> <?=lang('g.signupnew')?> <strong class="text-primary"> <?=lang('g.sixtysec')?>  <i class="glyphicon glyphicon-time "></i></strong></legend>
                <form class="bs-example form-horizontal" style="padding-right:20px; padding-left:20px;">
                   <fieldset>
-                              
+
                                <div class="form-group-30">
                                       <div class="form-group margin-4">
                                            <div class="input-group">
@@ -75,50 +75,50 @@
                                                <span class="input-group-addon " ><i class="glyphicon glyphicon-lock " ></i></span>
                                           </div>
                                       </div>
-   
+
                                       <div class="form-group margin-4">
                                           <div class="input-group">
                                                <input type="password" class="form-control" id="inputPasswordAgain" placeholder="<?=lang('g.passagain')?>">
                                                <span class="input-group-addon " ><i class="glyphicon glyphicon-lock " ></i></span>
-                                          </div>   
+                                          </div>
                                       </div>
-                                
+
                                       <div class="form-group margin-4">
                                            <div class="input-group">
                                                  <select   class="form-control" id="inputBirthYear">
-                                                     <option value="0" class="default" > <?=lang('g.byear')?> </option>
-                                                     <?php
+                                                     <option value="0" class="default" > <?=lang('g.byear')?></option>
+                                                     <?
                                                            $year = getdate();
                                                            $year = $year['year'];
-                                                           for ($i=$year - 18; $i >= 1930; $i--) 
+                                                           for ($i=$year - 18; $i >= 1930; $i--)
                                                               echo "<option value='{$i}'> $i </option>"
                                                        ?>
                                                  </select>
                                                  <span class="input-group-addon " ><i class="glyphicon glyphicon-list " ></i></span>
                                             </div>
-                                     </div>  
+                                     </div>
                                      <div class="form-group margin-4">
-                                            <div class="input-group " style="100%"> 
-                                                <div id="captchaDiv" class="col-lg-3" style="float:left; padding-top:5px; padding-right:0px; padding-left:0px;">  
-                                                     <?= $captcha ?>
+                                            <div class="input-group " style="100%">
+                                                <div id="captchaDiv" class="col-lg-3" style="float:left; padding-top:5px; padding-right:0px; padding-left:0px;">
+<?=$captcha?>
                                                 </div>
-                                                <div class="col-lg-2" style="float:left; padding-right: 0px; padding-top:8px; padding-left:25px;">  
+                                                <div class="col-lg-2" style="float:left; padding-right: 0px; padding-top:8px; padding-left:25px;">
                                                     <a id="captchaNew" href="#"><i class="glyphicon glyphicon-refresh three"></i></a>
                                                 </div>
                                                 <div class="input-group col-lg-7 "  style="float:left; padding-right: 0px; padding-left: 0px;">
                                                      <input type="text" class="form-control" id="inputCap" placeholder="<?=lang('g.passcap')?>">
                                                      <span class="input-group-addon " ><i class="glyphicon glyphicon-lock " ></i></span>
                                                 </div>
-                                            </div>      
+                                            </div>
                                     </div>
                                      <div class="mrn-lr-20 "  style="font-size:19px; margin:40px 0px 20px 0px" >
                                          <button id="inputSignup" class="btn btn-primary form-control" type="button" > <?=lang('g.signup')?> </button>
-                                     </div> 
+                                     </div>
                                 </div>
                         </fieldset>
-                    </form> 
-                    <p style="font-size:19px; margin:20px 0px 40px 0px"> <a href="<?php echo new_url() ?>" ><i class=" glyphicon glyphicon-home one"></i> <?=lang('g.mainpage')?> </a> </p>
-     
+                    </form>
+                    <p style="font-size:19px; margin:20px 0px 40px 0px"> <a href="<?php echo new_url()?>" ><i class=" glyphicon glyphicon-home one"></i> <?=lang('g.mainpage')?></a> </p>
+
           </div>
           <div class="col-lg-3" ></div>
        </div>
@@ -129,14 +129,14 @@
         <div class="well" style=" border-radius: 16px; margin-bottom: 0px !important; margin-right: 0px; margin-left: 0px; ">
                              <fieldset style="font-size:20px; padding-bottom:10px; padding-left: 40px; ">
                                   <div class="row">
-                                         <?=lang('g.usercreating')?> 
-                                       <img src="<?= public_url() ?>styles/images/loading2.gif" width="35" height="35" >
+<?=lang('g.usercreating')?>
+                                       <img src="<?=public_url()?>styles/images/loading2.gif" width="35" height="35" >
                                      </div>
                                      <div class="row">
                                       <strong class="text-primary"> <?=lang('g.wait')?></strong>
                                      </div>
                              </fieldset>
-        </div>  
+        </div>
     </div><!-- END of the Modal loading -->
-    <script src="<?php echo   public_url() . 'scripts/partial/newuser.js' ?>"></script> 
-    <script src="<?php echo  public_url() . 'scripts/partial/face-process.js'  ?>"></script>
+    <script src="<?php echo public_url() . 'scripts/partial/newuser.js'?>"></script>
+    <script src="<?php echo public_url() . 'scripts/partial/face-process.js'?>"></script>

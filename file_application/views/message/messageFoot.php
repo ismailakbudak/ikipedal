@@ -1,5 +1,5 @@
- <!-- Tab panes -->
-                
+<!-- Tab panes -->
+
 
 
     </div>
@@ -10,15 +10,14 @@
         <div class="well" style=" border-radius: 16px; margin-bottom: 0px !important; margin-right: 0px; margin-left: 0px; ">
                              <fieldset style="font-size:20px; padding-bottom:10px; padding-left: 40px; ">
                                   <div class="row">
-                                        <?=lang("m.sending")?>
-                                       <img src="<?= public_url() ?>styles/images/loading2.gif" width="35" height="35" >
+<?=lang("m.sending")?>
+                                       <img src="<?=public_url()?>styles/images/loading2.gif" width="35" height="35" >
                                      </div>
                                      <div class="row">
                                       <strong class="text-primary"> <?=lang("g.wait")?></strong>
                                      </div>
                              </fieldset>
-        </div>  
+        </div>
     </div><!-- END of the Modal Sending -->
-   <script type="text/javascript" > var active_message = '<?= $active_side ?>'; var message_number2 = '<?= $unreadSent ?>';var message_number = '<?= $unreadInbox ?>'; </script>
-   <script src="<?php echo   public_url() . 'scripts/partial/messages/messageFoot.js' ?>"></script>
-   
+   <script type="text/javascript" > var active_message = '<?=$active_side?>'; var message_number2 = '<?=$unreadSent?>';var message_number = '<?=$unreadInbox?>'; </script>
+   <script src="<?php echo public_url() . 'scripts/partial/messages/messageFoot.js'?>"></script>

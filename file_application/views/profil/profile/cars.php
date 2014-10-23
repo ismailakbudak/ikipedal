@@ -2,7 +2,7 @@
 <style type="text/css">
  ul{ padding: 0; margin: 0 0 0px 0px; }
  ul.unstyled { margin-left: 0; list-style: none; }
- ul { display: block; list-style-type: disc; -webkit-margin-before: 0em; -webkit-margin-after: 0em; -webkit-margin-start: 0px; -webkit-margin-end: 0px; -webkit-padding-start: 40px; }   
+ ul { display: block; list-style-type: disc; -webkit-margin-before: 0em; -webkit-margin-after: 0em; -webkit-margin-start: 0px; -webkit-margin-end: 0px; -webkit-padding-start: 40px; }
 .car-container { margin: 0 0 14px 0; }
 .car-container .profile-car-container {float: left;margin: 0 10px 0 0;text-align: center;}
 .car-container .profile-car-edit {display: block;margin: 9px 0 0 0;}
@@ -12,14 +12,14 @@
 </style>
 <div class="col-lg-8 well">
      <legend> <?=lang("a.cars")?> </legend>
-      <?  
+      <?
              if( isset($result) && $result)
-                   echo  $result;  
+                   echo  $result;
       ?>
      <form class="bs-example form-horizontal" >
                  <section class="prf-container clearfix">
-                    <?php 
-                       
+                    <?
+
                        foreach ($cars as $value) {
                           createCar($value);
                        }
@@ -27,10 +27,10 @@
                       function  createCar($value){
                            $foto =  public_url().'cars/'.$value['foto_name'] ;
                            $star =  'star_' .$value['comfort'];
-                           $path =  new_url().'car/update/'. urlencode(base64_encode($value['normalid'])); 
-                           $path2 =  new_url().'car/upload/'. urlencode(base64_encode($value['normalid'])); 
+                           $path =  new_url().'car/update/'. urlencode(base64_encode($value['normalid']));
+                           $path2 =  new_url().'car/upload/'. urlencode(base64_encode($value['normalid']));
                            $val=" <section class='car-container clearfix'>
-                                   
+
                                     <div class='profile-car'>
                                            <div class='profile-car-container'>
                                            <a href='{$path2}' >
@@ -38,7 +38,7 @@
                                                   <span class='profile-car-edit text-default'>" . lang("a.upload") ."</span>
                                            </a>
                                            </div>
-                                    </div>   
+                                    </div>
                                     <div class='car-text'>
                                           <ul class='unstyled'>
                                                <li>
@@ -58,21 +58,21 @@
                                           </ul>
                                     </div>
                               </section>  ";
-                            echo $val;  
+                            echo $val;
                        }
 
                      ?>
                      <div class="form-group-30 ">
                            <div class="col-lg-4"></div>
                            <div class="margin-4" >
-                               <a href="<?= new_url().'car/add'  ?>" class="btn btn-primary width-150" > <?=lang("a.addnew")?> </a>
+                               <a href="<?=new_url() . 'car/add'?>" class="btn btn-primary width-150" > <?=lang("a.addnew")?> </a>
                            </div>
                     </div>
                 </section>
      </form>
 </div>
 
- 
+
 
 
 <!-- Delete Car Modal
@@ -90,7 +90,6 @@
               <a href="#"  id="car" class="btn btn-primary width-100 onayDeleteCar" data-id='0'> <?=lang("a.delete")?> </a>
        </div>
 </div>
-<script src="<?php echo   public_url() . 'scripts/general/bootstrap-filestyle.js' ?>"></script> 
-<script src="<?php echo   public_url() . 'scripts/general/ajaxfileupload.js' ?>"></script> 
-<script src="<?php echo   public_url() . 'scripts/partial/profil/cars.js'  ?>"></script> 
- 
+<script src="<?php echo public_url() . 'scripts/general/bootstrap-filestyle.js'?>"></script>
+<script src="<?php echo public_url() . 'scripts/general/ajaxfileupload.js'?>"></script>
+<script src="<?php echo public_url() . 'scripts/partial/profil/cars.js'?>"></script>

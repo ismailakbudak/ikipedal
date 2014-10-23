@@ -12,21 +12,21 @@ blockquote small{color:#000;}
                                 <div class="form-group-30">
                                      <blockquote>
                                           <p> <?=lang("d.if")?> </p>
-                                          <small> <?=lang("d.if1")?> <a href="<?= new_url() .'profil/profile/info' ?>" class="text-primary">  <?=lang("d.if11")?> </a> <?=lang("d.if111")?> </small>
-                                          <small> <?=lang("d.if2")?>  <a href="<?= new_url() .'profil/profile/info' ?>" class="text-primary"> <?=lang("d.if22")?> </a> <?=lang("d.if222")?>  </small>
-                                          <small> <?=lang("d.if3")?> <a href="<?= new_url() .'contact' ?>" class="text-primary"> <?=lang("d.if33")?>   </a> <?=lang("d.if333")?> </small>
-                                          <small> <?=lang("d.if4")?> <a href="<?= new_url() .'profil/profile/notification' ?>" class="text-primary"> <?=lang("d.if44")?>  </a></small>
+                                          <small> <?=lang("d.if1")?> <a href="<?=new_url() . 'profil/profile/info'?>" class="text-primary">  <?=lang("d.if11")?> </a> <?=lang("d.if111")?> </small>
+                                          <small> <?=lang("d.if2")?>  <a href="<?=new_url() . 'profil/profile/info'?>" class="text-primary"> <?=lang("d.if22")?> </a> <?=lang("d.if222")?>  </small>
+                                          <small> <?=lang("d.if3")?> <a href="<?=new_url() . 'contact'?>" class="text-primary"> <?=lang("d.if33")?>   </a> <?=lang("d.if333")?> </small>
+                                          <small> <?=lang("d.if4")?> <a href="<?=new_url() . 'profil/profile/notification'?>" class="text-primary"> <?=lang("d.if44")?>  </a></small>
                                           <small> <?=lang("d.if5")?>
-                                            <a href="<?= new_url('message') ?>"  class="text-primary"> <?=lang("d.if55")?>  </a> <?=lang("d.or")?>
-                                            <a href="<?= new_url('contact') ?>" class="text-primary"> <?=lang("d.if555")?> </a>
+                                            <a href="<?=new_url('message')?>"  class="text-primary"> <?=lang("d.if55")?>  </a> <?=lang("d.or")?>
+                                            <a href="<?=new_url('contact')?>" class="text-primary"> <?=lang("d.if555")?> </a>
                                             <strong class="text-danger"> <?=lang("d.if5555")?> </strong></small>
                                      </blockquote>
                                       <div class="col-lg-12">
                                         <div class="alert alert-dismissable alert-danger">
-                                          <strong> <?=lang("d.sory")?> </strong> <?=lang("d.undisplay")?> 
+                                          <strong> <?=lang("d.sory")?> </strong> <?=lang("d.undisplay")?>
                                         </div>
                                       </div>
-                                 </div>     
+                                 </div>
                                  <div class="form-group-30">
                                      <blockquote>
                                           <p> <?=lang("d.sure")?>  </p>
@@ -46,9 +46,8 @@ blockquote small{color:#000;}
                                          </div>
                                 </div>
                       </fieldset>
-                 </form> 
+                 </form>
               </div>
           </div>
        </div>
-       <script src="<?php echo   public_url() . 'scripts/partial/profil/profil.js' ?>"></script> 
- 
+       <script src="<?php echo public_url() . 'scripts/partial/profil/profil.js'?>"></script>

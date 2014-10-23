@@ -12,7 +12,7 @@
                .set.active{ background-color:  #D3F5FF; }
                /*.set       {color: #000; background: #ffeb00 none; cursor: pointer;}*/
                .set:hover { background-color:  #D3F5FF; !important; border-width: 1px; }
-              
+
                .btn-group-justified { padding-bottom: 20px;  }
 
                .btn { text-shadow: 0 0 0  }
@@ -33,26 +33,26 @@
                           -webkit-box-shadow: 0px 0px 14px #3195F3;
                           box-shadow: 0px 0px 14px #878B12;;
                }
-    
-   </style>  
+
+   </style>
 
 
     <div  class="container" >
     <!-- container Begin        PROFILE PROFILES file
-    =================================================================== -->  
+    =================================================================== -->
           <div  class="row ">
                 <div class="col-lg-12 ">
                 <hr />
                 <div class="bs-example">
                     <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-                         <li id="dashroad" ><a href="<?php echo new_url().'profil'  ?>" ><i class="text-success glyphicon glyphicon-dashboard two"></i>  <?=lang('g.dashboard')?> </a></li>
-                         <li id="allerts"  ><a href="<?php echo new_url().'alert'  ?>" ><i class="text-danger  glyphicon glyphicon-bell two"></i>  <?=lang('g.alerts')?>    </a></li>
-                         <li id="profile"  ><a href="<?php echo new_url().'profil/profile/info '  ?>" ><i class="text-primary glyphicon glyphicon-user two"></i><?=lang('g.profil')?>          </a></li>
-                         <li id="messages" ><a href="<?php echo new_url().'message'  ?>" ><i class="text-warning glyphicon glyphicon-comment two"></i><?=lang('g.messages')?>    </a></li>
-                         <li id="reviews"  ><a href="<?php echo new_url().'review'  ?>" ><i class="text-danger  glyphicon glyphicon-star two"></i><?=lang('g.reviews')?>         </a></li>
-                         <li id="offers"   ><a href="<?php echo new_url().'offer'  ?>" ><i class="text-info    glyphicon glyphicon-briefcase two"></i><?=lang('g.offers')?>    </a></li>
+                         <li id="dashroad" ><a href="<?php echo new_url() . 'profil'?>" ><i class="text-success glyphicon glyphicon-dashboard two"></i>  <?=lang('g.dashboard')?> </a></li>
+                         <li id="allerts"  ><a href="<?php echo new_url() . 'alert'?>" ><i class="text-danger  glyphicon glyphicon-bell two"></i>  <?=lang('g.alerts')?>    </a></li>
+                         <li id="profile"  ><a href="<?php echo new_url() . 'profil/profile/info '?>" ><i class="text-primary glyphicon glyphicon-user two"></i><?=lang('g.profil')?>          </a></li>
+                         <li id="messages" ><a href="<?php echo new_url() . 'message'?>" ><i class="text-warning glyphicon glyphicon-comment two"></i><?=lang('g.messages')?>    </a></li>
+                         <li id="reviews"  ><a href="<?php echo new_url() . 'review'?>" ><i class="text-danger  glyphicon glyphicon-star two"></i><?=lang('g.reviews')?>         </a></li>
+                         <li id="offers"   ><a href="<?php echo new_url() . 'offer'?>" ><i class="text-info    glyphicon glyphicon-briefcase two"></i><?=lang('g.offers')?></a></li>
                     </ul>
 
                     <div id="myTabContent" class="tab-content ">
-                      
+
 

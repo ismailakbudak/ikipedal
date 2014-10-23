@@ -16,22 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
- 
-!function( $ ) {
+
+! function($) {
 
   var Slider = function(element, options) {
     this.element = $(element);
-    this.picker = $('<div class="slider">'+
-              '<div class="slider-track">'+
-                '<div class="slider-selection"></div>'+
-                '<div class="slider-handle"></div>'+
-                '<div class="slider-handle"></div>'+
-              '</div>'+
-              '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'+
-            '</div>')
-              .insertBefore(this.element)
-              .append(this.element);
-    this.id = this.element.data('slider-id')||options.id;
+    this.picker = $('<div class="slider">' +
+      '<div class="slider-track">' +
+      '<div class="slider-selection"></div>' +
+      '<div class="slider-handle"></div>' +
+      '<div class="slider-handle"></div>' +
+      '</div>' +
+      '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>' +
+      '</div>')
+      .insertBefore(this.element)
+      .append(this.element);
+    this.id = this.element.data('slider-id') || options.id;
     if (this.id) {
       this.picker[0].id = this.id;
     }
@@ -40,13 +40,13 @@
       this.touchCapable = true;
     }
 
-    var tooltip = this.element.data('slider-tooltip')||options.tooltip;
+    var tooltip = this.element.data('slider-tooltip') || options.tooltip;
 
     this.tooltip = this.picker.find('.tooltip');
     this.tooltipInner = this.tooltip.find('div.tooltip-inner');
 
-    this.orientation = this.element.data('slider-orientation')||options.orientation;
-    switch(this.orientation) {
+    this.orientation = this.element.data('slider-orientation') || options.orientation;
+    switch (this.orientation) {
       case 'vertical':
         this.picker.addClass('slider-vertical');
         this.stylePos = 'top';
@@ -66,15 +66,15 @@
         break;
     }
 
-    this.min = this.element.data('slider-min')||options.min;
-    this.max = this.element.data('slider-max')||options.max;
-    this.step = this.element.data('slider-step')||options.step;
-    this.value = this.element.data('slider-value')||options.value;
+    this.min = this.element.data('slider-min') || options.min;
+    this.max = this.element.data('slider-max') || options.max;
+    this.step = this.element.data('slider-step') || options.step;
+    this.value = this.element.data('slider-value') || options.value;
     if (this.value[1]) {
       this.range = true;
     }
 
-    this.selection = this.element.data('slider-selection')||options.selection;
+    this.selection = this.element.data('slider-selection') || options.selection;
     this.selectionEl = this.picker.find('.slider-selection');
     if (this.selection === 'none') {
       this.selectionEl.addClass('hide');
@@ -87,8 +87,8 @@
     this.handle2 = this.picker.find('.slider-handle:last');
     this.handle2Stype = this.handle2[0].style;
 
-    var handle = this.element.data('slider-handle')||options.handle;
-    switch(handle) {
+    var handle = this.element.data('slider-handle') || options.handle;
+    switch (handle) {
       case 'round':
         this.handle1.addClass('round');
         this.handle2.addClass('round');
@@ -103,7 +103,7 @@
       this.value[0] = Math.max(this.min, Math.min(this.max, this.value[0]));
       this.value[1] = Math.max(this.min, Math.min(this.max, this.value[1]));
     } else {
-      this.value = [ Math.max(this.min, Math.min(this.max, this.value))];
+      this.value = [Math.max(this.min, Math.min(this.max, this.value))];
       this.handle2.addClass('hide');
       if (this.selection == 'after') {
         this.value[1] = this.max;
@@ -113,9 +113,8 @@
     }
     this.diff = this.max - this.min;
     this.percentage = [
-      (this.value[0]-this.min)*100/this.diff,
-      (this.value[1]-this.min)*100/this.diff,
-      this.step*100/this.diff
+      (this.value[0] - this.min) * 100 / this.diff, (this.value[1] - this.min) * 100 / this.diff,
+      this.step * 100 / this.diff
     ];
 
     this.offset = this.picker.offset();
@@ -151,48 +150,48 @@
 
     over: false,
     inDrag: false,
-    
-    showTooltip: function(){
+
+    showTooltip: function() {
       this.tooltip.addClass('in');
       //var left = Math.round(this.percent*this.width);
       //this.tooltip.css('left', left - this.tooltip.outerWidth()/2);
       this.over = true;
     },
-    
-    hideTooltip: function(){
+
+    hideTooltip: function() {
       if (this.inDrag === false) {
         this.tooltip.removeClass('in');
       }
       this.over = false;
     },
 
-    layout: function(){
-      this.handle1Stype[this.stylePos] = this.percentage[0]+'%';
-      this.handle2Stype[this.stylePos] = this.percentage[1]+'%';
+    layout: function() {
+      this.handle1Stype[this.stylePos] = this.percentage[0] + '%';
+      this.handle2Stype[this.stylePos] = this.percentage[1] + '%';
       if (this.orientation == 'vertical') {
-        this.selectionElStyle.top = Math.min(this.percentage[0], this.percentage[1]) +'%';
-        this.selectionElStyle.height = Math.abs(this.percentage[0] - this.percentage[1]) +'%';
+        this.selectionElStyle.top = Math.min(this.percentage[0], this.percentage[1]) + '%';
+        this.selectionElStyle.height = Math.abs(this.percentage[0] - this.percentage[1]) + '%';
       } else {
-        this.selectionElStyle.left = Math.min(this.percentage[0], this.percentage[1]) +'%';
-        this.selectionElStyle.width = Math.abs(this.percentage[0] - this.percentage[1]) +'%';
+        this.selectionElStyle.left = Math.min(this.percentage[0], this.percentage[1]) + '%';
+        this.selectionElStyle.width = Math.abs(this.percentage[0] - this.percentage[1]) + '%';
       }
       if (this.range) {
         var time1 = this.formater(this.value[0]);
-        var time2 = this.formater(this.value[1]);  
-        if( time1 < 10 )
-            time1 = '0'+time1;
-        if( time2 < 10 )
-            time2 = '0'+time2;
-          
+        var time2 = this.formater(this.value[1]);
+        if (time1 < 10)
+          time1 = '0' + time1;
+        if (time2 < 10)
+          time2 = '0' + time2;
+
         this.tooltipInner.text(
-          time1 + ' : ' +time2
+          time1 + ' : ' + time2
         );
-        this.tooltip[0].style[this.stylePos] = this.size * (this.percentage[0] + (this.percentage[1] - this.percentage[0])/2)/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
+        this.tooltip[0].style[this.stylePos] = this.size * (this.percentage[0] + (this.percentage[1] - this.percentage[0]) / 2) / 100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight() / 2 : this.tooltip.outerWidth() / 2) + 'px';
       } else {
         this.tooltipInner.text(
           this.formater(this.value[0])
         );
-        this.tooltip[0].style[this.stylePos] = this.size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
+        this.tooltip[0].style[this.stylePos] = this.size * this.percentage[0] / 100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight() / 2 : this.tooltip.outerWidth() / 2) + 'px';
       }
     },
 
@@ -235,17 +234,17 @@
       this.inDrag = true;
       var val = this.calculateValue();
       this.element.trigger({
-          type: 'slideStart',
-          value: val
-        }).trigger({
-          type: 'slide',
-          value: val
-        });
+        type: 'slideStart',
+        value: val
+      }).trigger({
+        type: 'slide',
+        value: val
+      });
       return false;
     },
 
     mousemove: function(ev) {
-      
+
       // Touch: Get the original event:
       if (this.touchCapable && ev.type === 'touchmove') {
         ev = ev.originalEvent;
@@ -308,12 +307,11 @@
       var val;
       if (this.range) {
         val = [
-          (this.min + Math.round((this.diff * this.percentage[0]/100)/this.step)*this.step),
-          (this.min + Math.round((this.diff * this.percentage[1]/100)/this.step)*this.step)
+          (this.min + Math.round((this.diff * this.percentage[0] / 100) / this.step) * this.step), (this.min + Math.round((this.diff * this.percentage[1] / 100) / this.step) * this.step)
         ];
         this.value = val;
       } else {
-        val = (this.min + Math.round((this.diff * this.percentage[0]/100)/this.step)*this.step);
+        val = (this.min + Math.round((this.diff * this.percentage[0] / 100) / this.step) * this.step);
         this.value = [val, this.value[1]];
       }
       return val;
@@ -323,8 +321,8 @@
       if (this.touchCapable) {
         ev = ev.touches[0];
       }
-      var percentage = (ev[this.mousePos] - this.offset[this.stylePos])*100/this.size;
-      percentage = Math.round(percentage/this.percentage[2])*this.percentage[2];
+      var percentage = (ev[this.mousePos] - this.offset[this.stylePos]) * 100 / this.size;
+      percentage = Math.round(percentage / this.percentage[2]) * this.percentage[2];
       return Math.max(0, Math.min(100, percentage));
     },
 
@@ -342,7 +340,7 @@
         this.value[0] = Math.max(this.min, Math.min(this.max, this.value[0]));
         this.value[1] = Math.max(this.min, Math.min(this.max, this.value[1]));
       } else {
-        this.value = [ Math.max(this.min, Math.min(this.max, this.value))];
+        this.value = [Math.max(this.min, Math.min(this.max, this.value))];
         this.handle2.addClass('hide');
         if (this.selection == 'after') {
           this.value[1] = this.max;
@@ -352,21 +350,20 @@
       }
       this.diff = this.max - this.min;
       this.percentage = [
-        (this.value[0]-this.min)*100/this.diff,
-        (this.value[1]-this.min)*100/this.diff,
-        this.step*100/this.diff
+        (this.value[0] - this.min) * 100 / this.diff, (this.value[1] - this.min) * 100 / this.diff,
+        this.step * 100 / this.diff
       ];
       this.layout();
     }
   };
 
-  $.fn.slider = function ( option, val ) {
-    return this.each(function () {
+  $.fn.slider = function(option, val) {
+    return this.each(function() {
       var $this = $(this),
         data = $this.data('slider'),
         options = typeof option === 'object' && option;
-      if (!data)  {
-        $this.data('slider', (data = new Slider(this, $.extend({}, $.fn.slider.defaults,options))));
+      if (!data) {
+        $this.data('slider', (data = new Slider(this, $.extend({}, $.fn.slider.defaults, options))));
       }
       if (typeof option == 'string') {
         data[option](val);
@@ -381,7 +378,7 @@
     orientation: 'horizontal',
     value: 5,
     selection: 'before',
-    tooltip: 'hide',//show
+    tooltip: 'hide', //show
     handle: 'round',
     formater: function(value) {
       return value;
@@ -390,4 +387,4 @@
 
   $.fn.slider.Constructor = Slider;
 
-}( window.jQuery );
+}(window.jQuery);

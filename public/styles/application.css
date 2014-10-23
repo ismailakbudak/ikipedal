@@ -44,6 +44,22 @@
          padding-top: 10px; }
 .yan{ border-left: 2px solid #ccc; padding-left: 5px }         
 .social:hover{ margin-top: -3px }
+ 
+.max-width-470{
+  max-width: 470px;
+  max-height: 300px;
+} 
+.text-left{
+  text-align: left;
+}
+ 
+.text-right{
+  text-align: right;
+}
+.text-center{
+  text-align: center;
+}
+
 /*end--footer*/
 
       /*        $("[rel=popover]").popover('show');  
@@ -603,4 +619,13 @@ background: url(images/rating-car.png) repeat-x;
     left: 10px;
     top: 11px;
     left: -6px;
+}
+
+.border-input{
+  padding: 0px 27px 0px 25px;
+  border-width: 2px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 300;
+  text-overflow: ellipsis;
 }

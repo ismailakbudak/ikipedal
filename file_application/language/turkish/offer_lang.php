@@ -3,6 +3,8 @@
 // for offer ride scripts
 $lang['g.blank_travel']            = "Güzergah bilgisi bulunamadı...";
 $lang['g.blank_start_point']       = "Başlangıç noktası girmediniz..";
+$lang['g.blank_name']              = "Etkinlik ismi boş geçilemez..";
+$lang['g.locations']               = "Yol güzergahı lokasyonları alınamadı. Daha sonra deneyiniz.";
 $lang['g.blank_destination_point'] = "Hedef noktası girmediniz..";
 $lang['g.blank_start_date']        = "Başlangıç tarihi seçmediniz..";
 $lang['g.blank_return_date']       = "Dönüş tarihi seçmediniz...";
@@ -21,12 +23,12 @@ $lang['g.sel_luggage']             = " Bagaç büyüklüğünü seçmediniz..";
 $lang['g.sel_leavetime']           = " Ayrılma zamanını secmediniz..";
 $lang['g.condition']               = "Kuralları onaylamadınız..";
 $lang['g.max_num']                 = "Girebileceğiniz maksimum miktardasınız..";
-$lang['g.min_num']                 = "Girebileceğiniz en küçük miktardasınız.."; 
+$lang['g.min_num']                 = "Girebileceğiniz en küçük miktardasınız..";
 $lang['g.real_distance']           = "Gercek Toplam Mesafe : ";
-$lang['g.real_time']               = " Gercek  Seyahet Süresi : "; 
+$lang['g.real_time']               = " Gercek  Seyahet Süresi : ";
 $lang['g.saatS']                   = " saat ";
-$lang['g.dakikaS']                 = " dk "; 
-// for offer ride 
+$lang['g.dakikaS']                 = " dk ";
+// for offer ride
 $lang['o.newoffer'] 			   = "Yeni Teklif";
 $lang['o.progcomplete'] 		   = "Tamamlama ";
 $lang['o.progTitle']		       = "Bu sayfadaki bilgileri doldurduğunuzda teklifinizin %30'luk kısmını tamamlıyacaksınız. Bilgileri doldurup devam ediniz...";
@@ -62,11 +64,13 @@ $lang['o.travelroute'] 			   = "İzlenecek Yol";
 $lang['o.tripinfo'] 			   = "Seyahat Genel Bilgileri";
 $lang['o.travelstartdateTitle']    = "Seyahat Başlangıç Tarihi ";
 $lang['o.travelfinishdateTitle']   = " Seyahat bitiş tarihi";
-$lang['o.traveldateTitle'] 		   =  "Seyahat Tarihi"; 
-$lang['o.traveltimeTitle'] 		   =  "Seyahat Saati "; 
-$lang['o.travelreturntime'] 	   = "Seyahat Dönüş Saati"; 
+$lang['o.traveldateTitle'] 		   =  "Seyahat Tarihi";
+$lang['o.traveltimeTitle'] 		   =  "Seyahat Saati ";
+$lang['o.travelreturntime'] 	   = "Seyahat Dönüş Saati";
 $lang['o.traveldeparturetime']	   = "Seyahat Saati";
-// for offerride2 
+$lang['o.event_name']              = "Etkinlik İsmi";
+$lang['o.event_type']              = "Etkinlik Türü";
+// for offerride2
 $lang['o2.progTitle'] 			   = "Bu sayfadaki bilgileri doldurduğunuzda teklifinizin %80'lik kısmını tamamlıyacaksınız. Bilgileri doldurup teklif verme işlemini tamamlayınız...";
 $lang['o2.price'] 				   = "Her Yolcu için Ücret";
 $lang['o2.pricecolor'] 			   = " Yeşil renk düşük fiyatları, Sarı renk normal fiyatları, Kırmızı ise aşırı yüksek fiyatları belirtir. ";
@@ -96,7 +100,7 @@ $lang['o2.termcon1'] 			   = "Şartlar Kurallar";
 $lang['o2.termcon2']		 	   = "Content";
 $lang['o2.close'] 				   = "Kapat";
 
-// for offer detail page 
+// for offer detail page
 $lang['od.detailoffer'    ] = "Teklif detayları";
 $lang['od.route'          ] = "Seyahat güzergah noktaları...";
 $lang['od.twoway'         ] = "Çift yönlü seyahat..";
@@ -114,7 +118,7 @@ $lang['od.dateR'          ] = "Dönüş Tarihi : ";
 $lang['od.timeR'          ] = "Dönüş Saati  : ";
 $lang['od.times'           ] = "Hareket Saatleri  : ";
 $lang['od.timeRs'           ] = "Dönüş Saatleri  : ";
-$lang['od.nav'            ] = " : Teklif sahibi "; 
+$lang['od.nav'            ] = " : Teklif sahibi ";
 $lang['od.nav2'           ] = " her yolcu için ücret ";
 $lang['od.create'         ] = "Teklif yayınlanma tarihi : ";
 $lang['od.seen'           ] = "";
