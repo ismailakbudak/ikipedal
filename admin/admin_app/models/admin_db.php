@@ -62,11 +62,7 @@ class Admin_Db extends CI_Model {
            // users foto_onay = 0   
            $query = $this->db -> select( "COUNT(id) AS num" )
                               -> where('foto_onay', 0 )
-                              -> get('users');
-           // cars foto_onay = 0   
-           $query2 = $this->db -> select( "COUNT(id) AS num" )
-                               -> where('foto_onay', 0 )
-                               -> get('cars');
+                              -> get('users'); 
            // alert_user is_read = 0   
            $query3 = $this->db -> select( "COUNT(id) AS num" )
                                -> where('is_read', 0 )
@@ -98,13 +94,10 @@ class Admin_Db extends CI_Model {
            
 		                                         
            // for users photo
-           if(  $query && $query2 && $query3 && $query4  && $query5 && $query6 && $query7 && $query8 ){
+           if(  $query   && $query3 && $query4  && $query5 && $query6 && $query7 && $query8 ){
                 $result                        = $query->row_array();
                 $counts['user_photo_count']    = $result['num'];
-
-                $result                        = $query2->row_array();
-                $counts['car_photo_count']     = $result['num'];
-
+ 
                 $result                        = $query3->row_array();
                 $counts['alert_user_count']    = $result['num'];
 

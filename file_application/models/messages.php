@@ -340,7 +340,7 @@ class Messages extends CI_Model {
     function getSent($sender_user_id) {
         $query = $this->db->select('*, COUNT("id") as number, messages.created_at,  messages.ride_offer_id, users.id as received_userid ')
                       ->from('messages')
-                      ->join('ride_offers', 'ride_offers.id = messages.ride_offer_id')
+                      ->join('events', 'events.id = messages.ride_offer_id')
                       ->join('users', 'users.id = messages.received_user_id')
                       ->where('messages.user_id', $sender_user_id)
                       ->where('send_visible', "1")
@@ -365,7 +365,7 @@ class Messages extends CI_Model {
     function getInbox($received_user_id) {
         $query = $this->db->select('*, COUNT("id") as number, messages.created_at, messages.ride_offer_id, users.id as sender_userid ')
                       ->from('messages')
-                      ->join('ride_offers', 'ride_offers.id = messages.ride_offer_id')
+                      ->join('events', 'events.id = messages.ride_offer_id')
                       ->join('users', 'users.id = messages.user_id')
                       ->where('messages.received_user_id', $received_user_id)
                       ->where('receive_visible', "1")
@@ -391,7 +391,7 @@ class Messages extends CI_Model {
         $received_user_id = $user_id;
         $query            = $this->db->select('*, COUNT("id") as number, messages.created_at, messages.ride_offer_id, users.id as sender_userid ')
                       ->from('messages')
-                      ->join('ride_offers', 'ride_offers.id = messages.ride_offer_id')
+                      ->join('events', 'events.id = messages.ride_offer_id')
                       ->join('users', 'users.id = messages.user_id')
                       ->where('messages.received_user_id', $received_user_id)
                       ->where('receive_visible', "1")
@@ -415,7 +415,7 @@ class Messages extends CI_Model {
     function getArchivedSend($sender_user_id) {
         $query = $this->db->select('*, COUNT("id") as number, messages.created_at,  messages.ride_offer_id, users.id as received_userid ')
                       ->from('messages')
-                      ->join('ride_offers', 'ride_offers.id = messages.ride_offer_id')
+                      ->join('events', 'events.id = messages.ride_offer_id')
                       ->join('users', 'users.id = messages.received_user_id')
                       ->where('messages.user_id', $sender_user_id)
                       ->where('send_visible', "1")

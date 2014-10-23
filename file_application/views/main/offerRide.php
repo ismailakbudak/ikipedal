@@ -66,6 +66,26 @@
                                               </div>
                                             </div>
                                           </div>
+                                           <hr/>
+                                           <div class="form-group form-padding" >
+                                              <input id='inputEventName' name="inputEventName" type="text" class="collapse in form-control border-input" placeholder=" <?=lang('o.event_name')?>">
+                                           </div>
+                                           <div class="form-group form-padding" >
+                                                <label for="inputEventType" class="col-lg-4 control-label " style='font-style:normal' > <?=lang('o.event_type')?> </label>
+                                                <div class='col-lg-8'>
+                                                  <select class="form-control input-sm" id="inputEventType">
+                                                      <?
+                                                          foreach ($event_types as $value) {
+                                                              if( strcmp(lang('lang'), "tr") == 0 ){
+                                                                  echo "<option   value='{$value[id]}'> $value[name] </option>";
+                                                              }else{
+                                                                  echo "<option   value='{$value[id]}'> $value[name_en] </option>";
+                                                              }
+                                                          }
+                                                      ?>
+                                                  </select>
+                                                </div>
+                                          </div>
                                       </div>
                                  </div> <!-- Birinci panel sonunu-->
 
@@ -216,9 +236,9 @@
                                       <div class="panel-body" id="">
 
                                             <div class="form-group">
-                                               <label for="textArea" class="col-lg-12 control-label" style="text-align:left"> <?=lang('o2.moveexplain')?></label>
+                                             <label for="textArea" class="col-lg-12 control-label " style="text-align:left"> <?=lang('o2.moveexplain')?></label>
                                                <div class="col-lg-12">
-                                                 <textarea class="form-control"  title=' <?=lang('o2.movedescTitle')?> ' rows="3" id="inputExplainGoing" placeholder="<?=lang('o2.movedesc')?>" ></textarea>
+                                                 <textarea class="form-control max-width-470"  title=' <?=lang('o2.movedescTitle')?> ' rows="3" id="inputExplainGoing" placeholder="<?=lang('o2.movedesc')?>" ></textarea>
                                                 </div>
                                             </div>
 
@@ -226,6 +246,7 @@
                                  </div> <!-- 4. panel sonunu-->
 
                                  <div class="form-group form-padding">
+                                   <div id='unique-message' > </div>
                                    <div class="col-lg-10 col-lg-offset-9">
                                      <button id="inputContinue" type="button" class="btn btn-primary"><?=lang('o.continue')?></button>
                                    </div>

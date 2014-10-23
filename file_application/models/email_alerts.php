@@ -84,7 +84,7 @@ class Email_Alerts extends CI_Model {
                                               R.origin AS departure,
                                               R.destination AS arrivial ")
         ->from('email_alerts_result E')
-        ->join('ride_offers R', 'R.id = E.ride_offer_id')
+        ->join('events R', 'R.id = E.ride_offer_id')
         ->join('email_alerts EE', 'EE.id = E.email_alert_id')
         ->where('EE.user_id', $user_id)
         ->get();

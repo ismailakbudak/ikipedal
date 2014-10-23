@@ -1,11 +1,28 @@
 (function($) {
 
-  CapitiliazeFirst(["#pac-input", "#pac-input2"]);
+  CapitiliazeFirst(["#pac-input", "#pac-input2", "#inputEventName", "#inputExplainGoing"]);
 
   $("#inputContinue").on('click', function() {
-    console.log(JSON.stringify(locations, null, 4));
-    console.log('geocoding finished');
-    return false;
+
+
+    var totalDistance = $("#totalDistance").text(),
+      totalTime = $("#totalTime").text(),
+      DistancesWay = "",
+      TimesWay = "",
+      distances = $("#total").find(".row").find(".distance"),
+      times = $("#total").find(".row").find(".time");
+
+    if (distances.length > 1) {
+      for (var i = 0; i < distances.length; i++) {
+        DistancesWay += $(distances[i]).text();
+        TimesWay += $(times[i]).text();
+        if (i < distances.length - 1) {
+          DistancesWay += '?';
+          TimesWay += '?';
+        }
+      };
+    }
+
     var startPoint = $('#pac-input'),
       destinationPoint = $('#pac-input2'),
       array = $('#iteneraryPanel').find('.wayPoint'),
@@ -30,120 +47,82 @@
       endDate = $("#datepickerEnd"),
       endDateTimeHour = $("#datepickerEndTimeHour"),
       endDateTimeMinute = $("#datepickerEndTimeSecond"),
+      inputName = $('#inputEventName'),
+      inputExplainGoing = $('#inputExplainGoing'),
+      inputEventType = $('#inputEventType'),
       trip_type = 0;
     if ($('input[name=twoWayCheck]:checked').val() == 'on')
       isTwoway = true;
     else
       isTwoway = false;
 
+
     var boolValid = true;
+    boolValid = boolValid && FillKontrol(inputName, er.blank_name);
     boolValid = boolValid && FillKontrol(startPoint, er.blank_start_point);
     boolValid = boolValid && FillKontrol(destinationPoint, er.blank_destination_point);
-
-    if ($("#radiosOnetime").is(":checked") === true) {
-      trip_type = 0;
-      boolValid = boolValid && FillKontrolParent(startDate, er.blank_start_date);
-      if (isTwoway) {
-        boolValid = boolValid && FillKontrolParent(endDate, er.blank_return_date);
-        boolValid = boolValid && SameData(endDate, startDate, er.same_date);
-      }
-      if (boolValid) {
-        var dataForm = {
-            round_trip: isTwoway,
-            origin: startPoint.val(),
-            destination: destinationPoint.val(),
-            way_points: wayPointsString,
-            departure_date: startDate.val(),
-            departure_time: startDateTimeHour.val() + ":" + startDateTimeMinute.val(),
-            return_date: endDate.val(),
-            return_time: endDateTimeHour.val() + ":" + endDateTimeMinute.val()
-          },
-          url = 'offersAjax/createOffer1',
-          result = JSON.parse(AjaxSendJson(url, dataForm));
-        if (strcmp(result.status, 'success') == 0) {
-          window.location = base_url + 'main/offerRide2'
-        } else if (strcmp(result.status, 'fail') == 0) {
-          HataMesaj('body', 'error', er.error, er.fail)
-        } else if (strcmp(result.status, 'error') == 0) {
-          HataMesaj('body', 'error', er.error, result.message);
-        } else {
-          HataMesaj('body', 'error', er.error, er.error_send)
-        }
-
-      } else {
-        HataMesaj('body', 'warning', er.warning, er.edit_info);
-      }
-      return false;
-    } else {
-      var arrayStart = $("#weekDaysStart").find('.ui-state-active'),
-        arrayReturn = $("#weekDaysReturn").find('.ui-state-active'),
-        startDate = $("#datepickerStartDay"),
-        endDate = $("#datepickerEndDay"),
-        startDateTimeHour = $("#weekDaysStartHour"),
-        startDateTimeMinute = $("#weekDaysStartMinute"),
-        endDateTimeHour = $("#weekDaysReturnHour"),
-        endDateTimeMinute = $("#weekDaysReturnMinute");
-      trip_type = 1;
-
-      boolValid = boolValid && CheckArray($("#weekDaysStart"), arrayStart, er.blank_travel_day);
-      if (isTwoway)
-        boolValid = boolValid && CheckArray($("#weekDaysReturn"), arrayReturn, er.blank_travel_day_return);
-      boolValid = boolValid && FillKontrolSpecial($('#dateKontrol'), startDate, er.blank_start_date);
-      boolValid = boolValid && FillKontrolSpecial($('#dateKontrol'), endDate, er.blank_finih_date);
-      boolValid = boolValid && SameDay($('#dateKontrol'), endDate, startDate, er.same_date);
-      if (boolValid) {
-        var departureDays = "",
-          returnDays = ""
-
-        for (var i = 0; i < arrayStart.length; i++) {
-          if (i != arrayStart.length - 1)
-            departureDays += $(arrayStart[i]).data("name") + '?';
-          else
-            departureDays += $(arrayStart[i]).data("name");
-        };
-        if (isTwoway) {
-          for (var i = 0; i < arrayReturn.length; i++) {
-            if (i != arrayReturn.length - 1)
-              returnDays += $(arrayReturn[i]).data("name") + '?';
-            else
-              returnDays += $(arrayReturn[i]).data("name");
-          };
-        }
-        var data = {
-            round_trip: isTwoway,
-            origin: startPoint.val(),
-            destination: destinationPoint.val(),
-            way_points: wayPointsString,
-            departure_date: startDate.val(),
-            departure_time: startDateTimeHour.val() + ":" + startDateTimeMinute.val(),
-            return_date: endDate.val(),
-            return_time: endDateTimeHour.val() + ":" + endDateTimeMinute.val(),
-            departure_days: departureDays,
-            return_days: returnDays
-          },
-          url = 'offersAjax/createOffer2',
-          result = JSON.parse(AjaxSendJson(url, data));
-        if (strcmp(result.status, 'success') == 0) {
-          window.location = base_url + 'main/offerRide2'
-        } else if (strcmp(result.status, 'fail') == 0) {
-          HataMesaj('body', 'error', er.error, er.fail)
-        } else if (strcmp(result.status, 'error') == 0) {
-          HataMesaj('body', 'error', er.error, result.message);
-        } else {
-          HataMesaj('body', 'error', er.error, er.error_send)
-        }
-      } else {
-        HataMesaj('body', 'warning', er.warning, er.edit_info);
-      }
+     
+ 
+    //console.log(JSON.stringify(locations, null, 4));
+    if (locations.length < 2) {
+      HataMesaj(er.locations);
       return false;
     }
+    if ($("#radiosOnetime").is(":checked") === true) {
+      trip_type = 0;
+    } else {
+      trip_type = 1;
+    }
+    boolValid = boolValid && FillKontrolParent(startDate, er.blank_start_date);
+    if (isTwoway) {
+      boolValid = boolValid && FillKontrolParent(endDate, er.blank_return_date);
+      boolValid = boolValid && SameData(endDate, startDate, er.same_date);
+    }
+    if (boolValid) {
+      var dataForm = {
+          trip_type: trip_type,
+          round_trip: isTwoway,
+          origin: startPoint.val(),
+          destination: destinationPoint.val(),
+          name: inputName.val(),
+          event_type: inputEventType.val(),
+          explain_departure: inputExplainGoing.val(),
+          way_points: wayPointsString,
+          departure_date: startDate.val(),
+          departure_time: startDateTimeHour.val() + ":" + startDateTimeMinute.val(),
+          return_date: endDate.val(),
+          return_time: endDateTimeHour.val() + ":" + endDateTimeMinute.val(),
+          locations: locations,
+          total_distance: totalDistance,
+          total_time: totalTime,
+          DistancesWay: DistancesWay,
+          TimesWay: TimesWay
+        },
+        url = 'offersAjax/createOffer1',
+        result = JSON.parse(AjaxSendJson(url, dataForm));
+
+      if (strcmp(result.status, 'success') == 0) {
+        window.location = base_url + result.path;
+      } else if (strcmp(result.status, 'fail') == 0) {
+        HataMesaj(er.fail)
+      } else if (strcmp(result.status, 'error') == 0) {
+        HataMesaj(result.message);
+      } else if (strcmp(result.status, 'login') == 0) {
+        $('#login').modal('toggle');
+      } else {
+        HataMesaj(er.error_send)
+      }
+    } else {
+      //HataMesaj(er.edit_info);
+    }
+    return false;
   });
 
   function SameData(endDate, startDate, mesaj) {
     if (endDate.val() == startDate.val()) {
       var startDateTimeHour = $("#datepickerStartTimeHour"),
         endDateTimeHour = $("#datepickerEndTimeHour");
-      if (startDateTimeHour.val() <= endDateTimeHour.val() - 3) {
+      if (startDateTimeHour.val() <= endDateTimeHour.val() - 1) {
         return true;
       } else {
         Hata(endDate.parent().parent().parent(), mesaj);
@@ -411,6 +390,7 @@
           if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
             /* Toplma mesafeyi yazdırma */
+            /*
             var result = directionsDisplay.getDirections();
             var total = 0,
               minute = 0,
@@ -446,6 +426,57 @@
               " <div >" + start + "   >>>>>>>>> </div>" +
               text +
               " <div >" + end + "   <<<<<<<<< </div>";
+              */
+
+            // Toplma mesafeyi yazdırma 
+            var result = directionsDisplay.getDirections(),
+              total = 0,
+              minute = 0,
+              text = "",
+              myroute = result.routes[0],
+              j = 0;
+            for (var i = 0; i < myroute.legs.length; i++) {
+              total += myroute.legs[i].distance.value;
+              minute += parseInt(myroute.legs[i].duration.value);
+              var dil = "";
+              if (param.length == 0) {
+                if (strcmp(er.lang, "en") == 0)
+                  dil = "  " + myroute.legs[i].duration.text.replace('gün', 'day').replace('saat', 'hour').replace('dakika', 'minute');
+                else
+                  dil = "  " + myroute.legs[i].duration.text;
+                text += " <div class='row'> <div class='col-lg-4 time'> " + dil + "</div> " +
+                  " <div class='col-lg-2 distance'>" + myroute.legs[i].distance.value / 1000.0 + "</div> " +
+                  " <div class='col-lg-1'> km </div> " +
+                  " </div>";
+              } else {
+                if (strcmp(er.lang, "en") == 0)
+                  dil = "  " + myroute.legs[i].duration.text.replace('gün', 'day').replace('saat', 'hour').replace('dakika', 'minute');
+                else
+                  dil = "  " + myroute.legs[i].duration.text;
+                text += " <div class='row'> <div class='col-lg-4 time'  > " + dil + "</div> " +
+                  " <div class='col-lg-2 distance'>" + myroute.legs[i].distance.value / 1000.0 + "</div> " +
+                  " <div class='col-lg-1'> km </div> " +
+                  " </div>";
+                if (j < param.length) {
+                  text += " <div  >  >>>>>>>>>  " + param[j]['location'] + "   >>>>>>>>>   </div>";
+                  j += 1;
+                }
+              }
+
+            }
+
+
+            var hour = Math.floor(minute / 3600),
+              min = Math.ceil((minute % 3600) / 60);
+            total = total / 1000.0;
+
+            var value = "<div class='col-lg-4'>" +
+              er.total_seyahat + " </div><div style='padding-left: 14px' id='totalDistance'> " + total + ' km ' + "</div> " +
+              "<div class='col-lg-4'>" +
+              er.total_time + "</div> <div id='totalTime' class='col-lg-12'> " + hour + er.saatS + min + er.dakikaS + "</div> </ br>" +
+              " <div class='col-lg-12' >" + start + "   >>>>>>>>> </div>" +
+              "<div class='col-lg-12'>" + text + "</div>" +
+              " <div class='col-lg-12'>" + end + "   <<<<<<<<< </div>";
             document.getElementById('total').innerHTML = value;
 
           }
@@ -508,7 +539,7 @@
               if (status == google.maps.GeocoderStatus.OK) {
                 var point = {
                   type: 'way',
-                  name: address,
+                  name: address.location,
                   lat: results[0].geometry.location.lat(),
                   lng: results[0].geometry.location.lng()
                 };

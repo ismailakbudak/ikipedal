@@ -9,22 +9,32 @@
  *   @return
  **/
 function getLocation(&$offer, $locations) {
-    $result = 0;
-    foreach ($locations as $val) {
-        if (strcmp($val['name'], $offer['departure_place']) == 0) {
-            $offer['lat'] = $val['lat'];
-            $offer['lng'] = $val['lng'];
-            $result++;
-        }
-        if (strcmp($val['name'], $offer['arrivial_place']) == 0) {
-            $offer['dLat'] = $val['lat'];
-            $offer['dLng'] = $val['lng'];
-            $result++;
-        }
-        if ($result == 2) {
-            break;
-        }
-    }
+	$result = 0;
+	error_reporting(0);
+	foreach ($locations as $val) {
 
-    return $result;
+		$name = $val['name'];
+		$from = $offer['o_from'];
+		$to = $offer['d_to'];
+
+		$name = trim($name);
+		$from = trim($from);
+		$to = trim($to);
+
+		if (strcmp($name, $from) === 0) {
+			$offer['from_lat'] = $val['lat'];
+			$offer['from_lng'] = $val['lng'];
+			$result++;
+		}
+		if (strcmp($name, $to) === 0) {
+			$offer['to_lat'] = $val['lat'];
+			$offer['to_lng'] = $val['lng'];
+			$result++;
+		}
+		if ($result == 2) {
+			break;
+		}
+	}
+
+	return $result;
 }

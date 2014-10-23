@@ -113,7 +113,7 @@ class Look_At extends CI_Model {
     function GetUserLookList($user_id) {
         $query = $this->db->select('path, look_at.origin, look_at.destination,  MAX(look_at.created_at) AS created_at ')
                       ->from('look_at')
-                      ->join('ride_offers', 'ride_offers.id = look_at.ride_offer_id')
+                      ->join('events', 'events.id = look_at.ride_offer_id')
                       ->where('look_at.user_id =', $user_id)
                       ->order_by("created_at", "DESC")
                       ->group_by('path')

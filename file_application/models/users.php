@@ -161,7 +161,7 @@ class Users extends CI_Model {
      **/
     public function levelUpdate($user_id) {
         $query1 = $this->db->select('COUNT(id) as number')
-                       ->from('ride_offers')
+                       ->from('events')
                        ->where('user_id', $user_id)
                        ->get();
         $query2 = $this->db->select('*, users.created_at as since, users.description as abaoutme')
@@ -497,7 +497,7 @@ class Users extends CI_Model {
         if ($query && $query2) {
             $this->db->where('user_id', $user_id);// set user offers not-active
             $offer  = array('is_active' => 0);
-            $query2 = $this->db->update('ride_offers', $offer);// update information
+            $query2 = $this->db->update('events', $offer);// update information
             if ($query2) {
                 $this->db->where('id', $user_id);
                 $user   = array('active' => 0);// set user not-active
@@ -562,9 +562,9 @@ class Users extends CI_Model {
         $where = "is_active = 1  AND ( CONCAT(departure_date,' ',departure_time) >='{$date}' OR CONCAT(return_date,' ', return_time)  >='{$date}' )";
         $query = $this->db->select('COUNT(id) as count')
                       ->where($where)
-                      ->get("ride_offers");
+                      ->get("events");
         $query2 = $this->db->select('COUNT(id) as count')
-                       ->get("ride_offers");
+                       ->get("events");
         $query3 = $this->db->select('COUNT(id) as count')
                        ->get("users");
 

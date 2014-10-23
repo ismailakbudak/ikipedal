@@ -263,6 +263,7 @@ function HataMes(id, text) {
     id.removeClass("has-error", 3000);
     id.find('#alert').remove();
   }, 7000);
+  UniqueMessage(text);
 }
 // Right bottom alert-error message  
 function HataMesaj(text) {
@@ -278,6 +279,7 @@ function HataMesaj(text) {
       text: text.charAt(0).toUpperCase() + text.slice(1) // capitialize first character
     });
   }
+  UniqueMessage(text);
 }
 
 // Right bottom alert-error message for modal
@@ -294,6 +296,7 @@ function HataMesajModal(id, text) {
       text: text.charAt(0).toUpperCase() + text.slice(1) // capitialize first character
     });
   }
+  UniqueMessage(text);
 }
 // Right bottom alert-success message
 function BasariMesaj(text) {
@@ -309,6 +312,7 @@ function BasariMesaj(text) {
       text: text.charAt(0).toUpperCase() + text.slice(1) // capitialize first character
     });
   }
+  UniqueMessage(text);
 }
 
 // for form control element error message
@@ -321,6 +325,17 @@ function Hata(id, text) {
   setTimeout(function() {
     id.parent().removeClass("has-error", 3000);
     id.parent().find('#alert').remove();
+  }, 3000);
+  UniqueMessage(text);
+}
+
+function UniqueMessage(text){
+  var error = '<div id="alert" class="alert alert-dismissable alert-danger"> ' + ' <button type="button" class="close" data-dismiss="alert">&times;</button> ' + ' <strong>Opps.. </strong> ' + text.charAt(0).toUpperCase() + text.slice(1) + '</div>';
+  $message = $('#unique-message');
+  
+  $message.append(error);
+  setTimeout(function() { 
+    $message.html('');
   }, 3000);
 
 }
@@ -431,7 +446,7 @@ function CheckArray(id, array, mesaj) {
 }
 
 function SelectKontrol(id, mesaj) {
-  if (id.val() == "" || id.val() == "0") {
+  if (id.val() == "" || id.val() == "0"  ) {
     Hata(id.parent(), mesaj);
     return false;
   } else {
@@ -440,7 +455,7 @@ function SelectKontrol(id, mesaj) {
 }
 
 function FillKontrolParent(id, mesaj) {
-  if (id.val() == "" || id.val() == "0") {
+  if (id.val() == "" || id.val() == "0" || jQuery.trim(id.val()) == '') {
     Hata(id.parent().parent(), mesaj);
     return false;
   } else {
@@ -457,8 +472,8 @@ function FillKontrolSpecial(id, kontrol, mesaj) {
   }
 }
 
-function FillKontrol(id, mesaj) {
-  if (id.val() == "" || id.val() == "0") {
+function FillKontrol(id, mesaj ) {
+  if (id.val() == "" || id.val() == "0" || jQuery.trim(id.val()) == '') {
     Hata(id.parent(), mesaj);
     return false;
   } else {

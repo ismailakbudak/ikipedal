@@ -3,6 +3,8 @@
 // for offer ride scripts
 $lang['g.blank_travel']            = "Travel path not found...";
 $lang['g.blank_start_point']       = "You did not enter start point..";
+$lang['g.blank_name']              = "Event name con not be blank..";
+$lang['g.locations']               = "Routes location could not get. Please try later..";
 $lang['g.blank_destination_point'] = "You did not enter destination point..";
 $lang['g.blank_start_date']        = "You did not select travel date..";
 $lang['g.blank_return_date']       = "You did not select travel return date...";
@@ -21,12 +23,12 @@ $lang['g.sel_luggage']             = " Please choose luggage size..";
 $lang['g.sel_leavetime']           = " Please choose ypur leave time..";
 $lang['g.condition']               = " You did not accept terms ..";
 $lang['g.max_num']                 = " You entered maximum value..";
-$lang['g.min_num']                 = " You entered minimum value.."; 
+$lang['g.min_num']                 = " You entered minimum value..";
 $lang['g.real_distance']           = " Real total distance : ";
-$lang['g.real_time']               = " Real total travel time : "; 
+$lang['g.real_time']               = " Real total travel time : ";
 $lang['g.saatS']                   = " hr ";
-$lang['g.dakikaS']                 = " min "; 
-// for offerride 
+$lang['g.dakikaS']                 = " min ";
+// for offerride
 $lang['o.newoffer'] 				= "New Offer";
 $lang['o.progcomplete'] 			= "Complete ";
 $lang['o.progTitle'] 				= "If you fill information in this page, you will complete %30 your offer. Please fill information and continue... ";
@@ -62,11 +64,13 @@ $lang['o.travelroute'] 				= "Itinerary";
 $lang['o.tripinfo'] 				= "Travel General Information";
 $lang['o.travelstartdateTitle'] 	= "Travel Start Date ";
 $lang['o.travelfinishdateTitle'] 	= "Travel Finish Date ";
-$lang['o.traveldateTitle'] 			=  "Travel Date"; 
-$lang['o.traveltimeTitle'] 			=  "Travel Time "; 
-$lang['o.travelreturntime'] 		= "Travel Return Hour"; 
+$lang['o.traveldateTitle'] 			=  "Travel Date";
+$lang['o.traveltimeTitle'] 			=  "Travel Time ";
+$lang['o.travelreturntime'] 		= "Travel Return Hour";
 $lang['o.traveldeparturetime']	    = "Travel Departure Hour";
-// for offerride2 
+$lang['o.event_name']              = "Event Name";
+$lang['o.event_type']              = "Event Type";
+// for offerride2
 $lang['o2.progTitle'] 				= "If you fill information in this page, you will complete %80 your trip. Please fill information and complete your offer process...";
 $lang['o2.price'] 					= "Price per passenger ";
 $lang['o2.pricecolor']				= " Green color is low price, Yellow color is normal price, Red color is high price. ";
@@ -96,7 +100,7 @@ $lang['o2.termcon1'] 				= "Terms and contion a";
 $lang['o2.termcon2'] 				= "Content b";
 $lang['o2.close'] 					= "Close";
 
-// for offer detail page 
+// for offer detail page
 $lang['od.detailoffer'    ] = "Offer Detail";
 $lang['od.route'          ] = "Travel route points ...";
 $lang['od.twoway'         ] = "Two way trip..";
@@ -114,7 +118,7 @@ $lang['od.dateR'          ] = "Return Date : ";
 $lang['od.timeR'          ] = "Return Time : ";
 $lang['od.times'          ] = "Departure Times  : ";
 $lang['od.timeRs'         ] = "Return Times  : ";
-$lang['od.nav'            ] = " : "; 
+$lang['od.nav'            ] = " : ";
 $lang['od.nav2'           ] = " is offering a ride. Price for per passenger  ";
 $lang['od.create'         ] = "Offer published : ";
 $lang['od.seen'           ] = " Seen ";

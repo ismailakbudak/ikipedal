@@ -60,7 +60,7 @@ class Searched extends CI_Model {
                        ->group_by('departure_place')
                        ->limit($LIMIT)
                        ->order_by("num", "desc")
-                       ->get('offer_created');
+                       ->get('created_events');
 
         if ($query && $query2) {
             return array('mostSearched' => $query->result_array(), 'mostCreated' => $query2->result_array());
