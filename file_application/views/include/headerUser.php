@@ -65,9 +65,6 @@ $this->load->view('include/head');
                                       <li><a tabindex="4" href="<?php echo new_url() . 'offer'?>">
                                         <i class="text-info     glyphicon glyphicon-briefcase two"></i> <?=lang('g.offers')?>  </a>
                                       </li>
-                                      <li><a tabindex="5" href="<?php echo new_url() . 'alert'?>">
-                                        <i class="text-danger   glyphicon glyphicon-bell two"></i> <?=lang('g.alerts')?>   </a>
-                                      </li>
                                       <li class="divider"></li>
                                       <li><a tabindex="6" href="<?php echo new_url() . 'login/logOut';?>">
                                         <i class="text-danger   glyphicon glyphicon-log-out two"></i> <?=lang('g.logout')?> </a>

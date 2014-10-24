@@ -161,10 +161,7 @@ $lang['p.pet-yes'        ] = "Arabama evcil hayvan alabilirim..";
 $lang['p.smoke-no'       ] = "Arabamda sigara içilmez..";
 $lang['p.smoke-yes'      ] = "Arabamda sigara içebilirsiniz..";
 
-?>
 
-
-<?php
 
 // for profile controller
 $lang['p.sory'] = "Üzgünüm! ";

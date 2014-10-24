@@ -8,24 +8,24 @@
  *   @return
  **/
 function timeLang($time, $lang) {
-    $en = array("saat" => "hr",
-        "sa"              => "hr",
-        "dakika"          => "min",
-        "dk"              => "min",
-    );
-    $tr = array("hr" => "saat",
-        "saat"          => "saat",
-        "sa"            => "saat",
-        "min"           => "dk",
-        "dakika"        => "dk",
-        "minute"        => "dakika",
-    );
-    if (strcmp($lang, "en") == 0) {
-        return strtr($time, $en);
-    } else {
+	$en = array("saat" => "hr",
+		"sa" => "hr",
+		"dakika" => "min",
+		"dk" => "min",
+	);
+	$tr = array("hr" => "saat",
+		"saat" => "saat",
+		"sa" => "saat",
+		"min" => "dk",
+		"dakika" => "dk",
+		"minute" => "dakika",
+	);
+	if (strcmp($lang, "en") == 0) {
+		return strtr($time, $en);
+	} else {
 
-        return strtr($time, $tr);
-    }
+		return strtr($time, $tr);
+	}
 }
 
 /**
@@ -35,20 +35,20 @@ function timeLang($time, $lang) {
  *   @return
  **/
 function en($day, $lang) {
-    $days = array("Pazartesi" => "Monday",
-        "Salı"                  => "Tuesday",
-        "Çarşamba"             => "Wednesday",
-        "Perşembe"              => "Thursday",
-        "Cuma"                   => "Friday",
-        "Cumartesi"              => "Saturday",
-        "Pazar"                  => "Sunday",
-    );
-    if (strcmp($lang, "en") == 0) {
-        return strtr($day, $days);
-    } else {
+	$days = array("Pazartesi" => "Monday",
+		"Salı" => "Tuesday",
+		"Çarşamba" => "Wednesday",
+		"Perşembe" => "Thursday",
+		"Cuma" => "Friday",
+		"Cumartesi" => "Saturday",
+		"Pazar" => "Sunday",
+	);
+	if (strcmp($lang, "en") == 0) {
+		return strtr($day, $days);
+	} else {
 
-        return $day;
-    }
+		return $day;
+	}
 }
 
 /**
@@ -59,16 +59,16 @@ function en($day, $lang) {
  *
  **/
 function oneTrip($value, $lang, $row_count = 0) {
-    $origin      = explode(',', $value['origin']);
-    $origin      = $origin[0];
-    $destination = explode(',', $value['destination']);
-    $destination = $destination[0];
-    $base        = new_url();
-    $url_detail  = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
-    $url_update  = $base . 'offer/update/' . $value['id'];
-    $url_show    = new_url('offer/showList/' . $value['id']);
-    $url_look    = $base . 'offers/look/' . $value['id'];
-    $val         = " <div class='panel panel-primary' data-count='" . $row_count . "'>
+	$origin = explode(',', $value['origin']);
+	$origin = $origin[0];
+	$destination = explode(',', $value['destination']);
+	$destination = $destination[0];
+	$base = new_url();
+	$url_detail = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
+	$url_update = $base . 'offer/update/' . $value['id'];
+	$url_show = new_url('offer/showList/' . $value['id']);
+	$url_look = $base . 'offers/look/' . $value['id'];
+	$val = " <div class='panel panel-primary' data-count='" . $row_count . "'>
                         <div class='panel-heading'>
                             <h3 class='panel-title'>
 {$origin}
@@ -92,20 +92,20 @@ function oneTrip($value, $lang, $row_count = 0) {
                                              <i class='glyphicon glyphicon-time sol2' title='" . lang('io.titletriphour') . "'></i>
                                              <div class='time' title='" . lang('io.titletriphour') . "'>
                                                             <select class='form-control input-sm' id='datepickerStartTimeHour'>  ";
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                   </select>
                                      </div>
                                      <label class='dod'>:</label>
@@ -124,20 +124,20 @@ function oneTrip($value, $lang, $row_count = 0) {
                                       <i class='glyphicon glyphicon-time sol2' title='" . lang('io.titlereturnhour') . "' ></i>
                                       <div class='time' title='" . lang('io.titlereturnhour') . "'>
                                                     <select class='form-control input-sm' id='datepickerReturnTimeHr'> ";
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                    </select>
                                       </div>
                                       <label class='dod'>:</label>
@@ -162,38 +162,38 @@ function oneTrip($value, $lang, $row_count = 0) {
                            <blockquote  class='col-lg-12 safari'>
                                 <span class='row row-ofer edit-row' >";
 
-    $date  = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
-    $times = explode(':', $value['departure_time']);
-    $time  = $times[0] . ":" . $times[1];
+	$date = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
+	$times = explode(':', $value['departure_time']);
+	$time = $times[0] . ":" . $times[1];
 
-    $val .= "   <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titledeparturedate') . "' ></i>  {$date}
+	$val .= "   <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titledeparturedate') . "' ></i>  {$date}
                                      <i class='text-success glyphicon glyphicon-time icon4 two' title='" . lang('io.titledeparturetime') . "'></i> {$time}
                                 </span>
                                 <span class='row row-ofer edit-row'>
                                      <i class='text-info glyphicon glyphicon-map-marker two' title='" . lang('io.titleroute') . "' ></i>";
 
-    if (count($value['way_points']) > 0) {
-        for ($i = 0; $i < count($value['way_points']);
-            $i++) {
-            $str0 = $value['way_points'][$i]['departure_place'];
-            $str  = explode(",", $str0);
-            if ($i == 0) {
-                $val .= "<strong title='$str0' >" . $str[0] . "</strong>→";
-            } else {
+	if (count($value['way_points']) > 0) {
+		for ($i = 0; $i < count($value['way_points']);
+			$i++) {
+			$str0 = $value['way_points'][$i]['departure_place'];
+			$str = explode(",", $str0);
+			if ($i == 0) {
+				$val .= "<strong title='$str0' >" . $str[0] . "</strong>→";
+			} else {
 
-                $val .= "<span  title='$str0' >" . $str[0] . "</span> →";
-            }
-        }
+				$val .= "<span  title='$str0' >" . $str[0] . "</span> →";
+			}
+		}
 
-        $str2 = explode(",", $value['destination']);
-        $val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
-    } else {
-        $str  = explode(",", $value['origin']);
-        $str2 = explode(",", $value['destination']);
-        $val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
-    }
-    $totaltime = timeLang($value['total_time'], $lang);
-    $val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
+		$str2 = explode(",", $value['destination']);
+		$val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
+	} else {
+		$str = explode(",", $value['origin']);
+		$str2 = explode(",", $value['destination']);
+		$val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
+	}
+	$totaltime = timeLang($value['total_time'], $lang);
+	$val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
                                      <i class='text-info glyphicon glyphicon-time icon4 two' title='" . lang('io.titletriptime') . "'></i> {$totaltime}
 
                                 </span>
@@ -211,10 +211,10 @@ function oneTrip($value, $lang, $row_count = 0) {
                                      <span class='row row-ofer  width-200' style='float:left'>
                                          <span class='badge seat' style='background-image:linear-gradient(#ff6707,#dd5600 60%,#c94e00);'>{$value['number_of_seats']}</span>" . lang('io.leftseat') . "
                                          <large class='{$value['price_class']}' ";
-    $val .= '                             rel="popover" data-placement="top" data-content=\'&lt;span class="row popover-desc "&gt;  &lt;strong class="green"  &gt;' . lang("od.green") . ' &lt;/strong&gt;' . lang("od.low") . '&lt;/span&gt;
+	$val .= '                             rel="popover" data-placement="top" data-content=\'&lt;span class="row popover-desc "&gt;  &lt;strong class="green"  &gt;' . lang("od.green") . ' &lt;/strong&gt;' . lang("od.low") . '&lt;/span&gt;
                                                                                                                           &lt;span class="row popover-desc "&gt;  &lt;strong class="orange" &gt; ' . lang("od.orange") . '&lt;/strong&gt; ' . lang("od.normal") . '&lt;/span&gt;
                                                                                                                           &lt;span class="row popover-desc "&gt;  &lt;strong class="red"    &gt; ' . lang("od.red") . '&lt;/strong&gt; ' . lang("od.high") . '&lt;/span&gt;\' data-trigger="hover" data-html="true"';
-    $val .= "style='margin-right:20px;'>
+	$val .= "style='margin-right:20px;'>
 {$value['price_per_passenger']} ₺
                                          </large>
                                      </span>
@@ -237,20 +237,20 @@ function oneTrip($value, $lang, $row_count = 0) {
                                       <i class='glyphicon glyphicon-time sol2' title='" . lang('io.titlereturnhour') . "' ></i>
                                       <div class='time' title='" . lang('io.titlereturnhour') . "'>
                                                     <select class='form-control input-sm' id='datepickerStartTimeHour'> ";
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                    </select>
                                       </div>
                                       <label class='dod'>:</label>
@@ -272,7 +272,7 @@ function oneTrip($value, $lang, $row_count = 0) {
                               </div>
                             </div>
                          </div> ";
-    return $val;
+	return $val;
 }// END of the oneTrip() function
 
 /**
@@ -283,16 +283,16 @@ function oneTrip($value, $lang, $row_count = 0) {
  *
  **/
 function twoTrip($value, $lang, $row_count = 0) {
-    $origin      = explode(',', $value['origin']);
-    $origin      = $origin[0];
-    $destination = explode(',', $value['destination']);
-    $destination = $destination[0];
-    $base        = new_url();
-    $url_update  = $base . 'offer/update/' . $value['id'];
-    $url_detail  = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
-    $url_show    = new_url('offer/showList/' . $value['id']);
-    $url_look    = $base . 'offers/look/' . $value['id'];
-    $val         = " <div class='panel panel-primary' data-count='" . $row_count . "'>
+	$origin = explode(',', $value['origin']);
+	$origin = $origin[0];
+	$destination = explode(',', $value['destination']);
+	$destination = $destination[0];
+	$base = new_url();
+	$url_update = $base . 'offer/update/' . $value['id'];
+	$url_detail = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
+	$url_show = new_url('offer/showList/' . $value['id']);
+	$url_look = $base . 'offers/look/' . $value['id'];
+	$val = " <div class='panel panel-primary' data-count='" . $row_count . "'>
                          <div class='panel-heading'>
                             <h3 class='panel-title'>
 {$origin}
@@ -317,20 +317,20 @@ function twoTrip($value, $lang, $row_count = 0) {
                                      <i class='glyphicon glyphicon-time sol2' title='" . lang('io.titletriphour') . "'></i>
                                      <div class='time' title='" . lang('io.titletriphour') . "'>
                                                     <select class='form-control input-sm' id='datepickerStartTimeHour'>";
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                    </select>
                                      </div>
                                      <label class='dod'>:</label>
@@ -351,20 +351,20 @@ function twoTrip($value, $lang, $row_count = 0) {
                                       <div class='time' title='" . lang('io.titlereturnhour') . "'>
                                                     <select class='form-control input-sm' id='datepickerReturnTimeHr'>";
 
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                    </select>
                                       </div>
                                       <label class='dod'>:</label>
@@ -388,47 +388,39 @@ function twoTrip($value, $lang, $row_count = 0) {
                              <blockquote  class='col-lg-12 safari'>
                                 <span class='row row-ofer edit-row' >";
 
-    $date  = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
-    $times = explode(':', $value['departure_time']);
-    $time  = $times[0] . ":" . $times[1];
+	$date = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
+	$times = explode(':', $value['departure_time']);
+	$time = $times[0] . ":" . $times[1];
 
-    $val .= "   <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titledeparturedate') . "' ></i>  {$date}
+	$val .= "   <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titledeparturedate') . "' ></i>  {$date}
                                      <i class='text-success glyphicon glyphicon-time icon4 two' title='" . lang('io.titledeparturetime') . "'></i> {$time}
                                 </span>
                                 <span class='row row-ofer edit-row'>
                                      <i class='text-info glyphicon glyphicon-map-marker two' title='" . lang('io.titleroute') . "' ></i>";
 
-    if (count($value['way_points']) > 0) {
-        for ($i = 0; $i < count($value['way_points']);
-            $i++) {
-            $str0 = $value['way_points'][$i]['departure_place'];
-            $str  = explode(",", $str0);
-            if ($i == 0) {
-                $val .= "<strong title='$str0' >" . $str[0] . "</strong>→";
-            } else {
+	if ($value['is_way']) {
 
-                $val .= "<span  title='$str0' >" . $str[0] . "</span> →";
-            }
-        }
-
-        $str2 = explode(",", $value['destination']);
-        $val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
-    } else {
-        $str  = explode(",", $value['origin']);
-        $str2 = explode(",", $value['destination']);
-        $val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
-    }
-    $totaltime = timeLang($value['total_time'], $lang);
-    $val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
+		$str = explode(",", $value['origin']);
+		$val .= "<strong title='$str[0]' >" . $str[0] . "</strong>→";
+		$val .= "<strong title='' >" . $value['way_points'] . "</strong>→";
+		$str2 = explode(",", $value['destination']);
+		$val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
+	} else {
+		$str = explode(",", $value['origin']);
+		$str2 = explode(",", $value['destination']);
+		$val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
+	}
+	$totaltime = timeLang($value['total_time'], $lang);
+	$val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
                                      <i class='text-info glyphicon glyphicon-time icon4 two' title='" . lang('io.titletriptime') . "'></i> {$totaltime}
                                 </span>
                                 <span class='row row-ofer'>";
 
-    $date  = tr(date_format(date_create($value['return_date']), ' l jS F Y'), $lang);
-    $times = explode(':', $value['return_time']);
-    $time  = $times[0] . ":" . $times[1];
+	$date = tr(date_format(date_create($value['return_date']), ' l jS F Y'), $lang);
+	$times = explode(':', $value['return_time']);
+	$time = $times[0] . ":" . $times[1];
 
-    $val .= " <i class='text-danger glyphicon glyphicon-calendar two' title='" . lang('io.titlereturndate') . "'></i>  {$date}
+	$val .= " <i class='text-danger glyphicon glyphicon-calendar two' title='" . lang('io.titlereturndate') . "'></i>  {$date}
                                      <i class='text-danger glyphicon glyphicon-time icon4 two' title='" . lang('io.titledeparturetime') . "'></i>  {$time}
                                </span>
                              </blockquote>
@@ -438,16 +430,7 @@ function twoTrip($value, $lang, $row_count = 0) {
                                        <span class='row row-ofer  width-200' style='float:left' >
                                           <span class='badge' style='background-image:linear-gradient(#ff6707,#dd5600 60%,#c94e00)'>{$value['look_count']['look']}</span> " . lang('io.countshow') . "
                                      </span>
-                                     <span class='row row-ofer  width-200' style='float:left'>
-                                         <span class='badge seat' style='background-image:linear-gradient(#ff6707,#dd5600 60%,#c94e00);'>{$value['number_of_seats']}</span> " . lang('io.leftseat') . "
-                                         <large class='{$value['price_class']}'";
-    $val .= '                             rel="popover" data-placement="top" data-content=\'&lt;span class="row popover-desc "&gt;  &lt;strong class="green"  &gt;' . lang("od.green") . ' &lt;/strong&gt;' . lang("od.low") . '&lt;/span&gt;
-                                                                                                                          &lt;span class="row popover-desc "&gt;  &lt;strong class="orange" &gt; ' . lang("od.orange") . '&lt;/strong&gt; ' . lang("od.normal") . '&lt;/span&gt;
-                                                                                                                          &lt;span class="row popover-desc "&gt;  &lt;strong class="red"    &gt; ' . lang("od.red") . '&lt;/strong&gt; ' . lang("od.high") . '&lt;/span&gt;\' data-trigger="hover" data-html="true"';
-    $val .= "style='margin-right:20px;'>
-{$value['price_per_passenger']} ₺
-                                         </large>
-                                     </span>
+
                                     <span class='row row-ofer  width-200'  style='float:left'>
                                             <a href='#' data-id='{$value['id']}'  title='" . lang('io.titleminusseat') . "'><i  class='glyphicon glyphicon-minus-sign two'></i> </a>
                                             <a href='#' data-id='{$value['id']}' title='" . lang('io.titleplusseat') . "'><i  class='glyphicon glyphicon-plus-sign  two '></i> </a>
@@ -457,7 +440,7 @@ function twoTrip($value, $lang, $row_count = 0) {
                            </div>
                           </div>
                           </div> ";
-    return $val;
+	return $val;
 }// END of the twoWayTrip() function
 
 /**
@@ -468,28 +451,28 @@ function twoTrip($value, $lang, $row_count = 0) {
  *
  **/
 function rutinTrip($value, $lang, &$count, $row_count = 0) {
-    $origin      = explode(',', $value['origin']);
-    $origin      = $origin[0];
-    $destination = explode(',', $value['destination']);
-    $destination = $destination[0];
-    $base        = new_url();
-    $url_update  = $base . 'offer/update/' . $value['id'];
-    $url_detail  = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
-    $url_show    = new_url('offer/showList/' . $value['id']);
-    $url_look    = $base . 'offers/look/' . $value['id'];
-    $val         = " <div class='panel panel-primary' data-count='" . $row_count . "'>
+	$origin = explode(',', $value['origin']);
+	$origin = $origin[0];
+	$destination = explode(',', $value['destination']);
+	$destination = $destination[0];
+	$base = new_url();
+	$url_update = $base . 'offer/update/' . $value['id'];
+	$url_detail = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
+	$url_show = new_url('offer/showList/' . $value['id']);
+	$url_look = $base . 'offers/look/' . $value['id'];
+	$val = " <div class='panel panel-primary' data-count='" . $row_count . "'>
                         <div class='panel-heading  panel-heading-my'>
                            <h3 class='panel-title'>
                                  <i class='glyphicon glyphicon-retweet icon4 yellow' title='" . lang('io.titlerutin') . "'></i>
 {$origin}";
-    if ($value['round_trip'] == "1") {
-        $val .= " <i class='yellow glyphicon glyphicon-arrow-left icon1' title='" . lang('io.titletwoway') . "'></i>
+	if ($value['round_trip'] == "1") {
+		$val .= " <i class='yellow glyphicon glyphicon-arrow-left icon1' title='" . lang('io.titletwoway') . "'></i>
                                  <i class='yellow glyphicon glyphicon-arrow-right icon2' title='" . lang('io.titletwoway') . "'></i>";
-    } else {
-        $val .= "<i class='yellow glyphicon glyphicon-arrow-right icon4' title='" . lang('io.titleonetime') . "'></i>";
-    }
+	} else {
+		$val .= "<i class='yellow glyphicon glyphicon-arrow-right icon4' title='" . lang('io.titleonetime') . "'></i>";
+	}
 
-    $val .= "    {$destination}
+	$val .= "    {$destination}
                                 <a href='{$url_update}' ><i title='" . lang('io.titleupdate') . "' class=' glyphicon glyphicon-pencil icon3 right'></i></a>
                                 <a class='delete-offer' data-toggle='modal' href='#delete-modal' data-id='" . $value['id'] . "' ><i title='" . lang('io.titledelete') . "' class=' glyphicon glyphicon-trash icon3 right'></i></a>
                                 <a href='{$url_detail}' ><i title='" . lang('io.titleshow') . "'  class=' glyphicon glyphicon-eye-open icon3 right'></i></a>
@@ -508,20 +491,20 @@ function rutinTrip($value, $lang, &$count, $row_count = 0) {
                                      <i class='glyphicon glyphicon-time sol2' title='" . lang('io.titletriphour') . "'></i>
                                      <div class='time' title='" . lang('io.titletriphour') . "'>
                                                     <select class='form-control input-sm' id='datepickerStartTimeHour'>";
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                    </select>
                                      </div>
                                      <label class='dod'>:</label>
@@ -541,20 +524,20 @@ function rutinTrip($value, $lang, &$count, $row_count = 0) {
                                       <div class='time' title='" . lang('io.titlereturnhour') . "'>
                                                     <select class='form-control input-sm' id='datepickerReturnTimeHr'>";
 
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                    </select>
                                       </div>
                                       <label class='dod'>:</label>
@@ -577,73 +560,73 @@ function rutinTrip($value, $lang, &$count, $row_count = 0) {
                            <div class='col-lg-9 '>
                              <blockquote  class='col-lg-12 safari'>
                                 <span class='row row-ofer edit-row' >";
-    $date  = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
-    $times = explode(':', $value['departure_time']);
-    $time  = $times[0] . ":" . $times[1];
-    $val .= "    <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titlestartdate') . "' ></i> {$date}
+	$date = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
+	$times = explode(':', $value['departure_time']);
+	$time = $times[0] . ":" . $times[1];
+	$val .= "    <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titlestartdate') . "' ></i> {$date}
                                       <i class='text-success glyphicon glyphicon-time icon4 two' title='" . lang('io.titledeparturetime') . "'></i> {$time}
                                       <strong title='" . lang('io.titletravelday') . "'> ";
-    $return = 0;
-    foreach ($value['rutin_trip'] as $day) {
-        if ($day["is_return"] == 0) {
-            $val .= " " . en($day['day'], $lang);
-        } else {
+	$return = 0;
+	foreach ($value['rutin_trip'] as $day) {
+		if ($day["is_return"] == 0) {
+			$val .= " " . en($day['day'], $lang);
+		} else {
 
-            $return++;
-        }
-    }
+			$return++;
+		}
+	}
 
-    $val .= "</strong>
+	$val .= "</strong>
                                 </span>
                                 <span class='row row-ofer edit-row'>";
-    $date  = tr(date_format(date_create($value['return_date']), ' l jS F Y'), $lang);
-    $times = explode(':', $value['return_time']);
-    $time  = $times[0] . ":" . $times[1];
-    $val .= "  <i class='text-danger glyphicon glyphicon-calendar two' title='" . lang('io.titlefinishdate') . "'></i>  {$date}";
-    if ($return > 0) {
-        $val .= " <i class='text-danger glyphicon glyphicon-time icon4 two' title='" . lang('io.titlereturnhour') . "'></i>  {$time}";
-    } else {// there is no return days
-        $val .= "<a href='#' data-id='{$value['id']}' style='margin-left:20px;' ><i title='" . lang('io.titlereturndaysadd') . "' class=' glyphicon glyphicon-paperclip icon two '></i></a>";
-        $count += 1;
-    }
-    $val .= "<strong title='" . lang('io.titletraveldayreturn') . "'>";
-    foreach ($value['rutin_trip'] as $day) {
-        if ($day["is_return"] == 1) {
-            $val .= "  " . en($day['day'], $lang);
-        }
-    }
+	$date = tr(date_format(date_create($value['return_date']), ' l jS F Y'), $lang);
+	$times = explode(':', $value['return_time']);
+	$time = $times[0] . ":" . $times[1];
+	$val .= "  <i class='text-danger glyphicon glyphicon-calendar two' title='" . lang('io.titlefinishdate') . "'></i>  {$date}";
+	if ($return > 0) {
+		$val .= " <i class='text-danger glyphicon glyphicon-time icon4 two' title='" . lang('io.titlereturnhour') . "'></i>  {$time}";
+	} else {// there is no return days
+		$val .= "<a href='#' data-id='{$value['id']}' style='margin-left:20px;' ><i title='" . lang('io.titlereturndaysadd') . "' class=' glyphicon glyphicon-paperclip icon two '></i></a>";
+		$count += 1;
+	}
+	$val .= "<strong title='" . lang('io.titletraveldayreturn') . "'>";
+	foreach ($value['rutin_trip'] as $day) {
+		if ($day["is_return"] == 1) {
+			$val .= "  " . en($day['day'], $lang);
+		}
+	}
 
-    $val .= " </strong>
+	$val .= " </strong>
                                 </span>
                                 <span class='row row-ofer '>
                                      <i class='text-info glyphicon glyphicon-map-marker two' title='" . lang('io.titleroute') . "' ></i>";
 
-    if (count($value['way_points']) > 0) {
-        for ($i = 0; $i < count($value['way_points']);
-            $i++) {
-            $str0 = $value['way_points'][$i]['departure_place'];
-            $str  = explode(",", $str0);
-            if ($i == 0) {
-                $val .= "<strong title='$str0' >" . $str[0] . "</strong>→";
-            } else {
+	if (count($value['way_points']) > 0) {
+		for ($i = 0; $i < count($value['way_points']);
+			$i++) {
+			$str0 = $value['way_points'][$i]['departure_place'];
+			$str = explode(",", $str0);
+			if ($i == 0) {
+				$val .= "<strong title='$str0' >" . $str[0] . "</strong>→";
+			} else {
 
-                $val .= "<span  title='$str0' >" . $str[0] . "</span> →";
-            }
-        }
+				$val .= "<span  title='$str0' >" . $str[0] . "</span> →";
+			}
+		}
 
-        $str2 = explode(",", $value['destination']);
-        $val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
-    } else {
-        $str  = explode(",", $value['origin']);
-        $str2 = explode(",", $value['destination']);
-        $val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
-    }
-    $totaltime = timeLang($value['total_time'], $lang);
-    $val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
+		$str2 = explode(",", $value['destination']);
+		$val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
+	} else {
+		$str = explode(",", $value['origin']);
+		$str2 = explode(",", $value['destination']);
+		$val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
+	}
+	$totaltime = timeLang($value['total_time'], $lang);
+	$val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
                                      <i class='text-info glyphicon glyphicon-time icon4 two' title='" . lang('io.titletriptime') . "'></i> {$totaltime}
                                 </span>";
 
-    $val .= "</blockquote>
+	$val .= "</blockquote>
                            </div>
                               <div class='col-lg-3 '>
                                      <blockquote class='pull-right' style='border-color: rgba(0, 0, 0, 0.15); height:100px'>
@@ -653,10 +636,10 @@ function rutinTrip($value, $lang, &$count, $row_count = 0) {
                                                 <span class='row row-ofer  width-200' style='float:left' >
                                                     <span class='badge seat' style='background-image:linear-gradient(#ff6707,#dd5600 60%,#c94e00);'>{$value['number_of_seats']}</span>" . lang('io.leftseat') . "
                                                     <large class='{$value['price_class']}'   ";
-    $val .= '                             rel="popover" data-placement="top" data-content=\'&lt;span class="row popover-desc "&gt;  &lt;strong class="green"  &gt;' . lang("od.green") . ' &lt;/strong&gt;' . lang("od.low") . '&lt;/span&gt;
+	$val .= '                             rel="popover" data-placement="top" data-content=\'&lt;span class="row popover-desc "&gt;  &lt;strong class="green"  &gt;' . lang("od.green") . ' &lt;/strong&gt;' . lang("od.low") . '&lt;/span&gt;
                                                                                                                           &lt;span class="row popover-desc "&gt;  &lt;strong class="orange" &gt; ' . lang("od.orange") . '&lt;/strong&gt; ' . lang("od.normal") . '&lt;/span&gt;
                                                                                                                           &lt;span class="row popover-desc "&gt;  &lt;strong class="red"    &gt; ' . lang("od.red") . '&lt;/strong&gt; ' . lang("od.high") . '&lt;/span&gt;\' data-trigger="hover" data-html="true"';
-    $val .= "style='margin-right:20px;'>
+	$val .= "style='margin-right:20px;'>
 {$value['price_per_passenger']} ₺
                                                     </large>
                                                 </span>
@@ -693,20 +676,20 @@ function rutinTrip($value, $lang, &$count, $row_count = 0) {
                                                      <div class='time' title='" . lang('io.titlereturnhour') . "'>
                                                                    <select class='form-control input-sm' id='datepickerReturnTimeHr'>";
 
-    for ($i = 0; $i < 24; $i++) {
-        if ($i < 10) {
-            $val .= "<option value='0{$i}'> 0$i </option>";
-        } else {
-            if ($i == 12) {
-                $val .= "<option selected value='{$i}'> $i </option>";
-            } else {
+	for ($i = 0; $i < 24; $i++) {
+		if ($i < 10) {
+			$val .= "<option value='0{$i}'> 0$i </option>";
+		} else {
+			if ($i == 12) {
+				$val .= "<option selected value='{$i}'> $i </option>";
+			} else {
 
-                $val .= "<option value='{$i}'> $i </option>";
-            }
-        }
-    }
+				$val .= "<option value='{$i}'> $i </option>";
+			}
+		}
+	}
 
-    $val .= "
+	$val .= "
                                                                   </select>
                                                      </div>
                                                      <label class='dod'>:</label>
@@ -729,7 +712,7 @@ function rutinTrip($value, $lang, &$count, $row_count = 0) {
 
                              </div>
                           </div> ";
-    return $val;
+	return $val;
 }
 // END of the rutinTrip() function
 

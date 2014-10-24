@@ -136,17 +136,6 @@
 				                                                         </div>";
 				                                                 $verifications[] = $email;
 				                                          }
-				                                          $phone = "";
-				                                          if( $user['tel_check'] ){
-				                                                 $phone = "<div class='row row-side verification'>
-				                                                                  <i class='col-xs-2 text-primary  glyphicon glyphicon-phone '></i>
-				                                                                  <div class='col-xs-8 text-verified text-success'>
-				                                                                       ".  lang("sd.phone")  ."
-				                                                                  </div>
-				                                                                  <i class='col-xs-2 validated'></i>
-				                                                          </div>";
-				                                                  $verifications[] = $phone;
-				                                          }
 				                                          $face = "";
 				                                          if( $user['face_check'] ){
 				                                                $face = "<div class='row row-side verification'>
@@ -202,31 +191,7 @@
 
 				                                     </div>";
 
-				                                 if( $user['cars'] ){
-				                                    foreach ($user['cars'] as $car) {
-				                                 	      $val .="  <div class='row row-side verified-title' >
-				                                                        <div class='row row-side'>
-				                                                            <h4 class='driver-h' >". lang('u.car') ."</h4>
-				                                                        </div>
-				                                                        <div class='row row-side'>
-				                                                            <div class='col-lg-5 no'>
-				                                                                <img src='". public_url("cars/" .$car['foto_name']) ."' width='100' height='100' class='user-car pic-img'>
-     				                                                        </div>
-                                                                            <div class='col-lg-7 no'>
-                 				                                                  <div class='row row-side'>
-				                                                                        ". lang("u.make") . $car['make']  ." </div>
-                                                                                  <div class='row row-side'>
-				                                                                      ". lang("u.model")  . $car['model'] ." </div>
-                                                                                  <div class='row row-side'>
-				                                                                       <span title='" . lang("u.tcomfort".$car['comfort'] ) ."' class='tip rating-car star_".$car['comfort']." '></span> </div>
-				                                                                  <div class='row row-side'>
-				                                                                     ". $car['colour'] ."</div>
-				                                                            </div>
-     				                                                    </div>
-     				                                                </div>";
-     				                                     break;
-     				                                }
-     				                             }
+
 				                     $val.="</fieldset>
 				                     </div>
 
@@ -262,23 +227,10 @@
 				                                                      <div class='row row-side' style='font-size:18px'>  $age    </div>
 				                                                      <div class='row row-side' style='font-size:18px'> ".lang("u.exp") ."{$level}    </div>
 				                                                      <div class='row row-side prf-container '> ";
-				                                                                $test = "rel='popover' data-placement='top' data-content=\"&lt;span class='row row-side  popover-desc '&gt;  &lt;strong class='green'  &gt; TEST &lt;/strong&gt;  TEST &lt;/span&gt;\" data-trigger='hover' data-html='true'";
-				                                                                $chat  = ($user['like_chat']  != "1") ? ( ($user['like_chat']  == "0" ) ? "no" : "yes") : "" ;
-				                                                                $smoke = ($user['like_pet']   != "1") ? ( ($user['like_pet']   == "0" ) ? "no" : "yes") : "" ;
-				                                                                $pet   = ($user['like_smoke'] != "1") ? ( ($user['like_smoke'] == "0" ) ? "no" : "yes") : "" ;
-				                                                                $music = ($user['like_music'] != "1") ? ( ($user['like_music'] == "0" ) ? "no" : "yes") : "" ;
-				                                                                if( strcmp("", $chat)  != 0 )
-				                                                                   $val .=  "<span  class='tip chat_$chat   ' rel='popover' data-placement='top' data-content=\"&lt;span class='row row-side  popover-desc colour-".$chat   ."'&gt;  ".lang("sd.chat-" .$chat )  ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
-				                                                                if( strcmp("", $music) != 0 )
-				                                                                   $val .=  "<span  class='tip music_$music ' rel='popover' data-placement='top' data-content=\"&lt;span class='row row-side  popover-desc colour-".$music  ."'&gt;  ".lang("sd.music-" .$music ) ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
-				                                                                if( strcmp("", $smoke) != 0 )
-				                                                                   $val .=  "<span  class='tip smoke_$smoke ' rel='popover' data-placement='top' data-content=\"&lt;span class='row row-side  popover-desc colour-".$smoke  ."'&gt;  ".lang("sd.smoke-" .$smoke ) ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
-				                                                                if( strcmp("", $pet  ) != 0 )
-				                                                                   $val .=  "<span  class=' tip pet_$pet    ' rel='popover' data-placement='top' data-content=\"&lt;span class='row row-side  popover-desc colour-".$pet    ."'&gt;  ".lang("sd.pet-" .$pet )   ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
 
 				                                        $val .=   " </div>";
 
-                                                            $bio =  ( strcmp("", trim( $user['explain']) ) == 0 ) ? "" : lang("u.also") ." : " . $user['explain'];
+                                                            $bio =  ( strcmp("", trim( $user['description']) ) == 0 ) ? "" : lang("u.also") ." : " . $user['description'];
 				                                            $val .="<div class='row row-side' style='/*font-weight:normal; font-size:14px; */ ' >". $bio ;
 				                                            $val .="</div>";
 

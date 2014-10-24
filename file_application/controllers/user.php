@@ -45,25 +45,19 @@ class User extends CI_Controller {
 		$userid = my_decode($user_id);
 		$this->load->model('offersdb');
 		$this->load->model('ratings_db');// load ratings_db model for database action
-		$this->load->model('cars');// load ratings_db model for database action
 		$user = $this->users->GetUserAllInfo($userid);// get user
 		$offers_count = $this->offersdb->GetUserOfferCount($userid);
-		$cars = $this->cars->GetUserCars($userid);
+
 		$ratings = $this->ratings_db->GetUserRatingsWithUser($userid);
 		$groupedRatings = $this->ratings_db->GetGroupedRatings($userid);
 		$avg = $this->ratings_db->GetUserAverageRatings($userid);
 		$ratings = $this->checkFoto($ratings);
 
-		if (is_array($user) && count($user) > 0 && is_array($offers_count) && is_array($cars)) {
+		if (is_array($user) && count($user) > 0 && is_array($offers_count)) {
 			$user['total'] = $this->ratings_db->totalRating($userid);// send total value to view
 			$user['avg'] = $avg;// send avg value to view
 			$user['foto'] = photoCheckUser($user);
 			$user['offer_count'] = $offers_count['offers_count'];
-			foreach ($cars as &$value) {
-				$value['foto_name'] = photoCheckCar($value);
-			}
-			// not-exist car image use default
-			$user['cars'] = $cars;
 
 			$data['ratings'] = $ratings;
 			$data['avg'] = $avg;

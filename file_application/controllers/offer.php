@@ -30,7 +30,7 @@ class Offer extends CI_Controller {
 		$this->userid = $this->encrypt->decode($this->session->userdata('userid'));// set global variable
 		$this->data['active'] = '#offers';// active profile menu
 		$this->load->model('offersdb');// load offersdb model for database action
-		$this->load->model('way_points');// load way_points model for database action
+		$this->load->model('event_paths');// load event_paths model for database action
 		$this->load->model('look_at');// load look_at model for database action
 		$this->load->model('rutin_trips');// load rutin_trips model for database action
 		$this->lang->load('offers');// load offer_controller language file
@@ -51,23 +51,13 @@ class Offer extends CI_Controller {
 		$offers = $this->offersdb->GetUserOffer($this->userid);// get users up-date offers   $user_id, $numrows, $start
 		if (is_array($offers)) {
 			foreach ($offers as &$value) {
-				$value['way_points'] = $this->way_points->GetOfferWays($value['id']);// get offer waypoints
+				//$value['event_paths'] = $this->event_paths->GetOfferWays($value['id']);// get offer waypoints
 				$look_count = $this->look_at->GetLookCount($value['id']);// get looked people count for this offerid
 				if (count($look_count) > 0) {
 					$value['look_count'] = $look_count;
 				} else {
 
 					$value['look_count'] = array('ride_offer_id' => $value['id'], 'look' => '0');
-				}
-
-				if (strcmp($value['trip_type'], "1") == 0) {// if there is get offer trip days
-					$rutin_trip = $this->rutin_trips->GetOfferDays($value['id']);// get trip days for this offerid
-					if (count($rutin_trip) > 0) {
-						$value['rutin_trip'] = $rutin_trip;
-					} else {
-
-						$value['rutin_trip'] = array(0 => array('id' => 0, "is_return" => "-1", "day" => ""));
-					}
 				}
 
 				$value['normal_id'] = $value['id'];
@@ -92,7 +82,7 @@ class Offer extends CI_Controller {
 		$offers = $this->offersdb->GetUserOfferOutofDate($this->userid);// get users up-date offers $user_id, $numrows, $start
 		if (is_array($offers)) {
 			foreach ($offers as &$value) {
-				$value['way_points'] = $this->way_points->GetOfferWays($value['id']);// get offer waypoints
+				$value['event_paths'] = $this->event_paths->GetOfferWays($value['id']);// get offer waypoints
 				$look_count = $this->look_at->GetLookCount($value['id']);// get looked people count for this offerid
 				if (count($look_count) > 0) {
 					$value['look_count'] = $look_count;
@@ -140,9 +130,9 @@ class Offer extends CI_Controller {
 		$offer = $this->offersdb->Get($where);// get users up-date offers   $user_id, $numrows, $start
 		$look_list = $this->look_at->GetLookList($offer_id);// get look list user
 		if (is_array($offer) && count($offer) > 0 && is_array($look_list)) {
-			$waypoints = $this->way_points->GetOfferWays($offer['id']);// get offer waypoints
+			$waypoints = $this->event_paths->GetOfferWays($offer['id']);// get offer waypoints
 			if (is_array($waypoints)) {
-				$offer['way_points'] = $waypoints;
+				$offer['event_paths'] = $waypoints;
 				foreach ($look_list as $value) {
 					$value['foto'] = photoCheckUser($value);
 				}
@@ -198,9 +188,9 @@ class Offer extends CI_Controller {
 
 			if ($offer['user_id'] == $this->userid) {
 
-				$waypoints = $this->way_points->GetOfferWays($offer_id);// get offer waypoints
+				$waypoints = $this->event_paths->GetOfferWays($offer_id);// get offer waypoints
 				$str_way = "";
-				if (is_array($waypoints) && count($waypoints) > 0) {// check count of way_points
+				if (is_array($waypoints) && count($waypoints) > 0) {// check count of event_paths
 					$str_way = "";
 					if (count($waypoints) == 2) {// there is only one waypoint
 						$str_way .= $waypoints[0]['arrivial_place'];
@@ -238,7 +228,7 @@ class Offer extends CI_Controller {
 					'round_trip' => $offer['round_trip'],
 					'origin' => $offer['origin'],
 					'destination' => $offer['destination'],
-					'way_points' => $str_way,
+					'event_paths' => $str_way,
 					'departure_date' => $offer['departure_date'],
 					'departure_time' => $offer['departure_time'],
 					'return_date' => $offer['return_date'],
@@ -438,7 +428,7 @@ class Offer extends CI_Controller {
 		$this->form->check(lang('oc.round_trip'), 'round_trip', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.origin'), 'origin', 'required|max_length[100]|xss_clean');// check post data
 		$this->form->check(lang('oc.destination'), 'destination', 'required|max_length[100]|xss_clean');// check post data
-		$this->form->check(lang('oc.way_points'), 'way_points', 'waypoints_match|xss_clean');// check post data
+		$this->form->check(lang('oc.event_paths'), 'event_paths', 'waypoints_match|xss_clean');// check post data
 		$this->form->check(lang('oc.departure_date'), 'departure_date', 'required|is_date|exact_length[10]|xss_clean');// check post data
 		$this->form->check(lang('oc.departure_time'), 'departure_time', 'required|is_time|exact_length[5] |xss_clean');// check post data
 		if (strcmp(trim($this->input->post('round_trip', TRUE)), "true") == 0) {// is trip twoway
@@ -452,14 +442,14 @@ class Offer extends CI_Controller {
 			$round_trip = 'false';
 		}
 
-		$this->form->check_names('origin', 'destination', 'way_points');
+		$this->form->check_names('origin', 'destination', 'event_paths');
 		if ($this->form->get_result()) {
 
 			$offer_data = array('user_id' => $this->userid,
 				'round_trip' => $round_trip, // create offer first model for session
 				'origin' => $this->input->post('origin', TRUE),
 				'destination' => $this->input->post('destination', TRUE),
-				'way_points' => $this->input->post('way_points', TRUE),
+				'event_paths' => $this->input->post('event_paths', TRUE),
 				'departure_date' => $this->input->post('departure_date', TRUE),
 				'departure_time' => $this->input->post('departure_time', TRUE),
 				'return_date' => $this->input->post('return_date', TRUE),
@@ -492,7 +482,7 @@ class Offer extends CI_Controller {
 		$this->form->check(lang('oc.round_trip'), 'round_trip', 'required|xss_clean');// check post data
 		$this->form->check(lang('oc.origin'), 'origin', 'required|max_length[100]|xss_clean');// check post data
 		$this->form->check(lang('oc.destination'), 'destination', 'required|max_length[100]|xss_clean');// check post data
-		$this->form->check(lang('oc.way_points'), 'way_points', 'waypoints_match|xss_clean');// check post data
+		$this->form->check(lang('oc.event_paths'), 'event_paths', 'waypoints_match|xss_clean');// check post data
 		$this->form->check(lang('oc.departure_date'), 'departure_date', 'required|is_date|exact_length[10]|xss_clean');// check post data
 		$this->form->check(lang('oc.departure_time'), 'departure_time', 'required|is_time|exact_length[5] |xss_clean');// check post data
 		$this->form->check(lang('oc.return_date'), 'return_date', 'required|is_date|exact_length[10]|xss_clean');// check post data
@@ -512,13 +502,13 @@ class Offer extends CI_Controller {
 			$round_trip = 'false';
 		}
 		$result = $this->form->date_check($start, $end, $round_trip, $departure_days, $return_days);
-		$this->form->check_names('origin', 'destination', 'way_points');
+		$this->form->check_names('origin', 'destination', 'event_paths');
 		if ($this->form->get_result() && count($result) > 0) {
 			$offer_data = array('user_id' => $this->userid,
 				'round_trip' => $round_trip, // create offer first model for session
 				'origin' => $this->input->post('origin', TRUE),
 				'destination' => $this->input->post('destination', TRUE),
-				'way_points' => $this->input->post('way_points', TRUE),
+				'event_paths' => $this->input->post('event_paths', TRUE),
 				'departure_date' => $this->input->post('departure_date', TRUE),
 				'departure_time' => $this->input->post('departure_time', TRUE),
 				'return_date' => $this->input->post('return_date', TRUE),
@@ -578,7 +568,7 @@ class Offer extends CI_Controller {
 				$locations = $this->input->post('locations', TRUE);
 				$expectedPrices = $this->input->post('expectedPrices', TRUE);
 				unset($expectedPrices[0]);
-				$post_way_points = $offer_data['way_points'];// waypoints name like istanbul?Denizli
+				$post_event_paths = $offer_data['event_paths'];// waypoints name like istanbul?Denizli
 				$post_round_trip = $offer_data['round_trip'];// two way or one way trip
 				$post_input_prices = $this->input->post('inputPrices', TRUE);// waypoints prices like 4?5
 				$post_input_prices_color = $this->input->post('inputPricesColor', TRUE);// waypoints prices color like red?orange
@@ -625,8 +615,8 @@ class Offer extends CI_Controller {
 				$waypoints = array();
 				$ways_offer = array();
 				$days = array();
-				if (trim($post_way_points) != "") {// way points is null or not
-					$points = explode('?', $post_way_points);// way points split
+				if (trim($post_event_paths) != "") {// way points is null or not
+					$points = explode('?', $post_event_paths);// way points split
 					$prices = explode('?', $post_input_prices);// way points price split
 					$pricesColor = explode('?', $post_input_prices_color);// way points price color split
 					$distances = explode('?', $post_input_distances);// way points distance split
@@ -1061,9 +1051,9 @@ class Offer extends CI_Controller {
 						}
 					}
 					if ($this->form->get_result()) {// is there any error
-						$way_points = $this->way_points->GetOfferWays($offer_id);// get offer waypoints from database
-						$ways_offer = $this->way_points->GetOfferWaysOffer($offer_id);// get offer waypoints from database
-						if (is_array($way_points) && is_array($ways_offer) && is_array($rutin_trips)) {
+						$event_paths = $this->event_paths->GetOfferWays($offer_id);// get offer waypoints from database
+						$ways_offer = $this->event_paths->GetOfferWaysOffer($offer_id);// get offer waypoints from database
+						if (is_array($event_paths) && is_array($ways_offer) && is_array($rutin_trips)) {
 
 							unset($offer['id'], $offer['created_at'], $offer['updated_at'], $offer['is_active']);
 							$offer['departure_date'] = $this->input->post('departure_date', TRUE);
@@ -1077,8 +1067,8 @@ class Offer extends CI_Controller {
 									unset($value['id'], $value['ride_offer_id'], $value['created_at'], $value['updated_at']);
 								}
 							}
-							if (count($way_points) > 0) {
-								foreach ($way_points as &$value) {// create new model
+							if (count($event_paths) > 0) {
+								foreach ($event_paths as &$value) {// create new model
 									unset($value['id'], $value['ride_offer_id'], $value['created_at'], $value['updated_at']);
 								}
 							}
@@ -1089,7 +1079,7 @@ class Offer extends CI_Controller {
 							}
 							$offer_id = $this->offersdb->saveOffer($rutin_trip_dates,
 								$offer,
-								$way_points,
+								$event_paths,
 								$ways_offer,
 								$rutin_trips);
 

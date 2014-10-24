@@ -161,9 +161,6 @@ $lang['ou.update'        ] = "Güncelle";
 $lang['ou.'] = "";
 
 
-?>
-
-<?
 
 $lang['o.blank_date'] = "Tarih Seçmediniz..";
 $lang['o.same_date']  = "Dönüş saati gidiş saatinden en az 3 saat sonra olmalıdır..";
@@ -248,9 +245,6 @@ $lang['od.high'                   ] = " yüksek fiyatları belirtir..";
 $lang['oi.sending'                ] = "Mesajınız gönderiliyor..";
 
 
-?>
-
-<?php
 
 // for controller
 $lang['oc.id'] = " teklif id ";

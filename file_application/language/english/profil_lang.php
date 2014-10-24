@@ -160,9 +160,6 @@ $lang['p.pet-yes'        ] = "Pets in the car is fine..";
 $lang['p.smoke-no'       ] = "No smoking in the car please..";
 $lang['p.smoke-yes'      ] = "Smoking in the car is fine..";
 
-?>
-
-<?php
 
 // for car controller
 $lang['p.sory'] = "Sory! ";

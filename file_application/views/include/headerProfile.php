@@ -46,7 +46,6 @@
                 <div class="bs-example">
                     <ul class="nav nav-tabs" style="margin-bottom: 15px;">
                          <li id="dashroad" ><a href="<?php echo new_url() . 'profil'?>" ><i class="text-success glyphicon glyphicon-dashboard two"></i>  <?=lang('g.dashboard')?> </a></li>
-                         <li id="allerts"  ><a href="<?php echo new_url() . 'alert'?>" ><i class="text-danger  glyphicon glyphicon-bell two"></i>  <?=lang('g.alerts')?>    </a></li>
                          <li id="profile"  ><a href="<?php echo new_url() . 'profil/profile/info '?>" ><i class="text-primary glyphicon glyphicon-user two"></i><?=lang('g.profil')?>          </a></li>
                          <li id="messages" ><a href="<?php echo new_url() . 'message'?>" ><i class="text-warning glyphicon glyphicon-comment two"></i><?=lang('g.messages')?>    </a></li>
                          <li id="reviews"  ><a href="<?php echo new_url() . 'review'?>" ><i class="text-danger  glyphicon glyphicon-star two"></i><?=lang('g.reviews')?>         </a></li>
