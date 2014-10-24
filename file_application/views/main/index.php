@@ -65,12 +65,13 @@
 
             // write offer information
             function writeContent( $offer, $lang ){
+
                   // offer data
                   $origin      = explode(',',$offer['origin']);
                   $origin      = trim($origin[0]);
                   $destination = explode(',',$offer['destination']);
                   $destination =  trim($destination[0]);
-                  $url_detail  =  new_url( urlCreate( $lang, $origin, $destination,  $offer['ride_offer_id'] ) );
+                  $url_detail  =  new_url( urlCreate( $lang, $origin, $destination,  '' ) );
                   $titleO      = $origin;
                   $titleD      = $destination;
                   if( strlen($origin) > 11 ){
@@ -114,7 +115,6 @@
                                                   <p class='date'  ><i class='text-primary glyphicon glyphicon-calendar' ></i> ". dateConvertSlider( $offer['departure_date'], lang('lang') ) ." </p>
                                                </div>
                                                <div class='col-lg-4 no-padding price-info' >
-                                                 <div class='price {$offer['price_class']}'   > {$offer['price_per_passenger']} ₺  </div>
                                                </div>
                                            </div>
                                        </div>

@@ -54,7 +54,7 @@ class Main extends CI_Controller {
 		$data['mostCreated'] = array();
 
 		$this->login->general($data);// call general load view
-		$this->load->view('main/main');// load views
+		$this->load->view('main/index');// load views
 		$this->load->view('include/footer');// load views
 
 	}
