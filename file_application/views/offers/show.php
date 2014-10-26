@@ -11,6 +11,7 @@
     $destination = explode(',',$offer['destination']);  // get destination name before comma
     $destination = $destination[0];
     $user = $offer['user'];
+
     ?>
     <br>
     <div class='col-lg-12'>
@@ -139,7 +140,7 @@
             <div id="contact-driver-modal" class="modal fade" tabindex="-1" data-id="-1";  data-width="600" data-height="340" data-backdrop="static" data-keyboard="false" style="display: none;">
               <div class="modal-my-header">
                 <button type="button" class="close" data-dismiss="modal" title="<?=lang("close")?>"  aria-hidden="true">&times;</button>
-                <h4 class="modal-title"> <?=lang("od.contactto") . "  " . $username . " " . $user['surname']?>  </h4>
+                <h4 class="modal-title"> <?=lang("od.contactto") . "  " . $user['name'] . " " . $user['surname']?>  </h4>
               </div>
               <div class="modal-body">
                 <h4 class="row row-side" ><?=lang("od.private-message")?></h4>
@@ -150,7 +151,8 @@
                      $age  = date("Y") - $user['birthyear'] . lang("age");
                      $alt  = $user['name'] . " " . $user['surname'] . " ( " . $age . " )";
 
-                    if(  $user['id'] != $offer['user_id'] ){
+
+                    if(  !$own_offer ){
                     echo   " <textarea  id='inputMessage' class='form-control' rows='3' style='max-width: 390px; max-height:100px; margin-bottom:10px' id='textArea'></textarea> " .
                     " <button id='send-message' type='button' class='btn btn-primary  btn-sm width-100' data-id='". $this->encrypt->encode($user['id']) ."' data-offer_id='". $offer['id'] ."'   >". lang('od.send') ."</button> ";
                     }

@@ -43,11 +43,11 @@
                              $origin           = $origin[0];
                              $destination      = explode(',',$message['destination']);
                              $destination      = $destination[0];
-                             $offer_id         =   urlencode(base64_encode( $message['ride_offer_id'] ));
+                             $offer_id         =   urlencode(base64_encode( $message['event_id'] ));
                              $received_userid  =   urlencode(base64_encode( $message['received_userid'] ));
                              $path             =   new_url('message/sent/' . $offer_id ."/" . $received_userid);
                              $val="<li class='list-group-item message' >
-                                        <a href='". $path ."' class='row one-thread' data-offer_id='". $this->encrypt->encode($message['ride_offer_id']) ."' data-received_userid='".$this->encrypt->encode($message['received_userid'])."'  >
+                                        <a href='". $path ."' class='row one-thread' data-offer_id='". $this->encrypt->encode($message['event_id']) ."' data-received_userid='".$this->encrypt->encode($message['received_userid'])."'  >
                                                <div class='col-lg-3 msg-who'>
                                                                   <div class='col-lg-3' style='text-align: center;'>
                                                                        <img class='tip pic-img' src='".$message['foto']."' style='width: 50px; height: 60px' height='60' width='50'>
@@ -64,7 +64,7 @@
                                                     <div class='col-lg-7'>
                                                         ".  tr(date_format(date_create(  $message['created_at']  ), ' l jS F Y H:i'), $this->lang->lang() ) ."
                                                      </div>
-                                                     <div class='col-lg-5' data-offer_id='". $this->encrypt->encode($message['ride_offer_id']) ."' data-received_userid='".$this->encrypt->encode($message['received_userid'])."' >";
+                                                     <div class='col-lg-5' data-offer_id='". $this->encrypt->encode($message['event_id']) ."' data-received_userid='".$this->encrypt->encode($message['received_userid'])."' >";
                                                 if($message['readed_sender'] != 0){
 		                                                $val.=     " <span href='#delete-modal' data-toggle='modal' class='delete-meessages'  >
 		                                                                 <i title='". lang("delete") ."' class='text-danger glyphicon glyphicon-trash' ></i>

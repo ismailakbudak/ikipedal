@@ -101,6 +101,7 @@ class Review extends CI_Controller {
 	 *
 	 **/
 	public function giveRating($user_id) {
+
 		if (!isset($user_id))// check user id is set
 		{show_404();
 		}
@@ -160,11 +161,13 @@ class Review extends CI_Controller {
 		$this->form->check(lang('rc.review'), 'review', 'required|min_length[5]|max_length[300]|xss_clean');// check post data
 		$this->form->check(lang('rc.is_driver'), 'is_driver', 'required|is_natural|less_than[2]|xss_clean');// check post data
 		$this->form->check(lang('rc.skill'), 'skill', 'required|xss_clean');// check post data
+
 		if ($this->form->get_result()) {
 			$is_driver = $this->input->post('is_driver', TRUE);// post is_driver value
 			$skill = $this->input->post('skill', TRUE);// post skill value
 			$who_give = base64_decode($this->input->post('who_give', TRUE));
 			$who_receive = base64_decode($this->input->post('who_receive', TRUE));
+
 			if ($who_receive != 0 && $who_give != 0) {
 				$result = $this->ratings_db->is_there($who_give, $who_receive);
 				if (!$result) {
@@ -181,7 +184,7 @@ class Review extends CI_Controller {
 					$result = $this->ratings_db->add($ratings);
 					$status = $result ? "success" : "fail";
 					$text = $result ? lang("rc.send_success") : lang("rc.send_fail");
-					$this->sendEmail($who_give, $who_receive);
+					//$this->sendEmail($who_give, $who_receive);
 				} else {
 					$status = "mistake";
 					$text = lang("rc.there_is");

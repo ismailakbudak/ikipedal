@@ -439,6 +439,17 @@ class Offers extends CI_Controller {
 					$value['foto'] = photoCheckUser($value);
 				}
 				//done check offer does belongs to login user if not add look_at new model
+				// check offer does belongs to login user if not add look_at new model
+				$data['own_offer'] = (strcmp($this->userid, $offer['user_id']) == 0) ? 1 : 0;// this offer is it belong to session user
+				if (!$data['own_offer']) {
+					$link = strcmp($lang, "tr") == 0 ? "seyahat-" : "travel-";
+					$link .= $url_title;// if offer does not belong to logined user
+					$this->look_at->add(array('event_id' => $offer['id'],
+						'origin' => $offer['origin'],
+						'destination' => $offer['destination'],
+						'user_id' => $this->userid,
+						'path' => $link));// add new look_at model
+				}
 				$data['offer'] = $offer;// send offer to view
 				$this->login->general($data);// load views
 				$this->load->view('offers/show');// load views

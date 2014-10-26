@@ -63,19 +63,7 @@
                                                            <h4>  $age    </h4>
                                                            <div class='row prf-container '>";
 
-                                                                     $test = "rel='popover' data-placement='top' data-content=\"&lt;span class='row popover-desc '&gt;  &lt;strong class='green'  &gt; TEST &lt;/strong&gt;  TEST &lt;/span&gt;\" data-trigger='hover' data-html='true'";
-                                                                     $chat  = ($user['like_chat']  != "1") ? ( ($user['like_chat']  == "0" ) ? "no" : "yes") : "" ;
-                                                                     $smoke = ($user['like_pet']   != "1") ? ( ($user['like_pet']   == "0" ) ? "no" : "yes") : "" ;
-                                                                     $pet   = ($user['like_smoke'] != "1") ? ( ($user['like_smoke'] == "0" ) ? "no" : "yes") : "" ;
-                                                                     $music = ($user['like_music'] != "1") ? ( ($user['like_music'] == "0" ) ? "no" : "yes") : "" ;
-                                                                     if( strcmp("", $chat)  != 0 )
-                                                                        $val .=  "<span  class='tip chat_$chat   ' rel='popover' data-placement='top' data-content=\"&lt;span class='row popover-desc colour-".$chat   ."'&gt;  ".lang("sd.chat-" .$chat )  ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
-                                                                     if( strcmp("", $music) != 0 )
-                                                                        $val .=  "<span  class='tip music_$music ' rel='popover' data-placement='top' data-content=\"&lt;span class='row popover-desc colour-".$music  ."'&gt;  ".lang("sd.music-" .$music ) ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
-                                                                     if( strcmp("", $smoke) != 0 )
-                                                                        $val .=  "<span  class='tip smoke_$smoke ' rel='popover' data-placement='top' data-content=\"&lt;span class='row popover-desc colour-".$smoke  ."'&gt;  ".lang("sd.smoke-" .$smoke ) ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
-                                                                     if( strcmp("", $pet  ) != 0 )
-                                                                        $val .=  "<span  class=' tip pet_$pet    ' rel='popover' data-placement='top' data-content=\"&lt;span class='row popover-desc colour-".$pet    ."'&gt;  ".lang("sd.pet-" .$pet )   ." &lt;/span&gt;\" data-trigger='hover' data-html='true'> </span>";
+
                                        $val .=   " </div>
                                                </div>
                                            </div>

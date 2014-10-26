@@ -46,11 +46,11 @@
                              $origin      = $origin[0];
                              $destination = explode(',',$message['destination']);
                              $destination = $destination[0];
-                             $offer_id    =   urlencode(base64_encode( $message['ride_offer_id'] ));
+                             $offer_id    =   urlencode(base64_encode( $message['event_id'] ));
                              $sender      =   urlencode(base64_encode( $message['sender_userid'] ));
                              $path        = new_url('message/inboxArchive/' . $offer_id ."/" . $sender);
                              $val="<li class='list-group-item message' >
-                                        <a href='". $path ."' class='row one-thread' data-offer_id='". $this->encrypt->encode($message['ride_offer_id']) ."' data-sender_userid='".$this->encrypt->encode($message['sender_userid'])."'  >
+                                        <a href='". $path ."' class='row one-thread' data-offer_id='". $this->encrypt->encode($message['event_id']) ."' data-sender_userid='".$this->encrypt->encode($message['sender_userid'])."'  >
                                                <div class='col-lg-3 msg-who'>
                                                                   <div class='col-lg-3' style='text-align: center;'>
                                                                        <img class='tip pic-img' src='".$message['foto']."' style='width: 50px; height: 60px' height='60' width='50'>
@@ -67,7 +67,7 @@
                                                     <div class='col-lg-7'>
                                                         ".  tr(date_format(date_create(  $message['created_at']  ), ' l jS F Y H:i'), $this->lang->lang() ) ."
                                                      </div>
-                                                     <div class='col-lg-5' data-offer_id='". $this->encrypt->encode($message['ride_offer_id']) ."' data-sender_userid='".$this->encrypt->encode($message['sender_userid'])."' >
+                                                     <div class='col-lg-5' data-offer_id='". $this->encrypt->encode($message['event_id']) ."' data-sender_userid='".$this->encrypt->encode($message['sender_userid'])."' >
                                                             <span href='#delete-modal' data-toggle='modal' class='delete-messagesInbox'  >
                                                                  <i title='". lang("delete") ."' class='text-danger glyphicon glyphicon-trash' ></i>
                                                              </span>
@@ -116,16 +116,16 @@
 <?php
 
 foreach ($archiveSent as $message) {
-    $message_number++;
-    $origin          = explode(',', $message['origin']);
-    $origin          = $origin[0];
-    $destination     = explode(',', $message['destination']);
-    $destination     = $destination[0];
-    $offer_id        = urlencode(base64_encode($message['ride_offer_id']));
-    $received_userid = urlencode(base64_encode($message['received_userid']));
-    $path            = new_url('message/sentArchive/' . $offer_id . "/" . $received_userid);
-    $val             = "<li class='list-group-item message' >
-                                        <a href='" . $path . "' class='row one-thread' data-offer_id='" . $this->encrypt->encode($message['ride_offer_id']) . "' data-received_userid='" . $this->encrypt->encode($message['received_userid']) . "'  >
+	$message_number++;
+	$origin = explode(',', $message['origin']);
+	$origin = $origin[0];
+	$destination = explode(',', $message['destination']);
+	$destination = $destination[0];
+	$offer_id = urlencode(base64_encode($message['event_id']));
+	$received_userid = urlencode(base64_encode($message['received_userid']));
+	$path = new_url('message/sentArchive/' . $offer_id . "/" . $received_userid);
+	$val = "<li class='list-group-item message' >
+                                        <a href='" . $path . "' class='row one-thread' data-offer_id='" . $this->encrypt->encode($message['event_id']) . "' data-received_userid='" . $this->encrypt->encode($message['received_userid']) . "'  >
                                                <div class='col-lg-3 msg-who'>
                                                                   <div class='col-lg-3' style='text-align: center;'>
                                                                        <img class='tip pic-img' src='" . $message['foto'] . "' style='width: 50px; height: 60px' height='60' width='50'>
@@ -142,7 +142,7 @@ foreach ($archiveSent as $message) {
                                                     <div class='col-lg-7'>
                                                         " . tr(date_format(date_create($message['created_at']), ' l jS F Y H:i'), $this->lang->lang()) . "
                                                      </div>
-                                                     <div class='col-lg-5' data-offer_id='" . $this->encrypt->encode($message['ride_offer_id']) . "' data-received_userid='" . $this->encrypt->encode($message['received_userid']) . "' >
+                                                     <div class='col-lg-5' data-offer_id='" . $this->encrypt->encode($message['event_id']) . "' data-received_userid='" . $this->encrypt->encode($message['received_userid']) . "' >
                                                             <span href='#delete-modal-sender' data-toggle='modal' class='delete-messages-sender'  >
                                                                  <i title='" . lang("delete") . "' class='text-danger glyphicon glyphicon-trash' ></i>
                                                              </span>
@@ -153,10 +153,10 @@ foreach ($archiveSent as $message) {
                                                </div>
                                           </a>
                                       </li>";
-    echo $val;
+	echo $val;
 }
 if (count($archiveSent) == 0) {
-    echo " <div class='bs-example'>
+	echo " <div class='bs-example'>
                                          <div class='alert alert-dismissable alert-info'>
                                               <button type='button' class='close' data-dismiss='alert' title='" . lang('close') . "' >&times;</button>
                                               <h4> " . lang("m.empty") . " <a href='" . new_url('message/archieve') . "' style='margin:10px' title='" . lang('refresh') . "' ><i class='glyphicon glyphicon-refresh'></i> </a> </h4>

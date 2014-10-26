@@ -122,7 +122,7 @@ class Message extends CI_Controller {
 			$message_update = array('readed_receive' => 1);// add readed 1 to message
 			$where = array('user_id' => $sender_id,
 				'received_user_id' => $received_user_id,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message_update);// update message to database
 			$this->data['side_user'] = $sideBar;
 			$sender['foto'] = photoCheckUser($sender);// check photo is exist
@@ -158,7 +158,7 @@ class Message extends CI_Controller {
 			$result = $this->block_user->isthereblock($sender_userid, $receiver_user_id);// get is there a blocked user
 			if ($sender_userid != 0 && $receiver_user_id != 0) {
 				if (count($result) == 0 && $this->idControl($sender_userid, $receiver_user_id, $offer_id)) {
-					$message = array('ride_offer_id' => $offer_id,
+					$message = array('event_id' => $offer_id,
 						'user_id' => $sender_userid,
 						'is_answer' => 1,
 						'readed_receive' => 1,
@@ -267,7 +267,7 @@ class Message extends CI_Controller {
 			$message_update = array('readed_sender' => 1);// add readed 1 to message
 			$where = array('user_id' => $sender_id,
 				'received_user_id' => $received_userid,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message_update);// update message to database
 			$this->data['side_user'] = $sideBar;
 			$sender['foto'] = photoCheckUser($sender);// check photo is exist
@@ -304,7 +304,7 @@ class Message extends CI_Controller {
 				$this->load->model("block_user");
 				$result = $this->block_user->isthereblock($received_userid, $sender_userid);// get is there a blocked user
 				if (count($result) == 0 && $this->idControl($sender_userid, $received_userid, $offer_id)) {
-					$message = array('ride_offer_id' => $offer_id,
+					$message = array('event_id' => $offer_id,
 						'user_id' => $sender_userid,
 						'received_user_id' => $received_userid,
 						'message' => $this->input->post('message', TRUE));
@@ -650,7 +650,7 @@ class Message extends CI_Controller {
 				'received_user_id' => $received_userid,
 				'readed_sender' => 1,
 				'sender_archived' => 0,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message);// add message to database
 			$status = ($result) ? "success" : "fail";// change status
 			$text = ($result) ? lang("mc.delete-success") : lang("mc.delete-fail");// set message
@@ -685,7 +685,7 @@ class Message extends CI_Controller {
 			$where = array('user_id' => $sender_user_id,
 				'received_user_id' => $received_userid,
 				'sender_archived' => 1,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message);// add message to database
 			$status = ($result) ? "success" : "fail";// change status
 			$text = ($result) ? lang("mc.delete-success") : lang("mc.delete-fail");// set message
@@ -720,7 +720,7 @@ class Message extends CI_Controller {
 			$where = array('user_id' => $sender_user_id,
 				'received_user_id' => $received_userid,
 				'readed_sender' => 1,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message);// add message to database
 			$status = ($result) ? "success" : "fail";// change status
 			$text = ($result) ? lang("success") : lang("fail");// set message
@@ -798,7 +798,7 @@ class Message extends CI_Controller {
 			$where = array('received_user_id' => $received_user_id,
 				'user_id' => $sender_userid,
 				'readed_receive' => 1,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message);// add message to database
 			$status = ($result) ? "success" : "fail";// change status
 			$text = ($result) ? lang("success") : lang("fail");// set message
@@ -834,7 +834,7 @@ class Message extends CI_Controller {
 				'user_id' => $sender_userid,
 				'readed_receive' => 1,
 				'receive_archived' => 0,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message);// add message to database
 			$status = ($result) ? "success" : "fail";// change status
 			$text = ($result) ? lang("mc.delete-success") : lang("mc.delete-fail");// set message
@@ -869,7 +869,7 @@ class Message extends CI_Controller {
 			$where = array('received_user_id' => $received_user_id,
 				'user_id' => $sender_userid,
 				'receive_archived' => 1,
-				'ride_offer_id' => $offer_id);
+				'event_id' => $offer_id);
 			$result = $this->messages->update($where, $message);// add message to database
 			$status = ($result) ? "success" : "fail";// change status
 			$text = ($result) ? lang("mc.delete-success") : lang("mc.delete-fail");// set message

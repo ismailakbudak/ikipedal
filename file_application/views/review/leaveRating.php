@@ -61,20 +61,6 @@
                             </div>
                        </fieldset>
                     </div>
-                    <h4> <?=lang("rl.phone")?>  </h4>
-                    <div class="bs-example form-horizontal">
-                       <fieldset>
-                           <div class="form-group">
-                                 <label for="inputTel" class="col-lg-2 control-label"> <?=lang("rl.tel")?> </label>
-                                 <div class="col-lg-5">
-                                   <input type="text" class="form-control" id="inputTel" placeholder="<?=lang("rl.telp")?>">
-                                 </div>
-                                 <div class="col-lg-5">
-                                     <button  id="buttonWithTel" type="button" class="form-control btn btn-primary width-200" > <?=lang("rl.find")?></button>
-                                 </div>
-                            </div>
-                       </fieldset>
-                    </div>
 
                    <div class="row">
                          <div class="col-lg-12">

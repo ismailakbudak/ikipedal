@@ -17,6 +17,7 @@
                  offer_id: offer_id
                },
                url = 'offer/contactDriver';
+ 
              $("#sending").modal();
              $.ajax({
                type: "POST",
