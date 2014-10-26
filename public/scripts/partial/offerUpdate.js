@@ -1,5 +1,5 @@
 (function($) {
-   
+
   if (strcmp(trip_typeSes, "0") === 0)
     $("#radiosOnetime").attr('checked', true);
   else
@@ -11,12 +11,22 @@
     $("#twoWayCheck").attr('checked', false);
     $("#returnDate").slideUp();
     $("#returnDays").slideUp();
-  } 
+  }
+  var startPoint =  $('#pac-input').val(),
+    endPoint  =$('#pac-input2').val(),
+    paramPoint  = [],
+    arrayPoint  = $('#iteneraryPanel').find('.wayPoint');
+  for (var i = 0; i < arrayPoint .length; i++) {
+    paramPoint.push({
+      location: $(arrayPoint[i]).val()
+    });
+  };
+  createLocations(startPoint, endPoint, paramPoint);
 
   CapitiliazeFirst(["#pac-input", "#pac-input2", "#inputEventName", "#inputExplainGoing"]);
 
   $("#inputUpdateOffer").on('click', function() {
-
+ 
 
     var totalDistance = $("#totalDistance").text(),
       totalTime = $("#totalTime").text(),
@@ -74,8 +84,8 @@
     boolValid = boolValid && FillKontrol(inputName, er.blank_name);
     boolValid = boolValid && FillKontrol(startPoint, er.blank_start_point);
     boolValid = boolValid && FillKontrol(destinationPoint, er.blank_destination_point);
-     
- 
+
+
     //console.log(JSON.stringify(locations, null, 4));
     if (locations.length < 2) {
       HataMesaj(er.locations);
@@ -109,9 +119,10 @@
           total_distance: totalDistance,
           total_time: totalTime,
           DistancesWay: DistancesWay,
-          TimesWay: TimesWay
+          TimesWay: TimesWay,
+          event_id: event_id
         },
-        url = 'offer/updateAction/'+ event_id ,
+        url = 'offer/updateAction',
         result = JSON.parse(AjaxSendJson(url, dataForm));
 
       if (strcmp(result.status, 'success') == 0) {
@@ -121,7 +132,7 @@
       } else if (strcmp(result.status, 'error') == 0) {
         HataMesaj(result.message);
       } else if (strcmp(result.status, 'notEventId') == 0) {
-         window.location = base_url;
+        window.location = base_url;
       } else {
         HataMesaj(er.error_send)
       }
@@ -313,6 +324,8 @@
     google.maps.event.addDomListener(window, 'load', initialize());
   }
   /* Map draw sonu */
+
+
 
   function MakeAutoComplete(id1) {
     function initialize() {
@@ -574,5 +587,3 @@
   }; // End of the createLocations
 
 })(jQuery);
-
-

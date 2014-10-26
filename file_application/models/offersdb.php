@@ -123,8 +123,7 @@ class Offersdb extends CI_Model {
 	 **/
 	function GetOffer($event_id) {
 		$query = $this->db->where('id =', $event_id)
-		//-> where('is_active', 1)
-		->get($this->table);
+		              ->get($this->table);
 		if ($query) {
 			return $query->row_array();
 		} else {
@@ -140,137 +139,8 @@ class Offersdb extends CI_Model {
 	 **/
 	function saveOffer($event, $event_paths) {
 
-		// Email alarmlarını kontrol et
-		$addAlerts = array();// Tüm eklenen alert id lerin tutulduğu dizi
-		$range = 0.5;// Position'a göre aramada kullanılan yarıçap alanı yaklaşık 50 km
-		// sunucuda zaman geri olduğu için
 		$date = date('Y-m-d');// Bugünün tarihi
 		$user_id = $event['user_id'];// Teklifi yapan kullanıcının id si
-		foreach ($event_paths as $offer) {
-
-			// her bir sefer için position ve origin destination kısımlarını al
-			$origin = $offer['d_from'];
-			$destination = $offer['o_to'];
-			$min_lat = $offer['from_lat']-$range;
-			$max_lat = $offer['from_lat']+$range;
-			$min_lng = $offer['from_lng']-$range;
-			$max_lng = $offer['from_lng']+$range;
-			$min_dLat = $offer['to_lat']-$range;
-			$max_dLat = $offer['to_lat']+$range;
-			$min_dLng = $offer['to_lng']-$range;
-			$max_dLng = $offer['to_lng']+$range;
-
-			// Normal yolculuklar için where clause  origin ve destination  değerlendiriliyor  position > 0 olması gerek
-			$one = "( place1 LIKE '%$origin%' AND  place2 LIKE '%$destination%' )  OR
-                                  (   ( lat >= $min_lat  AND  lat <= $max_lat AND lng >= $min_lng  AND  lng <= $max_lng )
-                                       AND
-                                      ( dLat >= $min_dLat  AND  dLat <= $max_dLat AND  dLng >= $min_dLng  AND  dLng <= $max_dLng )
-                                   ) ";
-
-			// Normal yolculuklar için where clause  origin  değerlendiriliyor  position < 0 olması gerek
-			$one2 = "( place1 LIKE '%$origin%'  )  OR
-                                   ( lat >= $min_lat  AND  lat <= $max_lat AND lng >= $min_lng  AND  lng <= $max_lng ) ";
-
-			// Normal yolculukları al origin, destination ve  position > 0 değerlendir
-			$where = "$one  AND date >='{$date}' AND dLat > 0 AND  dLng > 0 AND user_id != $user_id ";
-			$query = $this->db->distinct('id')
-			              ->select('id,place1,place2')
-			              ->from('email_alerts')
-			              ->where($where)
-			              ->get();
-			// Normal yolculuklar al origin,  position < 0 değerlendir
-			$where = "$one2  AND date >='{$date}' AND dLat < 0 AND  dLng < 0 AND user_id != $user_id";
-			$query3 = $this->db->distinct('id')
-			               ->select('id,place1,place2')
-			               ->from('email_alerts')
-			               ->where($where)
-			               ->get();
-
-			// Çift yönlü yolculuklar için veri çekme
-			$query2 = TRUE;
-			$query4 = TRUE;
-			if ($event['round_trip'] == 1) {
-
-				// Dönüş yolculukları where clause origin, destination ve  position > 0 değerlendir Origin ve destination değiştir
-				$oneReverse = "( place1 LIKE '%$destination%' AND  place2 LIKE '%$origin%' )  OR
-                                              (   ( dLat >= $min_lat  AND  dLat <= $max_lat AND  dLng >= $min_lng  AND  dLng <= $max_lng  )
-                                                   AND
-                                                  ( lat >= $min_dLat  AND  lat <= $max_dLat AND lng >= $min_dLng  AND  lng <= $max_dLng )
-                                               ) ";
-
-				// Dönüş yolculukları al origin, destination ve  position > 0 değerlendir
-				$where = "$oneReverse AND date >='{$date}' AND dLat > 0 AND  dLng > 0  AND user_id != $user_id";
-				$query2 = $this->db->distinct('id')
-				               ->select('id,place1,place2')
-				               ->from('email_alerts')
-				               ->where($where)
-				               ->get();
-				// Dönüş yolculukları where clause origin, destination ve  position < 0 değerlendir Origin ve destination değiştir
-				$oneReverse2 = "( place1 LIKE '%$destination%'  )  OR
-                                               ( lat >= $min_dLat  AND  lat <= $max_dLat AND  lng >= $min_dLng  AND  lng <= $max_dLng  ) ";
-				// Dönüş yolculukları al origin, destination ve  position < 0 değerlendir
-				$where = "$oneReverse2 AND date >='{$date}' AND dLat < 0 AND  dLng < 0 AND user_id != $user_id";
-				$query4 = $this->db->distinct('id')
-				               ->select('id,place1,place2')
-				               ->from('email_alerts')
-				               ->where($where)
-				               ->get();
-
-			}
-
-			// Veriler alındı hata varmı yok mu kontrol et
-			if ($query && $query2 && $query3 && $query4) {
-				// Gidiş yolculukları için dönüş seferleri position > 0
-				$result = $query->result_array();
-				// Gidiş yolculukları için dönüş seferleri position < 0
-				$result3 = $query3->result_array();
-
-				// Gidiş yolculuğu ve position > 0
-				if (is_array($result) && count($result) > 0) {
-					foreach ($result as $val) {
-						if (!array_key_exists($val['id'], $addAlerts)) {
-							$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-						}
-					}
-				}
-
-				// Gidiş yolculuğu ve position < 0
-				if (is_array($result3) && count($result3) > 0) {
-					foreach ($result3 as $val) {
-						if (!array_key_exists($val['id'], $addAlerts)) {
-							$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-						}
-					}
-				}
-
-				// Dönüş yolculukları için değerlendirme
-				if ($event['round_trip'] == 1) {
-
-					// Dönüş yolculukları için dönüş seferleri position > 0
-					$result = $query2->result_array();
-					// Dönüş yolculukları için dönüş seferleri position < 0
-					$result4 = $query4->result_array();
-
-					// Dönüş yolculuğu ve position > 0
-					if (is_array($result) && count($result) > 0) {
-						foreach ($result as $val) {
-							if (!array_key_exists($val['id'], $addAlerts)) {
-								$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-							}
-						}
-					}
-
-					// Dönüş yolculuğu ve position < 0
-					if (is_array($result4) && count($result4) > 0) {
-						foreach ($result4 as $val) {
-							if (!array_key_exists($val['id'], $addAlerts)) {
-								$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-							}
-						}
-					}
-				}
-			}
-		}
 
 		// sunucuda zaman geri olduğu için
 		$event['created_at'] = date('Y-m-d H:i:s');
@@ -284,47 +154,6 @@ class Offersdb extends CI_Model {
 			if ($this->db->affected_rows() > 0) {
 				$event_id = $this->db->insert_id();// get inserted id
 				if ($event_id > 0) {
-
-					// save email allerts
-					if ($result && count($addAlerts) > 0) {
-						$send_emails = array();
-						foreach ($addAlerts as &$value) {
-							$value['event_id'] = $event_id;
-							$send_emails[] = array('email_alert_id' => $value['email_alert_id']);
-
-						}
-						$query = $this->db->insert_batch('email_alerts_result', $addAlerts);
-
-						// send_email_alert
-						$query2 = TRUE;
-						if (count($send_emails) > 0) {
-							$query2 = $this->db->insert_batch('send_email_alert', $send_emails);
-						}
-
-						// send_email_user Seyahat sonrası hatırlatmalar için
-						$trip_date = $event['departure_date'];
-						if ($event['round_trip'] == 1) {
-							$trip_date = $event['return_date'];
-						}
-
-						$send_email_user = array('user_id' => $event['user_id'],
-							'type' => 'offer',
-							'event_id' => $event_id,
-							'last_date' => $trip_date);
-						$query3 = $this->db->insert('send_email_users', $send_email_user);
-
-						if ($query && $query2 && $query3) {
-							if ($this->db->affected_rows() > 0) {
-								$result = TRUE;
-							} else {
-
-								$result = FALSE;
-							}
-						} else {
-
-							$result = FALSE;
-						}
-					}
 
 					// save event_paths
 					if ($result && count($event_paths) > 0) {// way points is null or not
@@ -370,34 +199,32 @@ class Offersdb extends CI_Model {
 	 **/
 	function updateOfferAll($event_id, $event, $event_paths) {
 
-		$range = 0.5;// Position'a göre aramada kullanılan yarıçap alanı yaklaşık 50 km
-		// sunucuda zaman geri olduğu için
 		$date = date('Y-m-d');// Bugünün tarihi
 		$user_id = $event['user_id'];// Teklifi yapan kullanıcının id si
 		// sunucuda zaman geri olduğu için
-		$event['created_at'] = date('Y-m-d H:i:s');
+		$event['updated_at'] = date('Y-m-d H:i:s');
 
 		// Begin to add data
-		$this->db->trans_begin();// because of so many action we need to check all result
-		$query = $this->db->insert('events', $event);// save offer
-		$result = TRUE;
-		$event_id = -1;// set offerid begining value
-		if ($query) {
-			if ($this->db->affected_rows() > 0) {
-				$event_id = $this->db->insert_id();// get inserted id
-				if ($event_id > 0) {
+		$this->db->trans_begin();
 
+		$query = $this->db->where('id', $event_id)
+		              ->update($this->table, $event);
+
+		$query2 = $this->db->delete('event_paths', array('event_id' => $event_id));
+
+		$result = TRUE;
+		if ($query && $query2) {
+			if ($this->db->affected_rows() >= 0) {
+				if ($event_id > 0) {
 					// save event_paths
 					if ($result && count($event_paths) > 0) {// way points is null or not
-						foreach ($event_paths as &$value) {
-							$value['event_id'] = $event_id;
-						}
 
 						$query = $this->db->insert_batch('event_paths', $event_paths);
 						$query = $this->db->insert_batch('created_events', $event_paths);
 						if ($query) {
 							if ($this->db->affected_rows() > 0) {
 								$result = TRUE;
+
 							} else {
 								$result = FALSE;
 							}
@@ -446,23 +273,6 @@ class Offersdb extends CI_Model {
 		} else {
 
 			return FALSE;
-		}
-	}
-
-	/**
-	 *  Get offer rutin Dates with where parameter
-	 *  @parameter event_id
-	 *  RETURN rows or FALSE
-	 **/
-	function getRutinDates($event_id) {
-		$query = $this->db->where('event_id', $event_id)
-		              ->get('rutin_trip_dates');
-		if ($query) {
-			return $query->result_array();
-		} else {
-
-			return FALSE;
-
 		}
 	}
 
@@ -1492,69 +1302,6 @@ $secondReverse
 		}
 	}
 
-/**********************************************************************************************/
-/**********************************************************************************************/
-/**********************************************************************************************/
-	/********************************     event_update     ***********************************/
-/**********************************************************************************************/
-/**********************************************************************************************/
-/**********************************************************************************************/
-
-	/**
-	 *  Add new event_update model
-	 *  @param  $offerdata event_update model array
-	 *  @return TRUE or FALSE
-	 **/
-	function set_offer_data($offerdata) {
-
-		$query = $this->db->delete('event_update', array('user_id' => $offerdata['user_id']));
-		$query2 = $this->db->insert('event_update', $offerdata);
-		if ($query && $query2) {
-			return ($this->db->affected_rows() >= 0) ? TRUE : FALSE;
-		}
-		// if there is error returns -1
-		else{
-
-			return false;
-		}
-	}
-
-	/**
-	 *  Update  event_update model
-	 *  @param  $offerdata event_update model array
-	 *  @return TRUE or FALSE
-	 **/
-	function update_offer_data($offerdata) {
-
-		$query = $this->db->where('user_id', $offerdata['user_id'])
-		              ->update('event_update', $offerdata);
-		if ($query) {
-			return ($this->db->affected_rows() >= 0) ? TRUE : FALSE;
-		}
-		// if there is error returns -1
-		else{
-
-			return false;
-		}
-	}
-
-	/**
-	 *  Get event_update model with user_id
-	 *  @param  $offerdata event_update model array
-	 *  @return TRUE or FALSE
-	 **/
-	function get_offer_data($user_id) {
-
-		$query = $this->db->where('user_id', $user_id)
-		              ->get('event_update');
-		if ($query) {
-			return $query->row_array();
-		} else {
-
-			return false;
-		}
-
-	}
 }
 // END of the Offersdb Class
 
