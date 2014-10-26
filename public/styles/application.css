@@ -48,11 +48,13 @@
 .max-width-470{
   max-width: 470px;
   max-height: 300px;
+}
+.text-20{
+  font-size: 20px;
 } 
 .text-left{
   text-align: left;
 }
- 
 .text-right{
   text-align: right;
 }

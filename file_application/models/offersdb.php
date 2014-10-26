@@ -87,6 +87,40 @@ class Offersdb extends CI_Model {
 	 *  @parameter offerid
 	 *  RETURN row or FALSE
 	 **/
+	function Get($event_id) {
+		$query = $this->db->where('id =', $event_id)
+		              ->where('is_active', 1)
+		              ->get($this->table);
+		if ($query) {
+			return $query->row_array();
+		} else {
+
+			return FALSE;
+		}
+	}
+
+	/**
+	 *  Get offer information with id
+	 *  @parameter offerid
+	 *  RETURN row or FALSE
+	 **/
+	function GetWhere($where) {
+		$query = $this->db->where($where)
+		              ->where('is_active', 1)
+		              ->get($this->table);
+		if ($query) {
+			return $query->row_array();
+		} else {
+
+			return FALSE;
+		}
+	}
+
+	/**
+	 *  Get offer information with id
+	 *  @parameter offerid
+	 *  RETURN row or FALSE
+	 **/
 	function GetOffer($event_id) {
 		$query = $this->db->where('id =', $event_id)
 		//-> where('is_active', 1)
@@ -334,273 +368,50 @@ class Offersdb extends CI_Model {
 	 *  @parameter offer, waypoints_prices, waypoints_price_color, waypoints_distance, waypoints_distance_time, departure_days, return_days
 	 *  RETURN TRUE or FALSE
 	 **/
-	function updateOfferAll($event_id,
-		$rutin_trip_dates,
-		$event,
-		$waypoints,
-		$event_paths,
-		$days) {
+	function updateOfferAll($event_id, $event, $event_paths) {
 
-		// Email alarmlarını kontrol et
-		$addAlerts = array();// Tüm eklenen alert id lerin tutulduğu dizi
 		$range = 0.5;// Position'a göre aramada kullanılan yarıçap alanı yaklaşık 50 km
 		// sunucuda zaman geri olduğu için
 		$date = date('Y-m-d');// Bugünün tarihi
 		$user_id = $event['user_id'];// Teklifi yapan kullanıcının id si
-
-		foreach ($event_paths as $offer) {
-
-			// her bir sefer için position ve origin destination kısımlarını al
-			$origin = $offer['departure_place'];
-			$destination = $offer['arrivial_place'];
-			$min_lat = $offer['lat']-$range;
-			$max_lat = $offer['lat']+$range;
-			$min_lng = $offer['lng']-$range;
-			$max_lng = $offer['lng']+$range;
-			$min_dLat = $offer['dLat']-$range;
-			$max_dLat = $offer['dLat']+$range;
-			$min_dLng = $offer['dLng']-$range;
-			$max_dLng = $offer['dLng']+$range;
-
-			// Normal yolculuklar için where clause  origin ve destination  değerlendiriliyor  position > 0 olması gerek
-			$one = "( place1 LIKE '%$origin%' AND  place2 LIKE '%$destination%' )  OR
-                                  (   ( lat >= $min_lat  AND  lat <= $max_lat AND lng >= $min_lng  AND  lng <= $max_lng )
-                                       AND
-                                      ( dLat >= $min_dLat  AND  dLat <= $max_dLat AND  dLng >= $min_dLng  AND  dLng <= $max_dLng )
-                                   ) ";
-
-			// Normal yolculuklar için where clause  origin  değerlendiriliyor  position < 0 olması gerek
-			$one2 = "( place1 LIKE '%$origin%'  )  OR
-                                   ( lat >= $min_lat  AND  lat <= $max_lat AND lng >= $min_lng  AND  lng <= $max_lng ) ";
-
-			// Normal yolculukları al origin, destination ve  position > 0 değerlendir
-			$where = "$one  AND date >='{$date}' AND dLat > 0 AND  dLng > 0 AND user_id != $user_id ";
-			$query = $this->db->distinct('id')
-			              ->select('id,place1,place2')
-			              ->from('email_alerts')
-			              ->where($where)
-			              ->get();
-			// Normal yolculuklar al origin,  position < 0 değerlendir
-			$where = "$one2  AND date >='{$date}' AND dLat < 0 AND  dLng < 0 AND user_id != $user_id";
-			$query3 = $this->db->distinct('id')
-			               ->select('id,place1,place2')
-			               ->from('email_alerts')
-			               ->where($where)
-			               ->get();
-
-			// Çift yönlü yolculuklar için veri çekme
-			$query2 = TRUE;
-			$query4 = TRUE;
-			if ($event['round_trip'] == 1) {
-
-				// Dönüş yolculukları where clause origin, destination ve  position > 0 değerlendir Origin ve destination değiştir
-				$oneReverse = "( place1 LIKE '%$destination%' AND  place2 LIKE '%$origin%' )  OR
-                                              (   ( dLat >= $min_lat  AND  dLat <= $max_lat AND  dLng >= $min_lng  AND  dLng <= $max_lng  )
-                                                   AND
-                                                  ( lat >= $min_dLat  AND  lat <= $max_dLat AND lng >= $min_dLng  AND  lng <= $max_dLng )
-                                               ) ";
-
-				// Dönüş yolculukları al origin, destination ve  position > 0 değerlendir
-				$where = "$oneReverse AND date >='{$date}' AND dLat > 0 AND  dLng > 0  AND user_id != $user_id";
-				$query2 = $this->db->distinct('id')
-				               ->select('id,place1,place2')
-				               ->from('email_alerts')
-				               ->where($where)
-				               ->get();
-				// Dönüş yolculukları where clause origin, destination ve  position < 0 değerlendir Origin ve destination değiştir
-				$oneReverse2 = "( place1 LIKE '%$destination%'  )  OR
-                                               ( lat >= $min_dLat  AND  lat <= $max_dLat AND  lng >= $min_dLng  AND  lng <= $max_dLng  ) ";
-				// Dönüş yolculukları al origin, destination ve  position < 0 değerlendir
-				$where = "$oneReverse2 AND date >='{$date}' AND dLat < 0 AND  dLng < 0 AND user_id != $user_id";
-				$query4 = $this->db->distinct('id')
-				               ->select('id,place1,place2')
-				               ->from('email_alerts')
-				               ->where($where)
-				               ->get();
-
-			}
-
-			// Veriler alındı hata varmı yok mu kontrol et
-			if ($query && $query2 && $query3 && $query4) {
-				// Gidiş yolculukları için dönüş seferleri position > 0
-				$result = $query->result_array();
-				// Gidiş yolculukları için dönüş seferleri position < 0
-				$result3 = $query3->result_array();
-
-				// Gidiş yolculuğu ve position > 0
-				if (is_array($result) && count($result) > 0) {
-					foreach ($result as $val) {
-						if (!array_key_exists($val['id'], $addAlerts)) {
-							$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-						}
-					}
-				}
-
-				// Gidiş yolculuğu ve position < 0
-				if (is_array($result3) && count($result3) > 0) {
-					foreach ($result3 as $val) {
-						if (!array_key_exists($val['id'], $addAlerts)) {
-							$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-						}
-					}
-				}
-
-				// Dönüş yolculukları için değerlendirme
-				if ($event['round_trip'] == 1) {
-					// Dönüş yolculukları için dönüş seferleri position > 0
-					$result = $query2->result_array();
-					// Dönüş yolculukları için dönüş seferleri position < 0
-					$result4 = $query4->result_array();
-
-					// Dönüş yolculuğu ve position > 0
-					if (is_array($result) && count($result) > 0) {
-						foreach ($result as $val) {
-							if (!array_key_exists($val['id'], $addAlerts)) {
-								$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-							}
-						}
-					}
-
-					// Dönüş yolculuğu ve position < 0
-					if (is_array($result4) && count($result4) > 0) {
-						foreach ($result4 as $val) {
-							if (!array_key_exists($val['id'], $addAlerts)) {
-								$addAlerts[$val['id']] = array('email_alert_id' => $val['id']);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		$event['is_way'] = (count($waypoints) > 0) ? 1 : 0;
-		$this->db->trans_begin();
 		// sunucuda zaman geri olduğu için
-		// because of so many action we need to check all result
-		$event['updated_at'] = date('Y-m-d H:i:s');
-		$event['explain_approval'] = 0;
-		$query1 = $this->db->delete('way_points', array('event_id' => $event_id));// delete old data
-		$query2 = $this->db->delete('rutin_trip', array('event_id' => $event_id));// delete old data
-		$query3 = $this->db->delete('rutin_trip_dates', array('event_id' => $event_id));// delete old data
-		$query5 = $this->db->delete('event_paths', array('event_id' => $event_id));// delete old data
-		$query5 = $this->db->delete('email_alerts_result', array('event_id' => $event_id));// delete old data
-		$query6 = $this->db->delete('send_email_users', array('event_id' => $event_id));// delete old data
-		$query7 = $this->db->delete('look_at', array('event_id' => $event_id));// delete old data
+		$event['created_at'] = date('Y-m-d H:i:s');
 
-		$query4 = $this->db->update('events', $event, array('id' => $event_id));// update offer
+		// Begin to add data
+		$this->db->trans_begin();// because of so many action we need to check all result
+		$query = $this->db->insert('events', $event);// save offer
 		$result = TRUE;
-		if ($query1 && $query2 && $query3 && $query4 && $query5 && $query6) {
+		$event_id = -1;// set offerid begining value
+		if ($query) {
+			if ($this->db->affected_rows() > 0) {
+				$event_id = $this->db->insert_id();// get inserted id
+				if ($event_id > 0) {
 
-			// save email allerts
-			if ($result && count($addAlerts) > 0) {
-				$send_emails = array();
-				foreach ($addAlerts as &$value) {
-					$value['event_id'] = $event_id;
-					$send_emails[] = array('email_alert_id' => $value['email_alert_id']);
+					// save event_paths
+					if ($result && count($event_paths) > 0) {// way points is null or not
+						foreach ($event_paths as &$value) {
+							$value['event_id'] = $event_id;
+						}
 
-				}
-				$query = $this->db->insert_batch('email_alerts_result', $addAlerts);
-
-				// send_email_alert için
-				$query2 = TRUE;
-				if (count($send_emails) > 0) {
-					$query2 = $this->db->insert_batch('send_email_alert', $send_emails);
-				}
-
-				// send_email_user Seyahat sonrası hatırlatmalar için
-				$trip_date = $event['departure_date'];
-				if ($event['round_trip'] == 1) {
-					$trip_date = $event['return_date'];
-				}
-
-				$send_email_user = array('user_id' => $event['user_id'],
-					'type' => 'offer',
-					'event_id' => $event_id,
-					'last_date' => $trip_date);
-				$query3 = $this->db->insert('send_email_users', $send_email_user);
-
-				if ($query && $query2 && $query3) {
-					if ($this->db->affected_rows() > 0) {
-						$result = TRUE;
-					} else {
-
-						$result = FALSE;
+						$query = $this->db->insert_batch('event_paths', $event_paths);
+						$query = $this->db->insert_batch('created_events', $event_paths);
+						if ($query) {
+							if ($this->db->affected_rows() > 0) {
+								$result = TRUE;
+							} else {
+								$result = FALSE;
+							}
+						} else {
+							$result = FALSE;
+						}
 					}
 				} else {
-
 					$result = FALSE;
 				}
-			}
-
-			// save multiple dates
-			if ($result && count($rutin_trip_dates) > 0) {
-				foreach ($rutin_trip_dates as &$value) {
-					$value['event_id'] = $event_id;
-				}
-				$query = $this->db->insert_batch('rutin_trip_dates', $rutin_trip_dates);
-				if ($query) {
-					if ($this->db->affected_rows() > 0) {
-						$result = TRUE;
-					} else {
-
-						$result = FALSE;
-					}
-				} else {
-
-					$result = FALSE;
-				}
-			}
-
-			// save ways points
-			if ($result && count($waypoints) > 0) {// way points is null or not
-				$query = $this->db->insert_batch('way_points', $waypoints);
-				if ($query) {
-					if ($this->db->affected_rows() > 0) {
-						$result = TRUE;
-					} else {
-
-						$result = FALSE;
-					}
-				} else {
-
-					$result = FALSE;
-				}
-			}
-
-			// save event_paths
-			if ($result && count($event_paths) > 0) {// way points is null or not
-				$query = $this->db->insert_batch('event_paths', $event_paths);
-				$query = $this->db->insert_batch('created_events', $event_paths);
-				if ($query) {
-					if ($this->db->affected_rows() > 0) {
-						$result = TRUE;
-					} else {
-
-						$result = FALSE;
-					}
-				} else {
-
-					$result = FALSE;
-				}
-			}
-
-			// save trip days
-			if ($result && count($days) > 0) {
-				$query = $this->db->insert_batch('rutin_trip', $days);
-				if ($query) {
-					if ($this->db->affected_rows() > 0) {
-						$result = TRUE;
-					} else {
-
-						$result = FALSE;
-					}
-				} else {
-
-					$result = FALSE;
-				}
+			} else {
+				$result = FALSE;
 			}
 		} else {
-
 			$result = FALSE;
 		}
 
@@ -652,22 +463,6 @@ class Offersdb extends CI_Model {
 
 			return FALSE;
 
-		}
-	}
-
-	/**
-	 *  Get user offers with where parameter
-	 *  @parameter user id
-	 *  RETURN rows or FALSE
-	 **/
-	function Get($where) {
-		$query = $this->db->where($where)
-		              ->get($this->table);
-		if ($query) {
-			return $query->row_array();
-		} else {
-
-			return FALSE;
 		}
 	}
 
@@ -1572,101 +1367,39 @@ $secondReverse
 	 * @return rows or FALSE
 	 *
 	 **/
-	function GetOfferForSearchResult($id, $tip, $no, $WoID) {
-		if ($tip == 0) {// event_id
-			$where = "R.is_active = 1  AND  WO.id  = $WoID    ";
-			$query = $this->db->select('     R.id AS event_id,
-                                                      R.origin AS originMap,
-                                                      R.destination AS destinationMap,
-                                                      R.user_id,
-                                                      R.created_at,
-                                                      WO.departure_place AS origin,
-                                                      WO.arrivial_place AS destination,
-                                                      WO.price AS price_per_passenger,
-                                                      WO.price_class AS price_class,
-                                                      R.trip_type,
-                                                      R.round_trip,
-                                                      R.departure_date,
-                                                      R.departure_time,
-                                                      R.return_date,
-                                                      R.return_time,
-                                                      R.number_of_seats,
-                                                      R.explain_departure,
-                                                      R.explain_return,
-                                                      LT.time,
-                                                      LT.timeen,
-                                                      L.size,
-                                                      L.sizeen,
-                                                      C.id AS car_id,
-                                                      C.foto_name,
-                                                      C.make,
-                                                      C.model,
-                                                      C.comfort,
-                                                      ( SELECT COUNT(id) FROM look_at WHERE event_id = R.id ) AS look')
+	function GetOfferForSearchResult($id) {
 
-			->from('event_paths AS WO')
-			->join('events AS R', 'WO.event_id = R.id')
-			->join('cars AS C', 'C.id = R.car_id')
-			->join('leave_times AS LT', 'LT.id = R.leave_time_id')
-			->join('luggages AS L', 'L.id = R.luggage_id')
-			->where($where)
-			->get();
-		} else {// date_id
-			$where2Ters = "R.is_active = 1  AND  T.id  = $id  AND  WO.id  = $WoID ";
-			$query = $this->db->select('R.id AS event_id,
-                                                      R.user_id,
-                                                      R.origin AS originMap,
-                                                      R.destination AS destinationMap,
-                                                      T.id AS date_id,
-                                                      T.date,
-                                                      T.is_return,
-                                                      R.created_at,
-                                                      WO.departure_place AS origin,
-                                                      WO.arrivial_place AS destination,
-                                                      WO.price AS price_per_passenger,
-                                                      WO.price_class AS price_class,
-                                                      R.trip_type,
-                                                      R.round_trip,
-                                                      R.departure_date,
-                                                      R.departure_time,
-                                                      R.return_date,
-                                                      R.return_time,
-                                                      R.number_of_seats,
-                                                      R.explain_departure,
-                                                      R.explain_return,
-                                                      LT.time,
-                                                      LT.timeen,
-                                                      L.size,
-                                                      L.sizeen,
-                                                      C.id AS car_id,
-                                                      C.foto_name,
-                                                      C.make,
-                                                      C.model,
-                                                      C.comfort,
-                                                      ( SELECT COUNT(id) FROM look_at WHERE event_id = R.id ) AS look')
-			->from('event_paths AS WO')
-			->join('events AS R', 'WO.event_id = R.id')
-			->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-			->join('cars AS C', 'C.id = R.car_id')
-			->join('leave_times AS LT', 'LT.id = R.leave_time_id')
-			->join('luggages AS L', 'L.id = R.luggage_id')
-			->where($where2Ters)
-			->get();
-		}
+		$query = $this->db->select('R.id AS id,
+		                            R.id AS event_id,
+		                            R.is_way ,
+		                            R.trip_type ,
+                                    R.origin  ,
+                                    R.destination  ,
+                                    R.user_id,
+                                    R.created_at,
+                                    R.way_points,
+                                    R.trip_type,
+                                    R.round_trip,
+                                    R.departure_date,
+                                    R.departure_time,
+                                    R.return_date,
+                                    R.return_time,
+                                    R.explain_departure,
+                                    ( SELECT COUNT(id) FROM look_at WHERE event_id = R.id ) AS look')
+		->from('events AS R')
+		->where('R.is_active', 1)
+		->where('R.id', $id)
+		->get();
 
 		if ($query) {
 			$offer = $query->row_array();
 			if (is_array($offer) && count($offer) > 0) {
-				$query = $this->db->select('W.departure_place, W.arrivial_place, W.distance, W.price')
-				              ->where('event_id', $offer['event_id'])
-				              ->get('way_points AS W');
 				$query2 = $this->db->select('*,
                                                    (SELECT COUNT(id) FROM events WHERE user_id = ' . $offer["user_id"] . ' ) AS offer_count,
                                                    (SELECT AVG(rate) FROM ratings WHERE received_userid = ' . $offer["user_id"] . ' ) AS avg,
                                                    (SELECT COUNT(id) FROM ratings WHERE received_userid = ' . $offer["user_id"] . ' ) AS total,
                                                    users.id as id')
 				->from('users')
-				->join('preferences', 'users.id = preferences.user_id')
 				->join('user_level', 'users.level_id = user_level.level_id')
 				->where('users.id', $offer['user_id'])
 				->get();
@@ -1677,29 +1410,23 @@ $secondReverse
 				               ->limit(5)
 				               ->get();
 
-				if ($query && $query2 && $query3) {
-					$ways = $query->result_array();
+				if ($query2 && $query3) {
 					$users = $query2->row_array();
 					$ratings = $query3->result_array();
-					if (is_array($ways) && is_array($users) && is_array($ratings)) {
-						$offer['way_points'] = $ways;
+					if (is_array($users) && is_array($ratings)) {
 						$users['ratings'] = $ratings;
 						$offer['user'] = $users;
 						return $offer;
 					} else {
-
 						return FALSE;
 					}
 				} else {
-
 					return FALSE;
 				}
 			} else {
-
 				return FALSE;
 			}
 		} else {
-
 			return FALSE;
 		}
 	}

@@ -13,120 +13,120 @@
 
 class Look_At extends CI_Model {
 
-    /**
-     * Constructor
-     **/
-    public $table;
+	/**
+	 * Constructor
+	 **/
+	public $table;
 
-    /**
-     * Constructor
-     **/
-    function __construct() {
-        parent::__construct();
-        $this->db    = $this->load->database('default', TRUE);
-        $this->table = 'look_at';
-    }
+	/**
+	 * Constructor
+	 **/
+	function __construct() {
+		parent::__construct();
+		$this->db = $this->load->database('default', TRUE);
+		$this->table = 'look_at';
+	}
 
-    /**
-     *  Add new loook_at model
-     *  @parameter look_at
-     *  RETURN row or FALSE
-     **/
-    function Add($look_at) {
-        //$query2 = $this->db -> like('path', $look_at['path'] )
-        //                    -> limit(1)
-        //                    -> get('look_at');
-        //if( $query2 ){
-        //    $result = $query2->row_array();
-        //    if(  count($result) == 0 ){
+	/**
+	 *  Add new loook_at model
+	 *  @parameter look_at
+	 *  RETURN row or FALSE
+	 **/
+	function Add($look_at) {
+		//$query2 = $this->db -> like('path', $look_at['path'] )
+		//                    -> limit(1)
+		//                    -> get('look_at');
+		//if( $query2 ){
+		//    $result = $query2->row_array();
+		//    if(  count($result) == 0 ){
 
-        // sunucuda zaman geri olduğu için
-        $look_at['created_at'] = date('Y-m-d H:i:s');
+		// sunucuda zaman geri olduğu için
+		$look_at['created_at'] = date('Y-m-d H:i:s');
 
-        $query = $this->db->insert('look_at', $look_at);
-        if ($query) {
-            if ($this->db->affected_rows() > 0) {
-                return TRUE;
-            } else {
+		$query = $this->db->insert('look_at', $look_at);
+		if ($query) {
+			if ($this->db->affected_rows() > 0) {
+				return TRUE;
+			} else {
 
-                return FALSE;
-            }
-        } else {
+				return FALSE;
+			}
+		} else {
 
-            return FALSE;
-        }
+			return FALSE;
+		}
 
-        //    }
-        //    else{
-        //          return TRUE;
-        //    }
-        //}
-        //else
-        //  return FALSE;
-    }
+		//    }
+		//    else{
+		//          return TRUE;
+		//    }
+		//}
+		//else
+		//  return FALSE;
+	}
 
-    /**
-     *  Get looked count to offer
-     *  @parameter offerid
-     *  RETURN row or FALSE
-     **/
-    function GetLookCount($offer_id) {
-        $query = $this->db->select('ride_offer_id, COUNT(id) AS look  ')
-                      ->where('ride_offer_id =', $offer_id)
-                      ->group_by('ride_offer_id')
-                      ->get($this->table);
-        if ($query) {
-            return $query->row_array();
-        } else {
+	/**
+	 *  Get looked count to offer
+	 *  @parameter offerid
+	 *  RETURN row or FALSE
+	 **/
+	function GetLookCount($event_id) {
+		$query = $this->db->select('event_id, COUNT(id) AS look  ')
+		              ->where('event_id =', $event_id)
+		              ->group_by('event_id')
+		              ->get($this->table);
+		if ($query) {
+			return $query->row_array();
+		} else {
 
-            return FALSE;
-        }
-    }
+			return FALSE;
+		}
+	}
 
-    /**
-     *  Get looked count to offer
-     *  @parameter offerid
-     *  RETURN rows or FALSE
-     **/
-    function GetLookList($offer_id) {
+	/**
+	 *  Get looked count to offer
+	 *  @parameter offerid
+	 *  RETURN rows or FALSE
+	 **/
+	function GetLookList($event_id) {
 
-        $query = $this->db->select('*, COUNT(user_id) AS number')
-                      ->from('look_at')
-                      ->join('users', 'users.id = look_at.user_id')
-                      ->where('user_id >', 0)
-                      ->where('ride_offer_id =', $offer_id)
-                      ->group_by('user_id')
-                      ->get();
-        if ($query) {
-            return $query->result_array();
-        } else {
+		$query = $this->db->select('*, COUNT(user_id) AS number')
+		              ->from('look_at')
+		              ->join('users', 'users.id = look_at.user_id')
+		              ->where('user_id >', 0)
+		              ->where('event_id =', $event_id)
+		              ->group_by('user_id')
+		              ->get();
+		if ($query) {
+			return $query->result_array();
+		} else {
 
-            return FALSE;
-        }
-    }
+			return FALSE;
+		}
+	}
 
-    /**
-     *  Get offers thats are user looked
-     *  @parameter $user_id
-     *  RETURN rows or FALSE
-     **/
-    function GetUserLookList($user_id) {
-        $query = $this->db->select('path, look_at.origin, look_at.destination,  MAX(look_at.created_at) AS created_at ')
-                      ->from('look_at')
-                      ->join('events', 'events.id = look_at.ride_offer_id')
-                      ->where('look_at.user_id =', $user_id)
-                      ->order_by("created_at", "DESC")
-                      ->group_by('path')
-                      ->limit(15)
-                      ->get();
-        if ($query) {
-            return $query->result_array();
-        } else {
+	/**
+	 *  Get offers thats are user looked
+	 *  @parameter $user_id
+	 *  RETURN rows or FALSE
+	 **/
+	function GetUserLookList($user_id) {
+		$query = $this->db->select('path, look_at.origin, look_at.destination,  MAX(look_at.created_at) AS created_at ')
+		              ->from('look_at')
+		              ->join('events', 'events.id = look_at.event_id')
+		              ->where('look_at.user_id =', $user_id)
+		              ->order_by("created_at", "DESC")
+		              ->group_by('path')
+		              ->limit(15)
+		              ->get();
+		if ($query) {
+			return $query->result_array();
+		} else {
 
-            return FALSE;
-        }
+			return FALSE;
+		}
 
-    }
+	}
 }
 // END of the Look_At Class
 

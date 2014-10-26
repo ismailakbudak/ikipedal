@@ -1,6 +1,5 @@
 <?php if (!defined('BASEPATH')) {exit('No direct script access allowed');
 }
-
 /**
  *
  * Offers Controller
@@ -11,32 +10,24 @@
  * @link        http://ismailakbudak.com
  *
  */
-
 class Offers extends CI_Controller {
-
 	/**
 	 *  global variable
 	 **/
 	public $userid;
-
 	/**
 	 *  Constructor
 	 **/
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper("offers");
 		$this->lang->load('offers');
-
 		// decode user id or set 0
 		if ($this->session->userdata('logged_in')) {
 			$this->userid = $this->encrypt->decode($this->session->userdata('userid'));
 		} else {
-
 			$this->userid = 0;
-
 		}
 	}
-
 	/**
 	 * Teklif verme sayfasının ilk bölümü
 	 *
@@ -46,7 +37,6 @@ class Offers extends CI_Controller {
 		$this->load->model('event_types');// load offers model
 		$types = $this->event_types->Get();
 		if (is_array($types)) {
-
 			$this->login->general();// call general load view
 			$data['event_types'] = $types;
 			$this->load->view('offers/new', $data);// load view
@@ -55,7 +45,6 @@ class Offers extends CI_Controller {
 			show_404();
 		}
 	}
-
 	/**
 	 * AJAX function
 	 * Teklif oluşturma işlemi 1.sayfa için triptype 0
@@ -63,11 +52,9 @@ class Offers extends CI_Controller {
 	 * @return JSON output status : success, fail, error
 	 **/
 	public function create() {
-
 		if ($this->session->userdata('logged_in')) {
-			$this->load->helper("offers");
-			$this->load->helper("ajax");
 
+			$this->load->helper("ajax");
 			$this->form->check(lang('oc.trip_type'), 'trip_type', 'required|xss_clean');// check post data
 			$this->form->check(lang('oc.round_trip'), 'round_trip', 'required|xss_clean');// check post data
 			$this->form->check(lang('oc.inputName'), 'name', 'required|max_length[100]|xss_clean');// check post data
@@ -92,18 +79,15 @@ class Offers extends CI_Controller {
 			$this->form->check(lang('oc.locations'), 'locations', 'check_array|xss_clean');// check post data
 			$this->form->check_names('origin', 'destination', 'way_points');
 			if ($this->form->get_result()) {
-
 				$post_user_id = $this->encrypt->decode($this->session->userdata('userid'));// decode userid
 				$post_way_points = $this->input->post('way_points', TRUE);// waypoints name like istanbul?Denizli
 				$post_round_trip = $this->input->post('round_trip', TRUE);// two way or one way trip
 				$post_input_distances = $this->input->post('DistancesWay', TRUE);// waypoints distances like 234km?221km
 				$post_input_times = $this->input->post('TimesWay', TRUE);// waypoints distance hour like 34 dk?3 saat
-
 				//added after
 				$locations = $this->input->post('locations', TRUE);
 				$is_way = (trim($post_way_points) == "") ? 0 : 1;
 				$post_round_trip = (strcmp($post_round_trip, 'true') == 0) ? 1 : 0;// trip is two way or not
-
 				$event = array('user_id' => $post_user_id, // create offer model for database
 					'name' => $this->input->post('name', TRUE),
 					'event_type_id' => $this->input->post('event_type', TRUE),
@@ -121,7 +105,6 @@ class Offers extends CI_Controller {
 					'total_time' => $this->input->post('total_time', TRUE),
 					'explain_departure' => $this->input->post('explain_departure', TRUE),
 				);
-
 				$ways_offer = array();
 				if ($is_way) {// way points is null or not
 					$points = explode('?', $post_way_points);// way points split
@@ -146,14 +129,12 @@ class Offers extends CI_Controller {
 						'time' => $times[count($times) - 1]);
 					$ways_offer[] = $waypoint;
 				}
-
 				// Add main travel
 				$ways_offer[] = array('o_from' => $event['origin'],
 					'd_to' => $event['destination'],
 					'distance' => $event['total_distance'],
 					'time' => $event['total_time'],
 				);
-
 				// Get locations of points
 				foreach ($ways_offer as &$value) {
 					$result = getLocation($value, $locations);
@@ -194,7 +175,6 @@ class Offers extends CI_Controller {
 	 *  @return  redirect
 	 **/
 	public function redirect() {
-
 		$origin = $this->security->xss_clean(trim($this->input->get('origin')));// get GET[] data from URL
 		$lat = $this->security->xss_clean($this->input->get('lat'));// get GET[] data from URL
 		$lng = $this->security->xss_clean($this->input->get('lng'));// get GET[] data from URL
@@ -204,14 +184,11 @@ class Offers extends CI_Controller {
 		$dLng = $this->security->xss_clean($this->input->get('dLng'));// get GET[] data from URL
 		$destinationStatus = $this->security->xss_clean($this->input->get('destinationStatus'));// get GET[] data from URL
 		$range = $this->security->xss_clean($this->input->get('range'));// get GET[] data from URL
-
 		// if origin value is not set, redirect user to search page
 		if (strcmp($originStatus, "1") != 0 || strcmp($origin, "") == 0 || strcmp($lat, "") == 0 || strcmp($lng, "") == 0 || !isset($lat) || !isset($lng) || $lat <= 0 || $lng <= 0)// check origin point is set
 		{redirect("ara-seyahat");
 		}
-
 		// check destination data is set
-
 		if (strcmp($destinationStatus, "1") != 0 || strcmp($destination, "") == 0 || $dLat <= 0 || $dLng <= 0) {
 			$destination = "";
 			$destinationStatus = 0;
@@ -230,7 +207,6 @@ class Offers extends CI_Controller {
 			'destinationStatus' => $destinationStatus);
 		$this->load->model('searched');// load  searched model for database action
 		$result = $this->searched->add($search);
-
 		$sessionOrigin = $origin;
 		$sessionDestination = $destination;
 		$origin = explode(",", $origin);
@@ -254,15 +230,12 @@ class Offers extends CI_Controller {
 				break;
 			}
 		}
-
 		if (!$flag1) {
 			$place1 = trim($origin[0]);
 		}
-
 		if (!$flag2) {
 			$place2 = trim($destination[0]);
 		}
-
 		$searchData = array('offerInfo' => 1,
 			'offerAlertSave' => 0,
 			'countOffer' => 1,
@@ -278,16 +251,13 @@ class Offers extends CI_Controller {
 			'place2' => $place2,
 			'range' => $range);
 		$this->session->set_userdata($searchData);
-
 		$query = "origin=$place1&lat=$lat&lng=$lng&destination=$place2&dLat=$dLat&dLng=$dLng&originStatus=$originStatus&destinationStatus=$destinationStatus&range=$range";
 		if (strcmp(lang('lang'), "tr") == 0) {
 			redirect("ara-seyahat-sonuc?$query");
 		} else {
-
 			redirect("search-travel-result?$query");
 		}
 	}
-
 	/**
 	 * Arama sonuçlarını göster
 	 *
@@ -296,7 +266,6 @@ class Offers extends CI_Controller {
 	 **/
 	public function search() {
 		$this->lang->load('main');
-
 		$origin = $this->security->xss_clean(trim($this->input->get('origin')));// get GET[] data from URL
 		$lat = $this->security->xss_clean($this->input->get('lat'));// get GET[] data from URL
 		$lng = $this->security->xss_clean($this->input->get('lng'));// get GET[] data from URL
@@ -335,12 +304,10 @@ class Offers extends CI_Controller {
 			$dLng = $this->session->userdata('dLng');// get GET[] data from URL
 			$destinationStatus = $this->session->userdata('destinationStatus');// get GET[] data from URL
 		}
-
 		// if origin value is not set, redirect user to search page
 		if (strcmp($originStatus, "1") != 0 || strcmp($origin, "") == 0 || strcmp($lat, "") == 0 || strcmp($lng, "") == 0 || !isset($lat) || !isset($lng) || $lat <= 0 || $lng <= 0)// check origin point is set
 		{redirect("ara-seyahat");
 		}
-
 		// check destination data is set
 		if (strcmp($destinationStatus, "1") != 0 || strcmp($destination, "") == 0 || $dLat <= 0 || $dLng <= 0) {
 			$destination = "";
@@ -364,21 +331,18 @@ class Offers extends CI_Controller {
 			$data['getDataUrl'] = $urlString;
 			$data['urlWithoutRange'] = $urlWithoutRange;
 			$data['range'] = $range;
-
 			$data['x1'] = $lat;
 			$data['x2'] = $dLat;
 			$data['y1'] = $lng;
 			$data['y2'] = $dLng;
 			$data['status1'] = $originStatus;
 			$data['status2'] = $destinationStatus;
-
 			$data['offset'] = $limit + $offset;
 			$data['origin'] = $origin;
 			$data['destination'] = $destination;
 			$data['results'] = $results;
 			$data['counts'] = $counts;
 			$data['levels'] = $levels;
-
 			$this->lang->load('search');// load language file
 			$this->login->general($data);// load views
 			$this->load->view('main/searchResult');// load views
@@ -386,9 +350,7 @@ class Offers extends CI_Controller {
 		} else {
 			show_404('offer');
 		}
-
 	}
-
 	/**
 	 * AJAX function
 	 * AJAX ile arama verilerini yükle
@@ -396,7 +358,6 @@ class Offers extends CI_Controller {
 	 * @return JSON $array teklif listesi
 	 **/
 	function searchAjax($OFFSET) {
-
 		$origin = $this->security->xss_clean(trim($this->input->get('origin')));// get GET[] data from URL
 		$lat = $this->security->xss_clean($this->input->get('lat'));// get GET[] data from URL
 		$lng = $this->security->xss_clean($this->input->get('lng'));// get GET[] data from URL
@@ -406,23 +367,19 @@ class Offers extends CI_Controller {
 		$dLng = $this->security->xss_clean($this->input->get('dLng'));// get GET[] data from URL
 		$destinationStatus = $this->security->xss_clean($this->input->get('destinationStatus'));// get GET[] data from URL
 		$range = $this->security->xss_clean($this->input->get('range'));// get GET[] data from URL
-
 		// check origin point is set
 		if (strcmp($originStatus, "1") == 0 && strcmp($origin, "") != 0 && is_numeric($OFFSET) && $OFFSET != 0) {
 			// check destination data is set
 			if (strcmp($destinationStatus, "1") != 0 || strcmp($destination, "") == 0) {
 				$destination = "";
 			}
-
 			$this->load->model('offersdb');// load offersdb model for database action
 			$this->load->helper('search');
 			$this->lang->load('search');// load language file
-
 			$limit = 3;
 			$offset = $OFFSET;
 			$offers = $this->offersdb->search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $limit, $offset);
 			if (is_array($offers)) {
-
 				$on = 'departure_date';
 				$results = array_sort($offers, $on, $order = SORT_ASC);
 				$offset = $OFFSET + $limit;
@@ -433,7 +390,6 @@ class Offers extends CI_Controller {
 					foreach ($results['offers'] as $v) {
 						$offers[] = writeOffer($v, $date, $countPrice, $offset);
 					}
-
 					$results['countPrice'] = $countPrice;
 					$results['offers'] = $offers;
 				} else {
@@ -447,13 +403,11 @@ class Offers extends CI_Controller {
 			// origin not initialized
 			$status = "error";
 		}
-
 		$result = array('status' => $status, // JSON output
 			'results' => isset($results) ? $results : array(),
 			'text' => isset($text) ? $text : "");
 		echo json_encode($result);// JSON output
 	}
-
 	/**
 	 * Arama sayfasından alınan veriler ile teklif detaylarını göster
 	 *
@@ -461,441 +415,96 @@ class Offers extends CI_Controller {
 	 * @return HTML view
 	 * tip 0 -> ride_offer_id,  1 -> date_id
 	 **/
-	public function detailSearch($url_title) {
-
+	public function detail($url_title) {
 		if (!isset($url_title)) {
 			show_404('offer');
 		}
-
 		$url = explode("-", $url_title);
-
-		if (count($url) == 6) {
+		if (count($url) == 3) {
 			$this->load->helper('offer_detail_search');// load offer_detail_helper file
 			$this->load->model('offersdb');// load offersdb model for database action
 			$this->load->model('look_at');// load look_at model for database action
-
-			$origin = $url[0];
-			$destination = $url[1];
+			$origin = trim($url[0]);
+			$destination = trim($url[1]);
 			$id = $url[2];
-			$tip = $url[3];
-			$no = $url[4];
-			$WoID = $url[5];
 			$lang = lang('lang');
 
-			if (!is_numeric($id) || !is_numeric($tip) || !is_numeric($no) || !is_numeric($WoID) ||
-				$tip < 0 || $tip > 1 || $no < 1 || $no > 8) {
+			if (!is_numeric($id) || strcmp('', $origin) == 0 || strcmp('', $destination) == 0) {
 				show_404('offer');exit;
 			}
-
-			$offer = $this->offersdb->GetOfferForSearchResult($id, $tip, $no, $WoID);// get offer
-
+			$offer = $this->offersdb->GetOfferForSearchResult($id);// get users up-date offers   $user_id, $numrows, $start
 			if (is_array($offer) && count($offer) > 0) {
-				$offer['foto_name'] = photoCheckCar($offer);// check photo car is exist
 				$offer['user']['foto'] = photoCheckUser($offer['user']);// check photo car is exist
-				$offer['no'] = $no;
-				$offer['tip'] = $tip;
-				$offer['id'] = urlencode(base64_encode($offer['ride_offer_id']));
 				foreach ($offer['user']['ratings'] as &$value) {
 					$value['foto'] = photoCheckUser($value);
 				}
-
-				// page loads
-				$page = "";
-				$is_reverse = false;
-				$scale_time = 150.86;
-				if ($no == 1) {// Tek seferlik GİDİŞ no way
-					$page = "search1";
-				} else if ($no == 2) {// Tek seferlik DÖNÜŞ no way
-					$temp = $offer['origin'];
-					$offer['origin'] = $offer['destination'];
-					$offer['destination'] = $temp;
-					// change map direction
-					$temp = $offer['originMap'];
-					$offer['originMap'] = $offer['destinationMap'];
-					$offer['destinationMap'] = $temp;
-
-					$temp = $offer['departure_date'];
-					$offer['departure_date'] = $offer['return_date'];
-					$offer['return_date'] = $temp;
-					$temp = $offer['departure_time'];
-					$offer['departure_time'] = $offer['return_time'];
-					$offer['return_time'] = $temp;
-					$temp = $offer['explain_departure'];
-					$offer['explain_departure'] = $offer['explain_return'];
-					$offer['explain_return'] = $temp;
-					$page = "search1";
-					$is_reverse = true;
-				} else if ($no == 3) {// Çok seferlik GİDİŞ no way
-					$page = "search1";
-					$offer['rutinDates'] = array(array('date' => $offer['date'], 'is_return' => $offer['is_return']));
-				} else if ($no == 4) {// Çok seferlik DÖNÜŞ no way
-					$temp = $offer['origin'];
-					$offer['origin'] = $offer['destination'];
-					$offer['destination'] = $temp;
-					// change map direction
-					$temp = $offer['originMap'];
-					$offer['originMap'] = $offer['destinationMap'];
-					$offer['destinationMap'] = $temp;
-					$temp = $offer['departure_date'];
-					$offer['departure_date'] = $offer['return_date'];
-					$offer['return_date'] = $temp;
-					$temp = $offer['departure_time'];
-					$offer['departure_time'] = $offer['return_time'];
-					$offer['return_time'] = $temp;
-					$temp = $offer['explain_departure'];
-					$offer['explain_departure'] = $offer['explain_return'];
-					$offer['explain_return'] = $temp;
-					$page = "search1";
-					$offer['rutinDates'] = array(array('date' => $offer['date'], 'is_return' => $offer['is_return']));
-					$is_reverse = true;
-				} else if ($no == 5) {// Tek seferlik GİDİŞ yes way
-					$ways = array();
-					$way_points = $offer['way_points'];
-					foreach ($way_points as $way) {
-						$way_origin = $way['departure_place'];// split origin point by comma
-						$way_destination = $way['arrivial_place'];// split origin point by comma
-						if (!in_array($way_origin, $ways))// if it is not in array add origin
-						{ $ways[] = $way_origin;
-						}
-
-						if (!in_array($way_destination, $ways))// if it is not in array add destination
-						{ $ways[] = $way_destination;
-
-						}
-					}
-
-					$index_origin = array_search($offer['origin'], $ways);
-					$index_destination = array_search($offer['destination'], $ways);
-					if ($index_origin != 0) {// for date configuretion
-						$offer['estimated'] = 1;
-					}
-					$data['ways'] = $ways;
-					$page = "searchDeparture";
-				} else if ($no == 6) {// Tek seferlik DÖNÜŞ yes way
-					$ways = array();
-					$way_points = $offer['way_points'];// array for waypoints
-					foreach ($way_points as $way) {
-						$way_origin = $way['departure_place'];// split origin point by comma
-						$way_destination = $way['arrivial_place'];// split origin point by comma
-						if (!in_array($way_origin, $ways))// if it is not in array add origin
-						{ $ways[] = $way_origin;
-						}
-
-						if (!in_array($way_destination, $ways))// if it is not in array add destination
-						{ $ways[] = $way_destination;
-						}
-					}
-
-					$temp = $offer['origin'];
-					$offer['origin'] = $offer['destination'];
-					$offer['destination'] = $temp;
-					// change map direction
-					$temp = $offer['originMap'];
-					$offer['originMap'] = $offer['destinationMap'];
-					$offer['destinationMap'] = $temp;
-					// change date
-					$temp = $offer['departure_date'];
-					$offer['departure_date'] = $offer['return_date'];
-					$offer['return_date'] = $temp;
-					// change time
-					$temp = $offer['departure_time'];
-					$offer['departure_time'] = $offer['return_time'];
-					$offer['return_time'] = $temp;
-
-					// change explain
-					$temp = $offer['explain_departure'];
-					$offer['explain_departure'] = $offer['explain_return'];
-					$offer['explain_return'] = $temp;
-					// change way points
-					$waysReturn = array();
-					for ($i = count($ways) - 1;
-						$i >= 0;
-						$i--) {
-						$waysReturn[] = $ways[$i];
-					}
-
-					$index_origin = array_search($offer['origin'], $ways);
-					$index_destination = array_search($offer['destination'], $ways);
-
-					if ($index_origin != count($ways) - 1) {// for date configuretion
-						$offer['estimated'] = 1;
-					}
-					$data['ways'] = $waysReturn;
-					$is_reverse = true;
-					$page = "searchReturn";
-
-				} else if ($no == 7) {// Çok seferlik GİDİŞ yes way
-					// url e göre seyahati biçimlendirme kısmı
-					$offer['rutinDates'] = array(array('date' => $offer['date'], 'is_return' => $offer['is_return']));
-					$ways = array();
-					$way_points = $offer['way_points'];
-					foreach ($way_points as $way) {
-						$way_origin = $way['departure_place'];// split origin point by comma
-						$way_destination = $way['arrivial_place'];// split origin point by comma
-						if (!in_array($way_origin, $ways))// if it is not in array add origin
-						{ $ways[] = $way_origin;
-						}
-
-						if (!in_array($way_destination, $ways))// if it is not in array add destination
-						{ $ways[] = $way_destination;
-						}
-					}
-
-					$index_origin = array_search($offer['origin'], $ways);
-					$index_destination = array_search($offer['destination'], $ways);
-					if ($index_origin != 0) {// for date configuretion
-						$offer['estimated'] = 1;
-					}
-					$data['ways'] = $ways;
-					$page = "searchDeparture";
-
-				} else if ($no == 8) {// Çok seferlik DÖNÜŞ yes way
-					// url e göre seyahati biçimlendirme kısmı
-					$offer['rutinDates'] = array(array('date' => $offer['date'], 'is_return' => $offer['is_return']));
-					$ways = array();
-					$way_points = $offer['way_points'];// array for waypoints
-					foreach ($way_points as $way) {
-						$way_origin = $way['departure_place'];// split origin point by comma
-						$way_destination = $way['arrivial_place'];// split origin point by comma
-						if (!in_array($way_origin, $ways))// if it is not in array add origin
-						{ $ways[] = $way_origin;
-						}
-
-						if (!in_array($way_destination, $ways))// if it is not in array add destination
-						{ $ways[] = $way_destination;
-						}
-					}
-
-					$temp = $offer['origin'];
-					$offer['origin'] = $offer['destination'];
-					$offer['destination'] = $temp;
-
-					// change map direction
-					$temp = $offer['originMap'];
-					$offer['originMap'] = $offer['destinationMap'];
-					$offer['destinationMap'] = $temp;
-
-					// change date
-					$temp = $offer['departure_date'];
-					$offer['departure_date'] = $offer['return_date'];
-					$offer['return_date'] = $temp;
-					// change time
-					$temp = $offer['departure_time'];
-					$offer['departure_time'] = $offer['return_time'];
-					$offer['return_time'] = $temp;
-
-					// change explain
-					$temp = $offer['explain_departure'];
-					$offer['explain_departure'] = $offer['explain_return'];
-					$offer['explain_return'] = $temp;
-					// change way points
-					$waysReturn = array();
-					for ($i = count($ways) - 1;
-						$i >= 0;
-						$i--) {
-						$waysReturn[] = $ways[$i];
-					}
-
-					$index_origin = array_search($offer['origin'], $ways);
-					$index_destination = array_search($offer['destination'], $ways);
-
-					if ($index_origin != count($ways) - 1) {// for date configuretion
-						$offer['estimated'] = 1;
-					}
-					$data['ways'] = $waysReturn;
-					$is_reverse = true;
-					$page = "searchReturn";
-				} else {
-					show_404('offer');
-					exit();
-				}
-
-				// done
-				// check offer does belongs to login user if not add look_at new model
-				$data['own_offer'] = (strcmp($this->userid, $offer['user_id']) == 0) ? 1 : 0;// this offer is it belong to session user
-				if (!$data['own_offer']) {
-					$link = strcmp($lang, "tr") == 0 ? "seyahat-" : "travel-";
-					$link .= $url_title;// if offer does not belong to logined user
-					$this->look_at->add(array('ride_offer_id' => $offer['ride_offer_id'],
-						'origin' => $offer['origin'],
-						'destination' => $offer['destination'],
-						'user_id' => $this->userid,
-						'path' => $link));// add new look_at model
-				}
-
-				$offer['is_reverse'] = $is_reverse;
-				$data['is_reverse'] = $is_reverse;
+				//done check offer does belongs to login user if not add look_at new model
 				$data['offer'] = $offer;// send offer to view
-
 				$this->login->general($data);// load views
-				$this->load->view('offers/' . $page);// load views
+				$this->load->view('offers/show');// load views
 				$this->load->view('include/footer');// load views
 			} else {// offer alınırken hata oluştu
 				show_404('offer');// show error page
 			}
-		} else {// count($url) != 5
+		} else {
 			show_404('offer');// show error page
 		}
 	}
-
 	/**
-	 * Teklif detaylarını göster
+	 *  Teklife gözatanları listeler
 	 *
-	 * @param  $url_title  teklife ait origin, destination ve offer_id içerir
-	 * @return HTML view
-	 **/
-	public function detail($url_title) {
-
-		$this->load->helper('offer_detail');// load offer_detail_helper file
-		$data['active'] = '#offers';// active profile menu
-		$this->load->model('offersdb');// load offersdb model for database action
-		$this->load->model('way_points');// load way_points model for database action
-		$this->load->model('rutin_trips');// load rutin_trips model for database action
-		if (!isset($url_title)) {
-			show_404('offer');
-			exit;
-		}
-		$url = explode("-", $url_title);
-		$offerid = $url[count($url) - 1];
-		$offer_id = $offerid;// base64_decode( urldecode( $offerid ) );               // decode offer id
-		$offerid = urlencode(base64_encode($offerid));
-		$offer = $this->offersdb->GetOffer($offer_id);// get offer
-		if ($offer && count($url) == 3) {
-			$this->load->model('users');// load user modal for database
-			$this->load->model('look_at');// load look_at model for database action
-			$this->load->model('cars');// load cars model for database action
-			$this->load->model('leave_times');// load leave_times model for database action
-			$this->load->model('luggages');// load luggages model for database action
-			$this->load->model('messages');// load messages model for database action
-			$this->load->model('ratings_db');// load ratings_db model for database action
-			$luggage = $this->luggages->GetLuggage($offer['luggage_id']);// get all luggages options
-			$leave_time = $this->leave_times->GetLeaveTime($offer['leave_time_id']);// get all leave times options
-			$user = $this->users->GetUserAllInfo($offer['user_id']);// get user
-			$car = $this->cars->GetCar($offer['car_id']);// get offer car
-			$offers_count = $this->offersdb->GetUserOfferCount($offer['user_id']);
-			$ratings = $this->ratings_db->GetUserRatingsSide($offer['user_id']);
-			$way_points = $this->way_points->GetOfferWays($offer_id);// get offer waypoints
-			if ($user && $car && $leave_time && $luggage && is_array($ratings) && is_array($way_points)) {
-				$look_count = $this->look_at->GetLookCount($offer_id);// get looked people count for this offerid
-				$offer['no_encryp_id'] = $offer_id;
-				$offer['look_count'] = (count($look_count) > 0) ? $look_count : array('ride_offer_id' => $offerid, 'look' => '0');// if there is no data for view assign it 0
-				$user['foto'] = photoCheckUser($user);
-				$user['offer_count'] = $offers_count['offers_count'];
-				foreach ($ratings as &$value) {
-					$value['foto'] = photoCheckUser($value);
-				}
-
-				$user['ratings'] = $ratings;
-				$user['total'] = $this->ratings_db->totalRating($offer['user_id']);// send total value to view
-				$user['avg'] = $this->ratings_db->GetUserAverageRatings($offer['user_id']);// send avg value to view
-				$data['user'] = $user;// send to user info to view
-
-				$login_userid = ($this->session->userdata('logged_in') == true) ? $this->encrypt->decode($this->session->userdata('userid')) : "-1";
-				$data['own_offer'] = (strcmp($login_userid, $offer['user_id']) == 0) ? 1 : 0;// this offer is it belong to session user
-				$car['foto_name'] = photoCheckCar($car);// check photo car is exist
-
-				if (!$data['own_offer']) {// if offer does not belong to logined user
-					$link = strcmp(lang('lang'), "tr") == 0 ? "detay-" : "detail-";
-					$link .= $url_title;// if offer does not belong to logined user
-
-					$this->look_at->add(array('ride_offer_id' => $offer_id,
-						'origin' => $offer['origin'],
-						'destination' => $offer['destination'],
-						'user_id' => $this->userid,
-						'path' => $link));// add new look_at model
-				}
-				// url e göre seyahati biçimlendirme kısmı
-				$origin = explode(",", $offer['origin']);// split origin point by comma
-				$origin = temizle($origin[0]);// take first array value
-				$destination = explode(",", $offer['destination']);// split destination point tby comma
-				$destination = temizle($destination[0]);// take array first value
-
-				if ($offer['trip_type'] == "1") {
-					// change date
-					$offer['departure_date_normal'] = $offer['departure_date'];
-					$offer['return_date_normal'] = $offer['return_date'];
-					// change time
-					$offer['departure_time_normal'] = $offer['departure_time'];
-					$offer['return_time_normal'] = $offer['return_time'];
-					$rutinDates = $this->offersdb->getRutinDates($offer_id);
-					if ($rutinDates) {
-						$offer['rutinDates'] = $rutinDates;
-					} else {
-						show_404("offer");// page could not found
-						exit;
-					}
-				}
-				if (strcmp($url[0], $origin) == 0 && strcmp($url[1], $destination) == 0) {// eğer istek origin ve destination içinse
-					// gidiş yolculuğunu göster
-					$data['is_reverse'] = false;
-					$offer['is_reverse'] = false;
-					$offer['car'] = $car;// send car to view
-					$offer['way_points'] = $way_points;
-					$offer['leave_time'] = $leave_time;// send leave_time to view
-					$offer['luggage'] = $luggage;// send luggage to view
-					$offer['id'] = $offerid;// send offer_id to view
-					$data['offer'] = $offer;// send offer to view
-					$this->login->general($data);// load views
-					$this->load->view('offer/detail');// load views
-					$this->load->view('include/footer');// load views
-				} else if ($offer['round_trip'] == 1 && strcmp($url[1], $origin) == 0 && strcmp($url[0], $destination) == 0) {// eğer istek origin ve destination için dönüş ise
-					// dönüş yolculuğunu göster
-					// change points
-					$temp = $offer['origin'];
-					$offer['origin'] = $offer['destination'];
-					$offer['destination'] = $temp;
-
-					// change date
-					$temp = $offer['departure_date'];
-					$offer['departure_date'] = $offer['return_date'];
-					$offer['return_date'] = $temp;
-					// change time
-					$temp = $offer['departure_time'];
-					$offer['departure_time'] = $offer['return_time'];
-					$offer['return_time'] = $temp;
-					// change explain
-					$temp = $offer['explain_departure'];
-					$offer['explain_departure'] = $offer['explain_return'];
-					$offer['explain_return'] = $temp;
-					// change way points
-					$data['is_reverse'] = true;
-					$offer['is_reverse'] = true;
-					$offer['car'] = $car;// send car to view
-					$offer['way_points'] = $way_points;
-					$offer['leave_time'] = $leave_time;// send leave_time to view
-					$offer['luggage'] = $luggage;// send luggage to view
-					$offer['id'] = $offerid;// send offer_id to view
-					$data['offer'] = $offer;// send offer to view
-					$this->login->general($data);// load views
-					$this->load->view('offer/detail');// load views
-					$this->load->view('include/footer');// load views
-				} else {
-					show_404("offer");//redirect('offers');        // page could not found
-				}
-			} else {
-				show_404("offer");// redirect('offers'); // page could not found
-			}
-		} else {
-			show_404("offer");//redirect('offers');        // page could not found
-		}
-	}
-
-	/*********************************** Private methods for using *************************************************************/
-	/**
-	 *  Sayfaları yükleme metodu
-	 *
-	 *  @param  $data    sayfa içeriklerini tutan dizi
-	 *  @param  $content  yüklencek sayfanın ismi
+	 *  @param  $offerid şifrelenmiş teklif id
 	 *  @return HTML view
 	 **/
-	private function loadContent($data = array(), $viewContent) {
-		$this->login->loadViewHead($data);//load views
-		$this->load->view('offer/offerHead');//load views
-		$this->load->view('offer/' . $viewContent);//load views
-		$this->load->view('offer/offerFoot');//load views
-		$this->login->loadViewHeadFoot();//load views
+	public function showList($offerid) {
+		if (!isset($offerid)) {
+			show_404();
+			exit();
+		}
+		$this->data['active_side'] = '';// active sidebar menu
+		$this->load->model('offersdb');// load offersdb model for database action
+		$this->load->model('look_at');// load look_at model for database action
+		$this->load->model('event_paths');// load event_paths model for database action
+		$this->load->model('rutin_trips');// load rutin_trips model for database action
+		$this->load->helper("offer");// load helper file for action
+		$where = array('id' => $offerid);
+		$offer = $this->offersdb->GetWhere($where);// get users up-date offers   $user_id, $numrows, $start
+		$look_list = $this->look_at->GetLookList($offerid);// get look list user
+		if (is_array($offer) && count($offer) > 0 && is_array($look_list)) {
+			$waypoints = $this->event_paths->GetOfferWays($offer['id']);// get offer waypoints
+			if (is_array($waypoints)) {
+				$offer['event_paths'] = $waypoints;
+				foreach ($look_list as $value) {
+					$value['foto'] = photoCheckUser($value);
+				}
+				$offer['look_list'] = $look_list;// send look list to view
+				$look_count = $this->look_at->GetLookCount($offer['id']);// get looked people count for this offerid
+				if (is_array($look_count) && count($look_count) > 0) {
+					$offer['look_count'] = $look_count;
+				} else {
+					$offer['look_count'] = array('ride_offer_id' => $offer['id'], 'look' => '0');
+				}
+				if (strcmp($offer['trip_type'], "1") == 0) {// if there is get offer trip days
+					$rutin_trip = $this->rutin_trips->GetOfferDays($offer['id']);// get trip days for this offerid
+					if (is_array($rutin_trip) && count($rutin_trip) > 0) {
+						$offer['rutin_trip'] = $rutin_trip;
+					} else {
+						$offer['rutin_trip'] = array(0 => array('id' => 0, "is_return" => "-1", "day" => ""));
+					}
+				}
+				$offer['normal_id'] = $offer['id'];
+				$offer['id'] = $offerid;// encypt again offerid for security
+				$this->data['offer'] = $offer;// load views
+				$this->login->general($this->data);// call general load view
+				$this->load->view('offers/view_list');//load views
+				$this->load->view('include/footer');// load views
+			} else {
+				show_404('hata');
+			}
+		} else {
+			show_404('hata');
+		}
 	}
-
 }// END of the Offers Class
 /**
  * End of the file offer

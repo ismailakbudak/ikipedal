@@ -1,4 +1,6 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');
+}
+
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -17,7 +19,7 @@
 |	['password'] The password used to connect to the database
 |	['database'] The name of the database you want to connect to
 |	['dbdriver'] The database type. ie: mysql.  Currently supported:
-				 mysql, mysqli, postgre, odbc, mssql, sqlite, oci8
+mysql, mysqli, postgre, odbc, mssql, sqlite, oci8
 |	['dbprefix'] You can add an optional prefix, which will be added
 |				 to the table name when using the  Active Record class
 |	['pconnect'] TRUE/FALSE - Whether to use a persistent connection
@@ -43,23 +45,15 @@
 |
 | The $active_record variables lets you determine whether or not to load
 | the active record class
-*/
+ */
 
 $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 
-/* site */
-/*
-$db['default']['username'] = 'hepgez_hepgez';      
-$db['default']['password'] = 'z5o!6hIBw-#-';       
-$db['default']['database'] = 'hepgez_hepgezelim';
-*/
-/* lokal */
-
 $db['default']['username'] = 'root';
-$db['default']['password'] = '1234'; 
+$db['default']['password'] = '1234';
 $db['default']['database'] = 'ikipedal_ikipedal';
 
 $db['default']['dbdriver'] = 'mysql';
@@ -73,7 +67,6 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

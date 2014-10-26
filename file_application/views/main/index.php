@@ -66,12 +66,13 @@
             // write offer information
             function writeContent( $offer, $lang ){
 
+
                   // offer data
                   $origin      = explode(',',$offer['origin']);
                   $origin      = trim($origin[0]);
                   $destination = explode(',',$offer['destination']);
                   $destination =  trim($destination[0]);
-                  $url_detail  =  new_url( urlCreate( $lang, $origin, $destination,  '' ) );
+                  $url_detail  =  new_url( urlCreate( $lang, $origin, $destination,  $offer['event_id'] ) );
                   $titleO      = $origin;
                   $titleD      = $destination;
                   if( strlen($origin) > 11 ){

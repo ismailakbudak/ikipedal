@@ -19,7 +19,6 @@ class SignUp extends CI_Controller {
 	 **/
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper('captcha');// load captcha helper file
 		$this->load->helper('email');// helper function about the email
 		$this->lang->load('email');// signup language
 	}
@@ -292,6 +291,7 @@ class SignUp extends CI_Controller {
 			'img_height' => '30',
 			'expiration' => 7200);
 		$cap = create_captcha($vals);
+
 		$this->session->set_userdata($cap);// set user session data
 		return $cap;
 	}

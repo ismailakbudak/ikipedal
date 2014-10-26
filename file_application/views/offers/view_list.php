@@ -1,4 +1,5 @@
-       <style type="text/css">
+<div class='container' >
+        <style type="text/css">
          .one-thread { display: block;
                        color: #666 !important;
                        padding: 0px 0px;
@@ -7,8 +8,8 @@
                        background-color:  #fff; }
          .msg{   padding: 10px; text-align: center;}
          .message{        border-color: #eee;
-         	             border-width: 5px;
-         	             border-radius: 10px;
+                       border-width: 5px;
+                       border-radius: 10px;
                          -webkit-transition: 0.5s ease-in-out all;
                          -moz-transition: 0.5s ease-in-out all;
                          -ms-transition: 0.5s ease-in-out all;
@@ -102,19 +103,93 @@
             ?>
       </legend>
       <div class="last-offer" >
+      <?
+                  $value = $offer;
+                  $origin = explode(',', $value['origin']);
+                  $row_count = 0;
+                  $origin = $origin[0];
+                  $destination = explode(',', $value['destination']);
+                  $destination = $destination[0];
+                  $base = new_url();
+                  $url_detail = $base . urlCreate($lang, $origin, $destination, $value['normal_id']);
+                  $url_look = $base . 'offers/look/' . $value['id'];
+                  $val = " <div class='panel panel-primary' data-count='" . $row_count . "'>
+                                         <div class='panel-heading'>
+                                            <h3 class='panel-title'> {$origin}";
+                  if ($value['is_way']) {
+                    $val .= " <i class='yellow glyphicon glyphicon-arrow-left icon1' title='" . lang('io.titletwoway') . "'></i>
+                    <i class='yellow glyphicon glyphicon-arrow-right icon2' title='" . lang('io.titletwoway') . "'></i> {$destination}";
+                  } else {
+                    $val .= " <i class='yellow glyphicon glyphicon-arrow-right icon1' title='" . lang('io.titleonetime') . "'></i> {$destination}";
 
-            <?
-                       if( strcmp($offer['trip_type'], "1") == 0 ){
-                                 echo rutinTrip($offer, $lang, $count);
-                       }
-                       else{
-                           if( $offer['round_trip'] )
-                                 echo twoTrip($offer, $lang);
-                           else
-                                 echo oneTrip($offer, $lang);
-                       }
+                  }
+                  $val .= "
+                                                <a href='{$url_detail}' ><i title='" . lang('io.titleshow') . "' class=' glyphicon glyphicon-eye-open icon3 right'></i></a>
+                                            </h3>
+                                          </div>
+                                          <div class='panel-body ' >
 
-            ?>
+                                          <div class='row row-ofer'>
+                                           <div class='col-lg-9 '>
+                                             <blockquote  class='col-lg-12 safari'>
+                                                <span class='row row-ofer edit-row' >";
+
+                  $date = tr(date_format(date_create($value['departure_date']), ' l jS F Y'), $lang);
+                  $times = explode(':', $value['departure_time']);
+                  $time = $times[0] . ":" . $times[1];
+
+                  $val .= "   <i class='text-success glyphicon glyphicon-calendar two' title='" . lang('io.titledeparturedate') . "' ></i>  {$date}
+                                                     <i class='text-success glyphicon glyphicon-time icon4 two' title='" . lang('io.titledeparturetime') . "'></i> {$time}
+                                                </span>
+                                                <span class='row row-ofer edit-row'>
+                                                     <i class='text-info glyphicon glyphicon-map-marker two' title='" . lang('io.titleroute') . "' ></i>";
+
+                  if ($value['is_way']) {
+
+                    $str = explode(",", $value['origin']);
+                    $val .= "<strong title='$str[0]' >" . $str[0] . "</strong>→";
+
+                    $way_points = explode("?", $value['way_points']);
+                    foreach ($way_points as $way) {
+                      $str2 = explode(",", $way);
+                      $val .= "<strong title='{$way}' >" . $str2[0] . "</strong>→";
+
+                    }
+                    $str2 = explode(",", $value['destination']);
+                    $val .= "<strong title='{$value['destination']}' >" . $str2[0] . "</strong>";
+                  } else {
+                    $str = explode(",", $value['origin']);
+                    $str2 = explode(",", $value['destination']);
+                    $val .= "<strong> <span title='{$value['origin']}' > " . $str[0] . " </span> → <span title='{$value['destination']}' > " . $str2[0] . " </span> </strong>";
+                  }
+                  $totaltime = timeLang($value['total_time'], $lang);
+                  $val .= " <i class='text-info glyphicon glyphicon-road icon4 two' title='" . lang('io.titletriplength') . "'></i> {$value['total_distance']}
+                                                     <i class='text-info glyphicon glyphicon-time icon4 two' title='" . lang('io.titletriptime') . "'></i> {$totaltime}
+                                                </span>
+                                                <span class='row row-ofer'>";
+
+                  $date = tr(date_format(date_create($value['return_date']), ' l jS F Y'), $lang);
+                  $times = explode(':', $value['return_time']);
+                  $time = $times[0] . ":" . $times[1];
+
+                  $val .= " <i class='text-danger glyphicon glyphicon-calendar two' title='" . lang('io.titlereturndate') . "'></i>  {$date}
+                                                     <i class='text-danger glyphicon glyphicon-time icon4 two' title='" . lang('io.titledeparturetime') . "'></i>  {$time}
+                                               </span>
+                                             </blockquote>
+                                         </div>
+                                         <div class='col-lg-3 '>
+                                             <blockquote class='pull-right' style='border-color: rgba(0, 0, 0, 0.15); height:100px'>
+                                                       <span class='row row-ofer  width-200' style='float:left' >
+                                                          <span class='badge' style='background-image:linear-gradient(#ff6707,#dd5600 60%,#c94e00)'>{$value['look_count']['look']}</span> " . lang('io.countshow') . "
+                                                     </span>
+
+                                             </blockquote>
+                                         </div>
+                                           </div>
+                                          </div>
+                                          </div> ";
+                  echo $val;
+      ?>
       </div><!--  <div class="last offer" /> -->
        <div>
          <?
@@ -127,9 +202,9 @@
                     $alt = $username ." ". $value['surname'] ."(". $age  .")" ;
                     $path = $value['foto'];
                     $times = $value['number'] . lang('ovl.times');
-					$total += $value['number'];
+          $total += $value['number'];
                     echo " <div class='list-group-item  message ' >
-                                 	<a href='". new_url('user/show/'. urlencode( base64_encode($value['user_id']) )  ) ."' class='row one-thread' >
+                                  <a href='". new_url('user/show/'. urlencode( base64_encode($value['user_id']) )  ) ."' class='row one-thread' >
                                         <div class='row'>
                                                            <div class='col-lg-4' style='text-align: center;'>
                                                                 <img alt='". $alt ."' title='". $alt ."'  class='tip pic-img' src='". $path ."' style='width: 50px; height: 60px' height='60' width='50'>
@@ -147,7 +222,7 @@
 
                 }
                 if( count($offer['look_list']) == 0 ){
-                       $url_refresh =   new_url('offer/showList/'. $offer['id']);
+                       $url_refresh =   new_url('offers/showList/'. $offer['id']);
                        echo " <div class='bs-example'>
                                   <div class='alert alert-dismissable alert-info'>
                                        <button type='button' class='close' data-dismiss='alert' title='". lang('close') ."' >&times;</button>
@@ -155,38 +230,27 @@
                                   </div>
                               </div>";
                 }
-				else{
-					$number = $offer['look_count']['look'] - $total;
-					$number = $number . lang('ovl.times');
-					$username = lang("ovl.notmember");
-					$path   = public_url('assets/male.png');
-					echo "<div class='list-group-item  message ' >
-					                   <div class='row'>
-                                                           <div class='col-lg-4' style='text-align: center;'>
-                                                                <img   class='tip pic-img' src='". $path ."' style='width: 50px; height: 60px' height='60' width='50'>
-                                                           </div>
-                                                           <div class='col-lg-8 name' style='text-align: center; padding-top:5px'>
-                                                               <div class='row' >". $username ."</div>
-                                                               <div class='row' > </div>
-                                                               <div class='row ' >".  $number  ."</div>
-                                                          </div>
-                                        </div>
-						 </div>";
-				}
+                else{
+                  $number = $offer['look_count']['look'] - $total;
+                  $number = $number . lang('ovl.times');
+                  $username = lang("ovl.notmember");
+                  $path   = public_url('assets/male.png');
+                  echo "<div class='list-group-item  message ' >
+                                     <div class='row'>
+                                                                   <div class='col-lg-4' style='text-align: center;'>
+                                                                        <img   class='tip pic-img' src='". $path ."' style='width: 50px; height: 60px' height='60' width='50'>
+                                                                   </div>
+                                                                   <div class='col-lg-8 name' style='text-align: center; padding-top:5px'>
+                                                                       <div class='row' >". $username ."</div>
+                                                                       <div class='row' > </div>
+                                                                       <div class='row ' >".  $number  ."</div>
+                                                                  </div>
+                                                </div>
+                     </div>";
 
+}
          ?>
        </div>
-      <!-- Delete offer modal
-      ===============================================================-->
-      <div id="delete-modal" class="modal fade" tabindex="-1" data-id="-1"; data-backdrop="static" data-keyboard="false" style="display: none;">
-             <div class="modal-body">
-                   <p><?=lang("io.commit")?></p>
-             </div>
-             <div class="modal-footer">
-                   <button type="button" data-dismiss="modal" class="btn width-100"><?=lang("g.cancel")?></button>
-                   <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?=lang("g.yes")?></button>
-             </div>
-      </div>
       <div id="loader">  </div>
       <script type="text/javascript" > er.blank_date = '<?=lang("o.blank_date")?>'; er.same_date = '<?=lang("o.same_date")?>'; er.choose_day = '<?=lang("o.choose_day")?>'; return_days_count = '<?=$count?>'; </script>
       <script src="<? echo   public_url() . 'scripts/partial/index-offers.js'  ?>"></script>

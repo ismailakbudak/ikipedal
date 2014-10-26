@@ -33,7 +33,7 @@
         .left{ text-align: right; float: center;}
         .pad-0{ padding-right: 0px !important; padding-left: 0px !important; margin-right: 0px !important; }
         .pad-10{ margin-left: 5px; margin-top: 10px; }
-        .test{ padding-left: 55px; padding-top:10px; padding-bottom:10px;}
+        .offer{ padding-left: 55px; padding-top:10px; padding-bottom:10px;}
      </style>
 
     <!--AÇıklama
@@ -60,19 +60,38 @@
                                             <div class="col-lg-5">
                                               <div class="radio">
                                                   <label>
-                                                    <input type="radio" name="radiosTime" id="radiosOnetime" value="onetime">
-<?=lang('o.onetime')?></label>
+                                                    <input type="radio" name="radiosTime" id="radiosOnetime" value="onetime"> <?=lang('o.onetime')?></label>
                                               </div>
                                             </div>
                                             <div class="col-lg-5">
                                               <div class="radio">
                                                  <label>
-                                                    <input type="radio" name="radiosTime" id="radiosManytime" value="manytime">
-<?=lang('o.manytime')?>
+                                                    <input type="radio" name="radiosTime" id="radiosManytime" value="manytime"> <?=lang('o.manytime')?>
                                                   </label>
                                               </div>
                                             </div>
                                           </div>
+
+                                           <hr/>
+                                           <div class="form-group form-padding" >
+                                              <input id='inputEventName' name="inputEventName" value="<? echo $offer['name'] ?>" type="text" class="collapse in form-control border-input" placeholder=" <?=lang('o.event_name')?>">
+                                           </div>
+                                           <div class="form-group form-padding" >
+                                                <div class='col-lg-8'>
+                                                  <select class="form-control input-sm" id="inputEventType">
+                                                      <?
+                                                          foreach ($event_types as $value) {
+                                                              $selected = ($offer['event_type_id'] === $value['id'] ) ? 'selected' : '';
+                                                              if( strcmp(lang('lang'), "tr") == 0 ){
+                                                                  echo "<option $selected  value='{$value[id]}'> $value[name] </option>";
+                                                              }else{
+                                                                  echo "<option  $selected value='{$value[id]}'> $value[name_en] </option>";
+                                                              }
+                                                          }
+                                                      ?>
+                                                  </select>
+                                                </div>
+                                           </div>
                                       </div>
                                  </div> <!-- Birinci panel sonunu-->
 
@@ -85,11 +104,11 @@
                                       <div class="panel-body" id="iteneraryPanel">
 
                                            <div class="form-group form-padding" >
-                                             <input id="pac-input" value="<? echo $test['origin'] ?>" name="inputStart" type="text" class="collapse in form-control "
+                                             <input id="pac-input" value="<? echo $offer['origin'] ?>" name="inputStart" type="text" class="collapse in form-control "
                                              placeholder="<?=lang('o.location')?>">
                                            </div>
                                            <div class="form-group form-padding" >
-                                               <input id="pac-input2" value="<? echo $test['destination'] ?>" name="inputEnd" type="text" class="collapse in form-control  "
+                                               <input id="pac-input2" value="<? echo $offer['destination'] ?>" name="inputEnd" type="text" class="collapse in form-control  "
                                                placeholder=" <?=lang('o.destination')?> ">
                                            </div>
 
@@ -100,27 +119,23 @@
                                            </div>
 
                                              <?
-
-
-                                                  $waypoitns = explode('?', $test['way_points']);
-
-
-                                                  if( $test['way_points'] != "" ){
-                                                         for ($i=0; $i < count($waypoitns) ; $i++) {
-                                                                 if( strcmp("", trim($waypoitns[$i])) !=  0 ){
-                                                                       $id = 'wayPoint' . $i;
-                                                                       $value =   " <div class='form-group form-padding wayPoints'>
-                                                                                       <div class='input-group'>
-                                                                                          <input id='{$id}' value='{$waypoitns[$i]}'  type='text' class='form-control wayPoint'  placeholder='". lang('g.position') ."' >
-                                                                                          <span class='input-group-btn'>
-                                                                                              <button class='btn btn-danger minus' type='button'>X</button>
-                                                                                          </span>
-                                                                                        </div>
-                                                                                     </div> ";
-                                                                       echo $value;
-                                                                  }
-                                                            }
-                                                     }
+                                                  if( $offer['is_way'] ){
+                                                     $waypoitns = explode('?', $offer['way_points']);
+                                                     for ($i=0; $i < count($waypoitns) ; $i++) {
+                                                             if( strcmp("", trim($waypoitns[$i])) !=  0 ){
+                                                                   $id = 'wayPoint' . $i;
+                                                                   $value =   " <div class='form-group form-padding wayPoints'>
+                                                                                   <div class='input-group'>
+                                                                                      <input id='{$id}' value='{$waypoitns[$i]}'  type='text' class='form-control wayPoint'  placeholder='". lang('g.position') ."' >
+                                                                                      <span class='input-group-btn'>
+                                                                                          <button class='btn btn-danger minus' type='button'>X</button>
+                                                                                      </span>
+                                                                                    </div>
+                                                                                 </div> ";
+                                                                   echo $value;
+                                                              }
+                                                        }
+                                                    }
                                              ?>
 
                                       </div>
@@ -136,8 +151,7 @@
                                             </div>
                                             <div class="col-lg-4">
                                                 <label for="twoWayCheck" class="hover-pointer">
-                                                   <input id="twoWayCheck" type="checkbox" data-result='<? echo ($test['round_trip'] == '1') ? 'checked' : 'unchecked'; ?>' name="twoWayCheck">
-<?=lang('o.twoway')?>
+                                                   <input id="twoWayCheck" type="checkbox" data-result='<? echo ($offer['round_trip'] == '1') ? 'checked' : 'unchecked'; ?>' name="twoWayCheck"><?=lang('o.twoway')?>
                                                 </label>
                                             </div>
                                         </div>
@@ -152,7 +166,7 @@
                                                      <i class="text-success glyphicon glyphicon-calendar two" style="margin-right:0px;" style="margin-right:0px;"></i>  <?=lang('o.departure')?>
                                                   </label>
                                                  <div class="col-lg-4" style="padding-bottom: 10px">
-                                                     <input  value="<? echo $test['departure_date'] ?>" title="<?=lang('o.traveldateTitle')?>" type="text" class="form-control date input-sm" id="datepickerStart"
+                                                     <input  value="<? echo $offer['departure_date'] ?>" title="<?=lang('o.traveldateTitle')?>" type="text" class="form-control date input-sm" id="datepickerStart"
                                                      placeholder="<?=lang('o.date')?>">
                                                  </div>
                                                  <div class="col-lg-5" title="<?=lang('o.traveltimeTitle')?> ">
@@ -160,7 +174,7 @@
                                                       <div style="width:60px; float:left">
                                                          <select class="form-control input-sm" id="datepickerStartTimeHour">
                                                             <?
-                                                                   $times =  explode(':', $test['departure_time'] );
+                                                                   $times =  explode(':', $offer['departure_time'] );
                                                                    $hour = $times[0];
                                                                    $min = $times[1];
 
@@ -209,7 +223,7 @@
                                                       <i class="text-danger glyphicon glyphicon-calendar two" style="margin-right:0px;" ></i> <?=lang('o.return')?>
                                                  </label>
                                                  <div class="col-lg-4" style="padding-bottom: 10px">
-                                                   <input  value="<? echo $test['return_date'] ?>"  type="text" title="<?=lang('o.returnTitledate')?> " class="form-control date input-sm" id="datepickerEnd"
+                                                   <input  value="<? echo $offer['return_date'] ?>"  type="text" title="<?=lang('o.returnTitledate')?> " class="form-control date input-sm" id="datepickerEnd"
                                                      placeholder="<?=lang('o.date')?>">
                                                  </div>
                                                  <div class="col-lg-5" title="<?=lang('o.returnTitletime')?>">
@@ -217,7 +231,7 @@
                                                      <div style="width:60px; float:left">
                                                        <select class="form-control input-sm" id="datepickerEndTimeHour">
                                                             <?
-                                                                     $times =  explode(':', $test['return_time'] );
+                                                                     $times =  explode(':', $offer['return_time'] );
                                                                      $hour = $times[0];
                                                                      $min = $times[1];
                                                                      for ($i=0; $i < 24; $i++){
@@ -263,185 +277,31 @@
                                             </div>
                                           </div> <!-- onetimeContent finish -->
 
-                                           <!-- many time trip content begin
-                                           ================================= -->
-                                           <div id="manytimeContent">
 
-                                              <div id="departureDays" class='row pad-10' >
-                                                      <div class="row pad-10">
-                                                            <div id="weekDaysStart" class="col-lg-7 pad-0" title="<?=lang('o.tripdaysTitle')?>">
-                                                                   <input type="checkbox" class="day" id="check1">
-                                                                   <label data-name='Pazartesi' class="day-label" for="check1"><?=lang('o.mon')?></label>
-                                                                   <input type="checkbox" class="day" id="check2">
-                                                                   <label data-name='Salı' class="day-label" for="check2"><?=lang('o.tue')?></label>
-                                                                   <input type="checkbox"  class="day" id="check3">
-                                                                   <label data-name='Çarşamba' class="day-label" for="check3"><?=lang('o.wed')?></label>
-                                                                   <input type="checkbox" class="day" id="check4">
-                                                                   <label data-name='Perşembe' class="day-label" for="check4"><?=lang('o.thu')?></label>
-                                                                   <input type="checkbox" class="day" id="check5">
-                                                                   <label data-name='Cuma'  class="day-label" for="check5"><?=lang('o.fri')?></label>
-                                                                   <input type="checkbox" class="day" id="check6">
-                                                                   <label data-name='Cumartesi'  class="day-label" for="check6"><?=lang('o.sat')?></label>
-                                                                   <input type="checkbox" class="day" id="check7">
-                                                                   <label data-name='Pazar' class="day-label" for="check7"><?=lang('o.sun')?></label>
-                                                            </div>
-                                                            <div class="col-lg-5" title="<?=lang('o.traveldeparturetime')?>  ">
-                                                                   <i class="text-success glyphicon glyphicon-time two"  style="float:left; padding-top:5px; margin-right:5px;"></i>
-                                                                  <div style="width:60px; float:left">
-                                                                    <select class="form-control input-sm" id="weekDaysStartHour">
-                                                                       <?
-                                                                              $times =  explode(':', $test['departure_time'] );
-                                                                              $hour = $times[0];
-                                                                              $min = $times[1];
-
-                                                                             for ($i=0; $i < 24; $i++){
-                                                                                 if($i < 10){
-                                                                                      if($i == $hour)
-                                                                                           echo "<option selected value='0{$i}'> 0$i </option>";
-                                                                                      else
-                                                                                            echo "<option value='0{$i}'> 0$i </option>";
-                                                                                  }
-                                                                                  else{
-                                                                                       if($i == $hour)
-                                                                                           echo "<option selected value='{$i}'> $i </option>";
-                                                                                        else
-                                                                                           echo "<option value='{$i}'> $i </option>";
-                                                                                   }
-                                                                              }
-                                                                       ?>
-                                                                    </select>
-                                                                  </div>
-                                                                  <label style="float:left; padding:5px; padding-top:5px; ">:</label>
-                                                                  <div class="" style="width:60px; float:left">
-                                                                     <select class="form-control input-sm" id="weekDaysStartMinute">
-                                                                           <?
-                                                                                  for ($i=0; $i < 60; $i += 10){
-                                                                                      if($i == 0 ){
-                                                                                           if('00' ==  $min)
-                                                                                                 echo "<option selected value='00'> 0$i </option>";
-                                                                                           else
-                                                                                                  echo "<option value='00'> 0$i </option>";
-
-                                                                                       }else{
-                                                                                            if($i == $min)
-                                                                                                echo "<option selected value='{$i }'> $i </option>";
-                                                                                             else
-                                                                                                echo "<option value='{$i}'> $i </option>";
-                                                                                        }
-                                                                                   }
-                                                                           ?>
-                                                                    </select>
-                                                                  </div>
-                                                            </div>
-                                                        </div>
-                                              </div>
-
-                                              <div id="returnDays" class='row pad-10' >
-                                                     <div class="row pad-10">
-                                                            <div id="weekDaysReturn" class="col-lg-7 pad-0" title="<?=lang('o.returndaysTitle')?>">
-                                                                   <input type="checkbox" class="day" id="check11">
-                                                                   <label data-name='Pazartesi' class="day-label" for="check11"><?=lang('o.mon')?></label>
-                                                                   <input type="checkbox" class="day" id="check22">
-                                                                   <label data-name='Salı' class="day-label" for="check22"><?=lang('o.tue')?></label>
-                                                                   <input type="checkbox"  class="day" id="check33">
-                                                                   <label data-name='Çarşamba' class="day-label" for="check33"><?=lang('o.wed')?></label>
-                                                                   <input type="checkbox" class="day" id="check44">
-                                                                   <label data-name='Perşembe' class="day-label" for="check44"><?=lang('o.thu')?></label>
-                                                                   <input type="checkbox" class="day" id="check55">
-                                                                   <label data-name='Cuma' class="day-label" for="check55"><?=lang('o.fri')?></label>
-                                                                   <input type="checkbox" class="day" id="check66">
-                                                                   <label data-name='Cumartesi' class="day-label" for="check66"><?=lang('o.sat')?></label>
-                                                                   <input type="checkbox" class="day" id="check77">
-                                                                   <label data-name='Pazar' class="day-label" for="check77"><?=lang('o.sun')?></label>
-                                                            </div>
-                                                            <div class="col-lg-5" title=" <?=lang('o.travelreturntime')?> ">
-                                                                   <i class="text-danger glyphicon glyphicon-time two" for="weekDaysReturnHour"  style="float:left; padding-top:5px; margin-right:5px;"></i>
-                                                                  <div style="width:60px; float:left">
-                                                                    <select class="form-control input-sm" id="weekDaysReturnHour">
-                                                                      <?
-                                                                              $times =  explode(':', $test['return_time'] );
-                                                                              $hour = $times[0];
-                                                                              $min = $times[1];
-
-                                                                             for ($i=0; $i < 24; $i++){
-                                                                                 if($i < 10){
-                                                                                      if($i == $hour)
-                                                                                           echo "<option selected value='0{$i}'> 0$i </option>";
-                                                                                      else
-                                                                                            echo "<option value='0{$i}'> 0$i </option>";
-                                                                                  }
-                                                                                  else{
-                                                                                       if($i == $hour)
-                                                                                           echo "<option selected value='{$i}'> $i </option>";
-                                                                                        else
-                                                                                           echo "<option value='{$i}'> $i </option>";
-                                                                                   }
-                                                                              }
-                                                                       ?>
-                                                                    </select>
-                                                                  </div>
-                                                                  <label style="float:left; padding:5px; padding-top:5px; ">:</label>
-                                                                  <div class="" style="width:60px; float:left">
-                                                                     <select class="form-control input-sm" id="weekDaysReturnMinute">
-                                                                          <?
-                                                                                 for ($i=0; $i < 60; $i += 10){
-                                                                                     if($i == 0 ){
-                                                                                          if('00' ==  $min)
-                                                                                                echo "<option selected value='00'> 0$i </option>";
-                                                                                          else
-                                                                                                 echo "<option value='00'> 0$i </option>";
-
-                                                                                      }else{
-                                                                                           if($i == $min)
-                                                                                               echo "<option selected value='{$i }'> $i </option>";
-                                                                                            else
-                                                                                               echo "<option value='{$i}'> $i </option>";
-                                                                                       }
-                                                                                  }
-                                                                          ?>
-                                                                    </select>
-                                                                  </div>
-                                                            </div>
-                                                      </div>
-                                              </div>
-
-                                              <div class='row'>
-                                                   <div class='row'>
-                                                      <div class='col-lg-6 test' style="padding-left: 70px;">
-                                                                  <div class="row">
-                                                                        <div class="row">
-                                                                              <label for="datepickerStartDay" title="<?=lang('o.travelstartdateTitle')?>" class="control-label">
-                                                                                    <i class="text-success glyphicon glyphicon-calendar two"></i><?=lang('o.start')?> :
-                                                                              </label>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                              <input value="<? echo $test['departure_date'] ?>" type="text"
-                                                                                title="<?=lang('o.travelstartdateTitle')?>" class="form-control input-sm date" id="datepickerStartDay"
-                                                                                placeholder="<?=lang('o.date')?>">
-                                                                        </div>
-                                                                 </div>
-                                                           </div>
-                                                           <div class='col-lg-6 test'  style="padding-left: padding-left: 70px;">
-                                                                 <div class="row">
-                                                                        <div class="row">
-                                                                             <label for="datepickerEndDay" title=" <?=lang('o.travelfinishdateTitle')?>" class="control-label">
-                                                                                <i class="text-danger glyphicon glyphicon-calendar two"></i> <?=lang('o.finish')?> :
-                                                                             </label>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                              <input value="<? echo $test['return_date'] ?>" type="text" title="<?=lang('o.travelfinishdateTitle')?>" class="form-control input-sm date" id="datepickerEndDay"
-                                                                              placeholder="<?=lang('o.date')?>">
-                                                                        </div>
-                                                                 </div>
-                                                           </div>
-                                                    </div>
-                                                    <div id="dateKontrol"></div>
-                                              </div>
-                                          </div><!-- manytimeContent finish -->
 
                                       </div><!-- Panel body end-->
                                  </div> <!-- 3. panel sonunu-->
+                                 <!-- 4. panel
+                                 ====================================-->
+                                 <div class="panel panel-default">
+                                      <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                               <h3 class="panel-title"> <?=lang('o2.moredesc')?> </h3>
+                                            </div>
+                                        </div>
+                                      </div>
+                                      <div class="panel-body" id="">
 
+                                            <div class="form-group">
+                                             <label for="textArea" class="col-lg-12 control-label " style="text-align:left"> <?=lang('o2.moveexplain')?></label>
+                                               <div class="col-lg-12">
+                                                 <textarea class="form-control max-width-470"  title=' <?=lang('o2.movedescTitle')?> ' rows="3" id="inputExplainGoing" placeholder="<?=lang('o2.movedesc')?>" > <? echo trim($offer['explain_departure']) ?>  </textarea>
+                                                </div>
+                                            </div>
+
+                                      </div>
+                                 </div> <!-- 4. panel sonunu-->
 
                                  <div class="form-group form-padding">
                                    <div class="col-lg-10 col-lg-offset-9">
@@ -482,7 +342,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&#38;sensor=false&#38;libraries=places"></script>
     <script type="text/javascript">
-         var trip_typeSes = "<? echo $test['trip_type']; ?>", departureDaysSes = "<? echo $test['departure_days']; ?>",   returnDaysSes = "<? echo $test['return_days']; ?>";
+         var trip_typeSes = "<? echo $offer['trip_type']; ?>", event_id = "<? echo $offer['id']; ?>";
     </script>
     <script src="<? echo  public_url() . 'scripts/partial/offer/offer-update.js'  ?>"></script>
     <script src="<? echo  public_url() . 'scripts/partial/offerUpdate.js'  ?>"></script>

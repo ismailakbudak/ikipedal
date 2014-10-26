@@ -1,6 +1,4 @@
-         $(function() {
-
-
+         $(function() { 
            CapitiliazeFirst(["#inputMessage"]);
 
            $("#sendMessage").on("click", function() {

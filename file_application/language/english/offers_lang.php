@@ -70,6 +70,7 @@ $lang['o.travelreturntime'] 		= "Travel Return Hour";
 $lang['o.traveldeparturetime']	    = "Travel Departure Hour";
 $lang['o.event_name']              = "Event Name";
 $lang['o.event_type']              = "Event Type";
+
 // for offerride2
 $lang['o2.progTitle'] 				= "If you fill information in this page, you will complete %80 your trip. Please fill information and complete your offer process...";
 $lang['o2.price'] 					= "Price per passenger ";
@@ -270,6 +271,7 @@ $lang['oc.send-success'] = "Your message has been sent successfully...";
 $lang['oc.send-fail'] = "Error occurred when message sending...";
 $lang['oc.block'] = "The user has blocked you...";
 $lang['oc.date-invalid'] = " Departure date is invalid....";
+$lang['oc.event_id'] = " Event id is invalid....";
 
 // for offerajax controller
 $lang['oc.round_trip'] = " trip way ";

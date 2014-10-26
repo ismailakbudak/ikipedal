@@ -256,6 +256,7 @@ $lang['oc.departure'] = "hareket";
 $lang['oc.return'] = "dönüş";
 $lang['oc.start'] = "başlangıç";
 $lang['oc.finish'] = "bitiş";
+$lang['oc.event_id'] = " Event id is invalid....";
 
 // for offer controller
 $lang['oc.successcopy'] = "Teklifiniz başarılı bir şekilde kopyalandı... ";
@@ -270,6 +271,7 @@ $lang['oc.send-success'] = "Mesajınız başarılı bir şekilde iletildi...";
 $lang['oc.send-fail'] = "Beklenmedik bir hata oluştu, mesajınız iletilemedi...";
 $lang['oc.block'] = "Bu kullanıcı sizi iletişim kurmaya engellemiştir...";
 $lang['oc.date-invalid'] = " Hareket tarihi gecersiz....";
+$lang['oc.event_id'] = " Event id gecersiz....";
 
 // for offerajax controller
 $lang['oc.round_trip'] = " yolculuk yönleri ";

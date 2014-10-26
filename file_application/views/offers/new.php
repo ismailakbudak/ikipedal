@@ -70,7 +70,6 @@
                                               <input id='inputEventName' name="inputEventName" type="text" class="collapse in form-control border-input" placeholder=" <?=lang('o.event_name')?>">
                                            </div>
                                            <div class="form-group form-padding" >
-                                                <label for="inputEventType" class="col-lg-4 control-label " style='font-style:normal' > <?=lang('o.event_type')?> </label>
                                                 <div class='col-lg-8'>
                                                   <select class="form-control input-sm" id="inputEventType">
                                                       <?
