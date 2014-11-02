@@ -39,8 +39,9 @@ class Main extends CI_Controller {
 		$this->lang->load('offers');
 
 		$offers = $this->offersdb->GetOfersForMain();
+		$counts = $this->offersdb->GetOfersForMainCount();
 		if (!is_array($offers)) {
-			$offers = array('last' => array(), 'today' => array(), 'best' => array());
+			$offers = array('last' => array(), 'today' => array() );
 		}
 
 		foreach ($offers as &$value) {
@@ -50,8 +51,7 @@ class Main extends CI_Controller {
 		}
 
 		$data['offers'] = $offers;
-		$data['mostSearched'] = array();
-		$data['mostCreated'] = array();
+		$data['counts'] = $counts; 
 
 		$this->login->general($data);// call general load view
 		$this->load->view('main/index');// load views

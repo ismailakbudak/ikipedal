@@ -596,12 +596,40 @@ class Offersdb extends CI_Model {
 		->where($where)
 		->order_by("R.departure_date", "asc")
 		->limit($LIMIT, $OFFSET)
+		->get(); 
+		if ($query1 && $query2  ) { 
+			return array('last' => $query1->result_array(),
+				'today' => $query2->result_array() );
+		} else {
+			return FALSE;
+		}
+	}
+
+	/***
+	 *
+	 * Offers get method for last, today and best offer
+	 *
+	 * @return array or FALSE
+	 *
+	 **/
+	function GetOfersForMainCount() { 
+        
+        $date = date("Y-m-d H:i:s",strtotime("-1 month"));
+         
+		$where = "R.is_active = 1  AND
+                  CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
+
+        // Tarihe gore gruplanmis teklifler
+		$query3 = $this->db->select('COUNT(R.id) AS number,
+                                     R.departure_date,
+                                   ')
+		->from('events AS R') 
+		->where($where)
+		->group_by("R.departure_date")
 		->get();
 
-		if ($query1 && $query2) {
-			return array('last' => $query1->result_array(),
-				'today' => $query2->result_array(),
-				'best' => array());
+		if (  $query3) {
+			return $query3->result_array();
 		} else {
 			return FALSE;
 		}

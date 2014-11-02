@@ -102,3 +102,10 @@
 .bic_calendar .popover-content{
     font-weight: 300;
 }
+.bic_calendar .week-day-5,
+.bic_calendar .week-day-6{
+    background: rgba(201, 251, 255, 1);
+}
+.bic_calendar .popover .arrow {
+    display: none;
+}

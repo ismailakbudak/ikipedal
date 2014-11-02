@@ -57,7 +57,8 @@
              nextText = "Sonraki",
              goTop    = "Başa Dön",
              facebook_lang = "tr_TR",
-             prevText = "Önceki";
+             prevText = "Önceki",
+             today = 'Bugün';
          if( strcmp(lang, "en") == 0 ){
             dayNames  = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
             dayNamesMin = [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"  ];
@@ -65,7 +66,8 @@
             nextText = "Next";
             goTop    = "Back to Top",
             facebook_lang = "en_US",
-            prevText = "Prev";
+            prevText = "Previous",
+            today = 'Today';
          }
     </script>
     <script type="text/javascript"> var base_url = '<?php echo new_url();?>', enviroment = '<?php echo ENVIRONMENT?>', er = {  <?=createErrorObject()?> }; </script>

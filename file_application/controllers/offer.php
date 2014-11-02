@@ -26,8 +26,7 @@ class Offer extends CI_Controller {
 		$this->data['active'] = '#offers';// active profile menu
 		$this->load->model('offersdb');// load offersdb model for database action
 		$this->load->model('event_paths');// load event_paths model for database action
-		$this->load->model('look_at');// load look_at model for database action
-		$this->load->model('rutin_trips');// load rutin_trips model for database action
+		$this->load->model('look_at');// load look_at model for database action 
 		$this->lang->load('offers');// load offer_controller language file
 	}
 	/*****  for Views method
@@ -75,15 +74,7 @@ class Offer extends CI_Controller {
 					$value['look_count'] = $look_count;
 				} else {
 					$value['look_count'] = array('ride_offer_id' => $value['id'], 'look' => '0');
-				}
-				if (strcmp($value['trip_type'], "1") == 0) {// if there is get offer trip days
-					$rutin_trip = $this->rutin_trips->GetOfferDays($value['id']);// get trip days for this offerid
-					if (count($rutin_trip) > 0) {
-						$value['rutin_trip'] = $rutin_trip;
-					} else {
-						$value['rutin_trip'] = array(0 => array('id' => 0, "is_return" => "-1", "day" => ""));
-					}
-				}
+				} 
 				$value['normal_id'] = $value['id'];
 				$value['id'] = urlencode(base64_encode($value['id']));// encypt again offerid for security
 			}

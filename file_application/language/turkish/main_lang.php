@@ -20,6 +20,7 @@ $lang['m.searched']             = " defa   ";
 $lang['m.statistics']           = " İlgilenebileçeğiniz bazı istatistikler ";
 $lang['m.statisticsCreate']     = "Seyahat oluştuma istatistikleri  ";
 $lang['m.statisticsSearch']     = " Seyahat arama istatistikleri ";
+$lang['m.event']                = "etkinlik";
 // how works 
 $lang['w.adres']                = "Nasıl Yararlanabilirsiniz?";
 $lang['w.goal']                 = "Bu sitenin amacı  her gün aynı güzergah üzerinde işe giden, sık sık veya ara sıra seyahat eden kişilerin  kendisine yol arkadaşları bulmasını sağlamaktır.   Bu sayede insanlar ucuza seyahet edebilecek, trafikteki araç sayısı azalacak ve araç sahipleri de yol masraflarının belli bir kısmını karşılayabilceklerdir.";

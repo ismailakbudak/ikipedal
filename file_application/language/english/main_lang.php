@@ -19,6 +19,7 @@ $lang['m.searched']             = " times   ";
 $lang['m.statistics']           = " Some statistics ";
 $lang['m.statisticsCreate']     = " Travel creation statistics  ";
 $lang['m.statisticsSearch']     = " Travel search statistics ";
+$lang['m.event']                = "event";
 // how works 
 $lang['w.adres']                = "How can we be register?";
 $lang['w.goal']                 = " Hepgezelim.com is a free service that shares the empty seats and  the costs. People who are going to somewhere by own car can share their seats with other people, if they want. In this way, people will be able to travel cheaply, the number of vehicles  will decrease the number of vehicles in traffic and the car owners will minimize the costs of the travel. ";
