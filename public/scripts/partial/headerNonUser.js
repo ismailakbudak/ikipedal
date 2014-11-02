@@ -89,12 +89,15 @@
              HataMesajModal(thisID, er.error_send)
            }
          },
-         error: function() {
-           HataMesajModal(thisID, 'error', er.error, er.error_send);
+         error: function(result) {
+           if (strcmp(enviroment, 'development') == 0) {
+             alert(  JSON.stringify(result, ',', ' '));
+           }
+           HataMesajModal(thisID,  er.error_send);
          }
        });
      } else {
-       HataMesajModal(thisID, 'warning', er.warning, er.edit_info);
+       HataMesajModal(thisID, er.edit_info);
      }
      return false;
    }); /***** End Kullanıcı giriş işlemi  *************/

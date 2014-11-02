@@ -338,14 +338,11 @@ class Offersdb extends CI_Model {
 	function search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $LIMIT, $OFFSET) {
 
 		$date = date('Y-m-d H:i:s');// current date
-		// tip 0 tekseferlik yolculuk event_id
-		// tip 1 çok seferli yolculuk  date_id
 		// no hangi gruptan geldiğini
 		$range = explode("-", $range);
 		if (count($range) == 2) {
 			$range = $range[0] . "." . $range[1];
 		} else {
-
 			$range = 0.2;
 		}
 
@@ -368,545 +365,33 @@ class Offersdb extends CI_Model {
 		}
 
 		// düz
-		$second = $twoway ? "AND ( WO.dLat >= $min_dLat  AND  WO.dLat <= $max_dLat AND  WO.dLng >= $min_dLng  AND  WO.dLng <= $max_dLng )" : "";
-		$one = "( WO.departure_place LIKE '%$origin%' AND  WO.arrivial_place LIKE '%$destination%' )  OR
-                    (  ( WO.lat >= $min_lat  AND  WO.lat <= $max_lat AND WO.lng >= $min_lng  AND  WO.lng <= $max_lng)
-$second
+		$second = $twoway ? "AND ( WO.to_lat >= $min_dLat  AND  WO.to_lat <= $max_dLat AND  WO.to_lng >= $min_dLng  AND  WO.to_lng <= $max_dLng )" : "";
+		$one = "( WO.o_from LIKE '%$origin%' AND  WO.d_to LIKE '%$destination%' )  OR
+                    (  ( WO.from_lat >= $min_lat  AND  WO.from_lat <= $max_lat AND WO.from_lng >= $min_lng  AND  WO.from_lng <= $max_lng) $second
                      ) ";
 
 		// tersleri için
-		$secondReverse = $twoway ? "AND ( WO.lat >= $min_dLat  AND  WO.lat <= $max_dLat AND WO.lng >= $min_dLng  AND  WO.lng <= $max_dLng )" : "";
-		$oneReverse = "( WO.departure_place LIKE '%$destination%' AND  WO.arrivial_place LIKE '%$origin%' )  OR
-                            (  ( WO.dLat >= $min_lat  AND  WO.dLat <= $max_lat AND  WO.dLng >= $min_lng  AND  WO.dLng <= $max_lng)
-$secondReverse
+		$secondReverse = $twoway ? "AND ( WO.from_lat >= $min_dLat  AND  WO.from_lat <= $max_dLat AND WO.from_lng >= $min_dLng  AND  WO.from_lng <= $max_dLng )" : "";
+		$oneReverse = "( WO.o_from LIKE '%$destination%' AND  WO.d_to LIKE '%$origin%' )  OR
+                            (  ( WO.to_lat >= $min_lat  AND  WO.to_lat <= $max_lat AND  WO.to_lng >= $min_lng  AND  WO.to_lng <= $max_lng) $secondReverse
                              ) ";
-		// NO:1 Tek seferlik GİDİŞ için  way pointsin içinde olmayanları seç
-		// R -> events
-		$where = "( $one )         AND
-                   R.trip_type = 0  AND
+		$where = "( $one OR $oneReverse ) AND
                    R.is_active = 1  AND
-                   R.is_way    = 0  AND
                    CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
-		$query1 = $this->db->select('R.id AS event_id,
-                                        0 AS tip,
-                                        0 AS is_way,
-                                        R.created_at,
-                                        WO.id,
-                                        WO.departure_place AS origin,
-                                        WO.arrivial_place AS destination,
-                                        WO.price AS price_per_passenger,
-                                        WO.price_class AS price_class,
-                                        R.departure_date,
-                                        R.departure_time,
-                                        R.number_of_seats,
-                                        U.name,
-                                        U.surname,
-                                        U.sex,
-                                        U.foto,
-                                        U.face_check,
-                                        U.birthyear,
-                                        U.friends,
-                                        L.level,
-                                        L.tr_level,
-                                        L.en_level,
-                                        P.like_chat,
-                                        P.like_pet,
-                                        P.like_smoke,
-                                        P.like_music,
-                                        C.make,
-                                        C.model,
-                                        C.comfort,
-                                        (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                        (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                        1 AS no ', FALSE)
+		$query = $this->db->select('R.*, U.*, L.*, (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
+                                    (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number ', FALSE)
 		->from('event_paths AS WO')
 		->join('events AS R', 'WO.event_id = R.id')
 		->join('users AS U', 'U.id = R.user_id')
-		->join('preferences AS P', 'U.id = P.user_id')
 		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
 		->where($where)
 		->order_by("R.departure_date", "asc")
 		->limit($LIMIT, $OFFSET)
 		->get();
 
-		//echo "Gidiş için <br>";
-		//echo $this->db->last_query();
-
-		// NO:2  Tek seferlik DONUS için  way pointsin içinde olmayanları seç
-		// R -> events
-		$whereTers = "( $oneReverse )   AND
-                       R.trip_type = 0   AND
-                       R.round_trip = 1  AND
-                       R.is_active = 1   AND
-                       R.is_way    = 0   AND
-                       CONCAT(R.return_date,' ',R.return_time) >='{$date}' ";
-		$query1Ters = $this->db->select('R.id AS event_id,
-                                             0 AS tip,
-                                             0 AS is_way,
-                                             R.created_at,
-                                             WO.id,
-                                             WO.departure_place AS destination,
-                                             WO.arrivial_place AS origin,
-                                             WO.price AS price_per_passenger,
-                                             WO.price_class AS price_class,
-                                             R.return_date AS departure_date,
-                                             R.return_time AS departure_time,
-                                             R.number_of_seats,
-                                             U.name,
-                                             U.surname,
-                                             U.sex,
-                                             U.foto,
-                                             U.face_check,
-                                             U.birthyear,
-                                             U.friends,
-                                             L.level,
-                                             L.tr_level,
-                                             L.en_level,
-                                             P.like_chat,
-                                             P.like_pet,
-                                             P.like_smoke,
-                                             P.like_music,
-                                             C.make,
-                                             C.model,
-                                             C.comfort,
-                                             (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                             (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                             2 AS no  ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($whereTers)
-		->order_by("R.return_date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-		//echo "<br><br>Donus icin <br>";
-		//echo $this->db->last_query();
-
-		// NO:3 Çok seferlik seyahatlerden seç  Gidişler çin way pointsin içinde olmayanları seç
-		// R -> events  T -> rutin_trip_dates
-		$where2 = "( $one )         AND
-                    R.trip_type = 1  AND
-                    R.is_active = 1  AND
-                    T.is_return = 0  AND
-                    R.is_way    = 0  AND
-                    CONCAT(T.date,' ',R.departure_time) >='{$date}' ";
-		$query2 = $this->db->select('R.id AS event_id,
-                                        T.id AS date_id,
-                                        1 AS tip,
-                                        0 AS is_way,
-                                        R.created_at,
-                                        WO.id,
-                                        WO.departure_place AS origin,
-                                        WO.arrivial_place AS destination,
-                                        WO.price AS price_per_passenger,
-                                        WO.price_class AS price_class,
-                                        T.date AS departure_date,
-                                        R.departure_time,
-                                        R.number_of_seats,
-                                        U.name,
-                                        U.surname,
-                                        U.birthyear,
-                                        U.sex,
-                                        U.foto,
-                                        U.face_check,
-                                        U.friends,
-                                        L.level,
-                                        L.tr_level,
-                                        L.en_level,
-                                        P.like_chat,
-                                        P.like_pet,
-                                        P.like_smoke,
-                                        P.like_music,
-                                        C.make,
-                                        C.model,
-                                        C.comfort,
-                                        (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                        (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                        3 AS no ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($where2)
-		->order_by("T.date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-
-		//echo "Cok seferlik Gidis icin <br>";
-		//echo $this->db->last_query();
-
-		// NO:4 Çok seferlik DONUS çin  way pointsin içinde olmayanları seç
-		// R -> events  T -> rutin_trip_dates
-		$where2Ters = "( $oneReverse )  AND
-                        R.trip_type = 1  AND
-                        R.is_active = 1  AND
-                        T.is_return = 1  AND
-                        R.is_way    = 0  AND
-                        CONCAT(T.date,' ',R.return_time) >='{$date}'";
-
-		$query2Ters = $this->db->select('R.id AS event_id,
-                                            T.id AS date_id,
-                                            1 AS tip,
-                                            0 AS is_way,
-                                            WO.id,
-                                            WO.departure_place AS destination,
-                                            WO.arrivial_place AS origin,
-                                            WO.price AS price_per_passenger,
-                                            WO.price_class AS price_class,
-                                            R.created_at,
-                                            T.date AS departure_date,
-                                            R.return_time AS departure_time,
-                                            R.number_of_seats,
-                                            U.name,
-                                            U.surname,
-                                            U.sex,
-                                            U.foto,
-                                            U.face_check,
-                                            U.birthyear,
-                                            U.friends,
-                                            L.level,
-                                            L.tr_level,
-                                            L.en_level,
-                                            P.like_chat,
-                                            P.like_pet,
-                                            P.like_smoke,
-                                            P.like_music,
-                                            C.make,
-                                            C.model,
-                                            C.comfort,
-                                            ( SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                            ( SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                            4 AS no ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($where2Ters)
-		->order_by("T.date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-
-		//echo "Cok seferlik donus icin <br>";
-		//echo $this->db->last_query();
-
-		/****************************************************************************/
-		/****************************************************************************/
-		/*    CHANGE ALL OF THEM                                                    */
-		/*****************************************************************************/
-		/*****************************************************************************/
-		/*****************************************************************************/
-		/*****************************************************************************/
-
-		// NO:5 Waypoints  Tek seferlik seyahatlerden seç Gidişler için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events   W -> way_points
-		$where = "( $one )         AND
-                   R.trip_type = 0  AND
-                   R.is_active = 1  AND
-                   R.is_way    = 1  AND
-                   CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
-		$query3 = $this->db->select('R.id AS event_id,
-                                        0 AS tip,
-                                        1 AS is_way,
-                                        R.created_at,
-                                        WO.id,
-                                        WO.departure_place AS origin,
-                                        WO.arrivial_place AS destination,
-                                        WO.price AS price_per_passenger,
-                                        WO.price_class AS price_class,
-                                        R.departure_date,
-                                        R.departure_time,
-                                        R.number_of_seats,
-                                        U.name,
-                                        U.surname,
-                                        U.sex,
-                                        U.foto,
-                                        U.face_check,
-                                        U.birthyear,
-                                        U.friends,
-                                        L.level,
-                                        L.tr_level,
-                                        L.en_level,
-                                        P.like_chat,
-                                        P.like_pet,
-                                        P.like_smoke,
-                                        P.like_music,
-                                        C.make,
-                                        C.model,
-                                        C.comfort,
-                                        (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                        (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                        5 AS no ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($where)
-		->order_by("R.departure_date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-
-		//echo "Gidiş için <br>";
-		//echo $this->db->last_query();
-
-		// NO:6 Waypoints Tek seferlik DONUS için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events   W -> way_points
-		//Gereksiz `R`.`departure_date` AS `return_date`,
-		//Gereksiz `R`.`departure_time` AS `return_time`,
-		$whereTers = "( $oneReverse )   AND
-                       R.trip_type = 0   AND
-                       R.round_trip = 1  AND
-                       R.is_active = 1   AND
-                       R.is_way    = 1   AND
-                       CONCAT(R.return_date,' ',R.return_time) >='{$date}' ";
-		$query3Ters = $this->db->select('R.id AS event_id,
-                                             0 AS tip,
-                                             1 AS is_way,
-                                             R.created_at,
-                                             WO.id,
-                                             WO.departure_place AS destination,
-                                             WO.arrivial_place AS origin,
-                                             WO.price AS price_per_passenger,
-                                             WO.price_class AS price_class,
-                                             R.return_date AS departure_date,
-                                             R.return_time AS departure_time,
-                                             R.number_of_seats,
-                                             U.name,
-                                             U.surname,
-                                             U.sex,
-                                             U.foto,
-                                             U.face_check,
-                                             U.birthyear,
-                                             U.friends,
-                                             L.level,
-                                             L.tr_level,
-                                             L.en_level,
-                                             P.like_chat,
-                                             P.like_pet,
-                                             P.like_smoke,
-                                             P.like_music,
-                                             C.make,
-                                             C.model,
-                                             C.comfort,
-                                             (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                             (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                             6 AS no  ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($whereTers)
-		->order_by("R.return_date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-		//echo "<br><br>Donus icin <br>";
-		//echo $this->db->last_query();
-
-		// NO:7 Waypoints Çok seferlik seyahatlerden seç Gidişler için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events  W -> way_points  T -> rutin_trip_dates
-		$where2 = "( $one )         AND
-                    R.trip_type = 1  AND
-                    R.is_active = 1  AND
-                    T.is_return = 0  AND
-                    R.is_way    = 1  AND
-                    CONCAT(T.date,' ',R.departure_time) >='{$date}' ";
-		$query4 = $this->db->select('R.id AS event_id,
-                                        T.id AS date_id,
-                                        1 AS tip,
-                                        1 AS is_way,
-                                        R.created_at,
-                                        WO.id,
-                                        WO.departure_place AS origin,
-                                        WO.arrivial_place AS destination,
-                                        WO.price AS price_per_passenger,
-                                        WO.price_class AS price_class,
-                                        T.date AS departure_date,
-                                        R.departure_time,
-                                        R.number_of_seats,
-                                        U.name,
-                                        U.surname,
-                                        U.birthyear,
-                                        U.sex,
-                                        U.foto,
-                                        U.face_check,
-                                        U.friends,
-                                        L.level,
-                                        L.tr_level,
-                                        L.en_level,
-                                        P.like_chat,
-                                        P.like_pet,
-                                        P.like_smoke,
-                                        P.like_music,
-                                        C.make,
-                                        C.model,
-                                        C.comfort,
-                                        (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                        (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                        7 AS no ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($where2)
-		->order_by("T.date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-
-		//echo "Cok seferlik Gidis icin <br>";
-		//echo $this->db->last_query();
-
-		// NO:8 Waypoints  Çok seferlik  DONUS için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events  T -> rutin_trip_dates  W -> way_points
-		$where2Ters = "( $oneReverse )  AND
-                        R.trip_type = 1  AND
-                        R.is_active = 1  AND
-                        T.is_return = 1  AND
-                        R.is_way    = 1  AND
-                        CONCAT(T.date,' ',R.return_time) >='{$date}'";
-
-		$query4Ters = $this->db->select('R.id AS event_id,
-                                            T.id AS date_id,
-                                            1 AS tip,
-                                            1 AS is_way,
-                                            WO.id,
-                                            WO.departure_place AS destination,
-                                            WO.arrivial_place AS origin,
-                                            WO.price AS price_per_passenger,
-                                            WO.price_class AS price_class,
-                                            R.created_at,
-                                            T.date AS departure_date,
-                                            R.return_time AS departure_time,
-                                            R.number_of_seats,
-                                            U.name,
-                                            U.surname,
-                                            U.sex,
-                                            U.foto,
-                                            U.face_check,
-                                            U.birthyear,
-                                            U.friends,
-                                            L.level,
-                                            L.tr_level,
-                                            L.en_level,
-                                            P.like_chat,
-                                            P.like_pet,
-                                            P.like_smoke,
-                                            P.like_music,
-                                            C.make,
-                                            C.model,
-                                            C.comfort,
-                                            ( SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
-                                            ( SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number,
-                                            8 AS no ', FALSE)
-		->from('event_paths AS WO')
-		->join('events AS R', 'WO.event_id = R.id')
-		->join('users AS U', 'U.id = R.user_id')
-		->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		->join('preferences AS P', 'U.id = P.user_id')
-		->join('user_level AS L', 'U.level_id = L.level_id')
-		->join('cars AS C', 'C.id = R.car_id')
-		->where($where2Ters)
-		->order_by("T.date", "asc")
-		->limit($LIMIT, $OFFSET)
-		->get();
-
-		//echo "Cok seferlik donus icin <br>";
-		//echo $this->db->last_query();
-
-		if ($query1 && $query1Ters && $query2 && $query2Ters && $query3 && $query3Ters && $query4 && $query4Ters) {
-
-			$result = $query1->result_array();// tek seferlik gidiş seyahatleri
-			$resultTers = $query1Ters->result_array();// tek seferlik dönüş seyahatleri
-			$result2 = $query2->result_array();// cok seferlik gidiş seyahatleri
-			$result2Ters = $query2Ters->result_array();// cok seferlik dönüş seyahatleri
-			$result3 = $query3->result_array();// Waypoints tek seferlik gidiş seyahatleri
-			$result3Ters = $query3Ters->result_array();// Waypoints tek seferlik dönüş seyahatleri
-			$result4 = $query4->result_array();// Waypoints çok seferlik gidiş seyahatleri
-			$result4Ters = $query4Ters->result_array();// Waypoints çok seferlik dönüş seyahatleri
-
-			// Waypoints Gidiş  Tek sefer
-			foreach ($result3 as &$value) {
-				$query2 = $this->db->select('W.id, W.departure_place, W.arrivial_place, W.distance, W.price')
-				               ->where('event_id', $value['event_id'])
-				               ->get('way_points AS W');
-				if ($query2) {
-					$allWays = $query2->result_array();
-					$value['is_go'] = 1;
-					$value['all_ways'] = $allWays;
-				} else {
-
-					return FALSE;
-				}
-			}
-
-			// Waypoints Dönüş  Tek sefer
-			foreach ($result3Ters as &$value) {
-				$query2 = $this->db->select('W.id, W.departure_place, W.arrivial_place, W.distance, W.price')
-				               ->where('event_id', $value['event_id'])
-				               ->get('way_points AS W');
-				if ($query2) {
-					$allWays = $query2->result_array();
-					$value['is_go'] = 0;
-					$value['all_ways'] = $allWays;
-				} else {
-
-					return FALSE;
-				}
-			}
-
-			// Waypoints Gidiş Çok sefer
-			foreach ($result4 as &$value) {
-				$query2 = $this->db->select('W.id, W.departure_place, W.arrivial_place, W.distance, W.price')
-				               ->where('event_id', $value['event_id'])
-				               ->get('way_points AS W');
-				if ($query2) {
-					$allWays = $query2->result_array();
-					$value['is_go'] = 1;
-					$value['all_ways'] = $allWays;
-				} else {
-
-					return FALSE;
-				}
-			}
-
-			// Waypoints Dönüş Çok sefer
-			foreach ($result4Ters as &$value) {
-				$query2 = $this->db->select('W.id, W.departure_place, W.arrivial_place, W.distance, W.price')
-				               ->where('event_id', $value['event_id'])
-				               ->get('way_points AS W');
-				if ($query2) {
-					$allWays = $query2->result_array();
-					$value['is_go'] = 0;
-					$value['all_ways'] = $allWays;
-				} else {
-
-					return FALSE;
-				}
-			}
-
-			// Merge results
-			$searched = array_merge($result, $resultTers, $result2, $result2Ters,
-				$result3, $result3Ters, $result4, $result4Ters);
-
-			// Display results
-			// $this-> display( $result, $resultTers, $result2, $result2Ters, $result3, $result3Ters, $result4, $result4Ters, $searched );
-
-			return $searched;// return search results
+		if ($query) {
+			$result = $query->result_array();// tek seferlik gidiş seyahatleri
+			return $result;// return search results
 		} else {
 
 			return FALSE;
@@ -924,17 +409,14 @@ $secondReverse
 	 * @return row or FALSE
 	 *
 	 **/
-	function searchCount($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $LIMIT, $OFFSET) {
+	function searchCount($origin, $destination, $lat, $lng, $dLat, $dLng, $range) {
 
 		$date = date('Y-m-d H:i:s');// current date
-		// tip 0 tekseferlik yolculuk event_id
-		// tip 1 çok seferli yolculuk  date_id
 		// no hangi gruptan geldiğini
 		$range = explode("-", $range);
 		if (count($range) == 2) {
 			$range = $range[0] . "." . $range[1];
 		} else {
-
 			$range = 0.2;
 		}
 
@@ -957,210 +439,33 @@ $secondReverse
 		}
 
 		// düz
-		$second = $twoway ? "AND ( WO.dLat >= $min_dLat  AND  WO.dLat <= $max_dLat AND  WO.dLng >= $min_dLng  AND  WO.dLng <= $max_dLng )" : "";
-		$one = "( WO.departure_place LIKE '%$origin%' AND  WO.arrivial_place LIKE '%$destination%' )  OR
-                    (  ( WO.lat >= $min_lat  AND  WO.lat <= $max_lat AND WO.lng >= $min_lng  AND  WO.lng <= $max_lng)
-$second
+		$second = $twoway ? "AND ( WO.to_lat >= $min_dLat  AND  WO.to_lat <= $max_dLat AND  WO.to_lng >= $min_dLng  AND  WO.to_lng <= $max_dLng )" : "";
+		$one = "( WO.o_from LIKE '%$origin%' AND  WO.d_to LIKE '%$destination%' )  OR
+                    (  ( WO.from_lat >= $min_lat  AND  WO.from_lat <= $max_lat AND WO.from_lng >= $min_lng  AND  WO.from_lng <= $max_lng) $second
                      ) ";
 
 		// tersleri için
-		$secondReverse = $twoway ? "AND ( WO.lat >= $min_dLat  AND  WO.lat <= $max_dLat AND WO.lng >= $min_dLng  AND  WO.lng <= $max_dLng )" : "";
-		$oneReverse = "( WO.departure_place LIKE '%$destination%' AND  WO.arrivial_place LIKE '%$origin%' )  OR
-                            (  ( WO.dLat >= $min_lat  AND  WO.dLat <= $max_lat AND  WO.dLng >= $min_lng  AND  WO.dLng <= $max_lng)
-$secondReverse
+		$secondReverse = $twoway ? "AND ( WO.from_lat >= $min_dLat  AND  WO.from_lat <= $max_dLat AND WO.from_lng >= $min_dLng  AND  WO.from_lng <= $max_dLng )" : "";
+		$oneReverse = "( WO.o_from LIKE '%$destination%' AND  WO.d_to LIKE '%$origin%' )  OR
+                            (  ( WO.to_lat >= $min_lat  AND  WO.to_lat <= $max_lat AND  WO.to_lng >= $min_lng  AND  WO.to_lng <= $max_lng) $secondReverse
                              ) ";
-		// NO:1 Tek seferlik GİDİŞ için  way pointsin içinde olmayanları seç
-		// R -> events
-		$where = "( $one )         AND
-                   R.trip_type = 0  AND
+		$where = "( $one OR $oneReverse ) AND
                    R.is_active = 1  AND
-                   R.is_way    = 0  AND
                    CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
-		$query1 = $this->db->select('COUNT(R.id) AS num')
-		               ->from('event_paths AS WO')
-		               ->join('events AS R', 'WO.event_id = R.id')
-		               ->join('users AS U', 'U.id = R.user_id')
-		               ->join('preferences AS P', 'U.id = P.user_id')
-		               ->join('user_level AS L', 'U.level_id = L.level_id')
-		               ->join('cars AS C', 'C.id = R.car_id')
-		               ->where($where)
-		               ->get();
+		$query = $this->db->select('R.*, U.*, L.*, (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
+                                    (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number ', FALSE)
+		->from('event_paths AS WO')
+		->join('events AS R', 'WO.event_id = R.id')
+		->join('users AS U', 'U.id = R.user_id')
+		->join('user_level AS L', 'U.level_id = L.level_id')
+		->where($where)
+		->order_by("R.departure_date", "asc")
+		->get();
 
-		//echo "Gidiş için <br>";
-		//echo $this->db->last_query();
-		// NO:2  Tek seferlik DONUS için  way pointsin içinde olmayanları seç
-		// R -> events
-		$whereTers = "( $oneReverse )   AND
-                       R.trip_type = 0   AND
-                       R.round_trip = 1  AND
-                       R.is_active = 1   AND
-                       R.is_way    = 0   AND
-                       CONCAT(R.return_date,' ',R.return_time) >='{$date}' ";
-		$query1Ters = $this->db->select('COUNT(R.id) AS num')
-		                   ->from('event_paths AS WO')
-		                   ->join('events AS R', 'WO.event_id = R.id')
-		                   ->join('users AS U', 'U.id = R.user_id')
-		                   ->join('preferences AS P', 'U.id = P.user_id')
-		                   ->join('user_level AS L', 'U.level_id = L.level_id')
-		                   ->join('cars AS C', 'C.id = R.car_id')
-		                   ->where($whereTers)
-		                   ->get();
-		//echo "<br><br>Donus icin <br>";
-		//echo $this->db->last_query();
-		// NO:3 Çok seferlik seyahatlerden seç  Gidişler çin way pointsin içinde olmayanları seç
-		// R -> events  T -> rutin_trip_dates
-		$where2 = "( $one )         AND
-                    R.trip_type = 1  AND
-                    R.is_active = 1  AND
-                    T.is_return = 0  AND
-                    R.is_way    = 0  AND
-                    CONCAT(T.date,' ',R.departure_time) >='{$date}' ";
-		$query2 = $this->db->select('COUNT(R.id) AS num')
-		               ->from('event_paths AS WO')
-		               ->join('events AS R', 'WO.event_id = R.id')
-		               ->join('users AS U', 'U.id = R.user_id')
-		               ->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		               ->join('preferences AS P', 'U.id = P.user_id')
-		               ->join('user_level AS L', 'U.level_id = L.level_id')
-		               ->join('cars AS C', 'C.id = R.car_id')
-		               ->where($where2)
-		               ->get();
+		if ($query) {
+			$result = $query->result_array();// tek seferlik gidiş seyahatleri
 
-		//echo "Cok seferlik Gidis icin <br>";
-		//echo $this->db->last_query();
-		// NO:4 Çok seferlik DONUS çin  way pointsin içinde olmayanları seç
-		// R -> events  T -> rutin_trip_dates
-		$where2Ters = "( $oneReverse )  AND
-                        R.trip_type = 1  AND
-                        R.is_active = 1  AND
-                        T.is_return = 1  AND
-                        R.is_way    = 0  AND
-                        CONCAT(T.date,' ',R.return_time) >='{$date}'";
-		$query2Ters = $this->db->select('COUNT(R.id) AS num')
-		                   ->from('event_paths AS WO')
-		                   ->join('events AS R', 'WO.event_id = R.id')
-		                   ->join('users AS U', 'U.id = R.user_id')
-		                   ->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		                   ->join('preferences AS P', 'U.id = P.user_id')
-		                   ->join('user_level AS L', 'U.level_id = L.level_id')
-		                   ->join('cars AS C', 'C.id = R.car_id')
-		                   ->where($where2Ters)
-		                   ->get();
-
-		//echo "Cok seferlik donus icin <br>";
-		//echo $this->db->last_query();
-
-		/****************************************************************************/
-		/****************************************************************************/
-		/*    CHANGE ALL OF THEM                                                    */
-		/*****************************************************************************/
-		/*****************************************************************************/
-		/*****************************************************************************/
-		/*****************************************************************************/
-
-		// NO:5 Waypoints  Tek seferlik seyahatlerden seç Gidişler için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events   W -> way_points
-		$where = "( $one )         AND
-                   R.trip_type = 0  AND
-                   R.is_active = 1  AND
-                   R.is_way    = 1  AND
-                   CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
-		$query3 = $this->db->select('COUNT(R.id) AS num')
-		               ->from('event_paths AS WO')
-		               ->join('events AS R', 'WO.event_id = R.id')
-		               ->join('users AS U', 'U.id = R.user_id')
-		               ->join('preferences AS P', 'U.id = P.user_id')
-		               ->join('user_level AS L', 'U.level_id = L.level_id')
-		               ->join('cars AS C', 'C.id = R.car_id')
-		               ->where($where)
-		               ->get();
-
-		//echo "Gidiş için <br>";
-		//echo $this->db->last_query();
-		// NO:6 Waypoints Tek seferlik DONUS için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events   W -> way_points
-		//Gereksiz `R`.`departure_date` AS `return_date`,
-		//Gereksiz `R`.`departure_time` AS `return_time`,
-		$whereTers = "( $oneReverse )   AND
-                       R.trip_type = 0   AND
-                       R.round_trip = 1  AND
-                       R.is_active = 1   AND
-                       R.is_way    = 1   AND
-                       CONCAT(R.return_date,' ',R.return_time) >='{$date}' ";
-		$query3Ters = $this->db->select('COUNT(R.id) AS num')
-		                   ->from('event_paths AS WO')
-		                   ->join('events AS R', 'WO.event_id = R.id')
-		                   ->join('users AS U', 'U.id = R.user_id')
-		                   ->join('preferences AS P', 'U.id = P.user_id')
-		                   ->join('user_level AS L', 'U.level_id = L.level_id')
-		                   ->join('cars AS C', 'C.id = R.car_id')
-		                   ->where($whereTers)
-		                   ->get();
-		//echo "<br><br>Donus icin <br>";
-		//echo $this->db->last_query();
-		// NO:7 Waypoints Çok seferlik seyahatlerden seç Gidişler için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events  W -> way_points  T -> rutin_trip_dates
-		$where2 = "( $one )         AND
-                    R.trip_type = 1  AND
-                    R.is_active = 1  AND
-                    T.is_return = 0  AND
-                    R.is_way    = 1  AND
-                    CONCAT(T.date,' ',R.departure_time) >='{$date}' ";
-		$query4 = $this->db->select('COUNT(R.id) AS num')
-		               ->from('event_paths AS WO')
-		               ->join('events AS R', 'WO.event_id = R.id')
-		               ->join('users AS U', 'U.id = R.user_id')
-		               ->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		               ->join('preferences AS P', 'U.id = P.user_id')
-		               ->join('user_level AS L', 'U.level_id = L.level_id')
-		               ->join('cars AS C', 'C.id = R.car_id')
-		               ->where($where2)
-		               ->get();
-
-		//echo "Cok seferlik Gidis icin <br>";
-		//echo $this->db->last_query();
-		// NO:8 Waypoints  Çok seferlik  DONUS için  farklı way points deki gidiş ve geliş yeri için arama yapılcak
-		// R -> events  T -> rutin_trip_dates  W -> way_points
-		$where2Ters = "( $oneReverse )  AND
-                        R.trip_type = 1  AND
-                        R.is_active = 1  AND
-                        T.is_return = 1  AND
-                        R.is_way    = 1  AND
-                        CONCAT(T.date,' ',R.return_time) >='{$date}'";
-		$query4Ters = $this->db->select('COUNT(R.id) AS num')
-		                   ->from('event_paths AS WO')
-		                   ->join('events AS R', 'WO.event_id = R.id')
-		                   ->join('users AS U', 'U.id = R.user_id')
-		                   ->join('rutin_trip_dates AS T', 'T.event_id = R.id')
-		                   ->join('preferences AS P', 'U.id = P.user_id')
-		                   ->join('user_level AS L', 'U.level_id = L.level_id')
-		                   ->join('cars AS C', 'C.id = R.car_id')
-		                   ->where($where2Ters)
-		                   ->get();
-
-		//echo "Cok seferlik donus icin <br>";
-		//echo $this->db->last_query();
-		if ($query1 && $query1Ters && $query2 && $query2Ters && $query3 && $query3Ters && $query4 && $query4Ters) {
-
-			$result = $query1->result_array();// tek seferlik gidiş seyahatleri
-			$resultTers = $query1Ters->result_array();// tek seferlik dönüş seyahatleri
-			$result2 = $query2->result_array();// cok seferlik gidiş seyahatleri
-			$result2Ters = $query2Ters->result_array();// cok seferlik dönüş seyahatleri
-			$result3 = $query3->result_array();// Waypoints tek seferlik gidiş seyahatleri
-			$result3Ters = $query3Ters->result_array();// Waypoints tek seferlik dönüş seyahatleri
-			$result4 = $query4->result_array();// Waypoints çok seferlik gidiş seyahatleri
-			$result4Ters = $query4Ters->result_array();// Waypoints çok seferlik dönüş seyahatleri
-
-			// Merge results
-			$searched = array_merge($result, $resultTers, $result2, $result2Ters,
-				$result3, $result3Ters, $result4, $result4Ters);
-
-			$count = 0;
-			foreach ($searched as $val) {
-				$count += $val['num'];
-			}
-
-			return $count;// return search results total count
+			return count($result);// return search results total count
 		} else {
 
 			return FALSE;

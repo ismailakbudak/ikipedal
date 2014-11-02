@@ -145,15 +145,14 @@
     <!-- container
     ================================== -->
     <div class="container">
-
       <div class="row">
-<?php
-if (isset($val)) {
-	echo $val;
-}
+          <? 
+          if (isset($val)) {
+          	echo $val;
+          }
 
-$alt = "sd";
-?>
+          $alt = "sd";
+          ?>
       </div>
       <!-- page-header
       ================================== -->
@@ -214,8 +213,7 @@ $alt = "sd";
                                          <i class="text-danger glyphicon glyphicon-search two" ></i> <?=lang("m.mostSearched")?>
                                     </a>
                              <? }                                                          ?>
-                      </div>
-
+                      </div> 
                       <?  if(  $countCreated  > 0 ) {                         ?>
                           <div class="row well createdResult" style="display:none; padding: 30px 20px 30px 20px; margin:5px 15px 0px 15px; background-color: #FFFFFF; margin-top:20px" >
                               <div class="col-lg-12" >
@@ -247,8 +245,7 @@ $alt = "sd";
                       <?  }                                                   ?>
 
                 </div>
-            <? }     ?>
-
+            <? }     ?> 
             <div class="row" style="display:none "  >
                    <div class="col-lg-12">
                       <!--MAP
@@ -261,6 +258,17 @@ $alt = "sd";
       </div>
 
       <div class="row well" style="padding: 30px 20px 30px 20px; margin:5px 0px 0px 0px; background-color: #FFFFFF; margin-top:20px" >
+
+          <div class="row" >
+               <p class="col-lg-12"> <?=lang('m.description')?> </p>
+          </div>
+
+          <div class='row'>
+            <div class="col-lg-8 col-lg-offset-2" > 
+              <div id="calendari_lateral1"></div>
+            </div>
+          </div>   
+          <hr/>      
           <div class="row slide" >
                    <?  if (count($offers['last']) == 4) {
                              $offerLast = $offers['last'];
@@ -268,12 +276,8 @@ $alt = "sd";
                   <div class="col-lg-4" >
                      <legend> <?=lang("m.last_activity")?></legend>
                      <div   class="well cycle " style="position: relative; overflow: hidden; ">
-                        <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  ">
-<?=writeContent($offerLast[0], lang('lang'))?><hr>
-<?=writeContent($offerLast[1], lang('lang'))?></div>
-                        <div class="content" style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  ">
-<?=writeContent($offerLast[2], lang('lang'))?><hr>
-<?=writeContent($offerLast[3], lang('lang'))?></div>
+                        <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerLast[0], lang('lang'))?><hr> <?=writeContent($offerLast[1], lang('lang'))?></div>
+                        <div class="content" style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerLast[2], lang('lang'))?><hr> <?=writeContent($offerLast[3], lang('lang'))?></div>
                      </div>
                   </div>
                 <?  }if (count($offers['today']) == 4) {
@@ -282,12 +286,8 @@ $alt = "sd";
                   <div class="col-lg-4" >
                       <legend>  <?=lang("m.soon")?></legend>
                       <div   class="well cycle " style="position: relative; overflow: hidden; ">
-                              <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  ">
-<?=writeContent($offerToday[0], lang('lang'))?><hr>
-<?=writeContent($offerToday[1], lang('lang'))?></div>
-                              <div class="content" style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  ">
-<?=writeContent($offerToday[2], lang('lang'))?><hr>
-<?=writeContent($offerToday[3], lang('lang'))?></div>
+                              <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerToday[0], lang('lang'))?><hr> <?=writeContent($offerToday[1], lang('lang'))?></div>
+                              <div class="content" style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerToday[2], lang('lang'))?><hr> <?=writeContent($offerToday[3], lang('lang'))?></div>
                      </div>
                   </div>
                   <?  }if (count($offers['best']) == 4) {
@@ -296,26 +296,64 @@ $alt = "sd";
                   <div class="col-lg-4" >
                       <legend> <?=lang("m.best")?></legend>
                       <div   class="well cycle " style="position: relative; overflow: hidden; ">
-                            <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  ">
-<?=writeContent($offerBest[0], lang('lang'))?><hr>
-<?=writeContent($offerBest[1], lang('lang'))?></div>
-                            <div class="content" style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  ">
-<?=writeContent($offerBest[2], lang('lang'))?><hr>
-<?=writeContent($offerBest[3], lang('lang'))?></div>
+                            <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerBest[0], lang('lang'))?>
+                              <hr> <?=writeContent($offerBest[1], lang('lang'))?></div>
+                            <div class="content" style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "><?=writeContent($offerBest[2], lang('lang'))?><hr><?=writeContent($offerBest[3], lang('lang'))?></div>
                       </div>
                   </div>
                 <?  }?>
 
           </div>
 
-          <div class="row" >
-
-               <p class="col-lg-12"> <?=lang('m.description')?> </p>
-
-          </div>
-
       </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&#38;sensor=false&#38;libraries=places"></script>
-    <script src="<?=public_url() . 'scripts/partial/map-main.js'?>"></script>
 
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&#38;sensor=false&#38;libraries=places"></script>
+    <script src="<?= public_url() . 'scripts/partial/map-main.js'?>"></script>        
+    <script src="<?= public_url() . 'scripts/general/bic_calendar.min.js'?>"></script>
+    <link href="<?= public_url() . 'styles/bic_calendar.css" rel="stylesheet'?> ">
+ 
+    <script>
+        $(document).ready(function() {
+ 
+
+            var events = [
+                //{
+                //    date: "28/12/2013",
+                //    title: 'SPORT & WELLNESS',
+                //    link: 'http://bic.cat',
+                //    linkTarget: '_blank',
+                //    color: '',
+                //    content: '<img src="http://gettingcontacts.com/upload/jornadas/sport-wellness_portada.png" ><br>06-11-2013 - 09:00 <br> Tecnocampus Mataró Auditori',
+                //    class: '',
+                //    displayMonthController: true,
+                //    displayYearController: true,
+                //    nMonths: 6
+                //}
+            ];
+
+            $('#calendari_lateral1').bic_calendar({
+                //list of events in array
+                events: events,
+                //enable select
+                enableSelect: true,
+                //enable multi-select
+                multiSelect: true,
+                //set day names
+                dayNames: dayNames,
+                //set month names
+                monthNames: monthNames,
+                //show dayNames
+                showDays: true,
+                //show month controller
+                displayMonthController: true,
+                //show year controller
+                displayYearController: true,                                
+                //set ajax call
+                //reqAjax: {
+                //    type: 'get',
+                //    url: 'http://bic.cat/bic_calendar/index.php'
+                //}
+            });
+        });
+    </script>

@@ -281,18 +281,18 @@ class Users extends CI_Model {
 
                 // USER RESPONSE RATE SET
                 // gelen mesajları getir
-                $query1 = $this->db->select('ride_offer_id, user_id, received_user_id, is_answer')
+                $query1 = $this->db->select('event_id, user_id, received_user_id, is_answer')
                                ->where("received_user_id", $user_id)
                                ->where("is_answer", 0)
-                               ->group_by('ride_offer_id')
+                               ->group_by('event_id')
                                ->group_by('user_id')
                                ->get('messages');
 
                 // gonderilen mesajlara cevapları getir
-                $query2 = $this->db->select('ride_offer_id, user_id, received_user_id, is_answer')
+                $query2 = $this->db->select('event_id, user_id, received_user_id, is_answer')
                                ->where("received_user_id", $user_id)
                                ->where("is_answer", 1)
-                               ->group_by('ride_offer_id')
+                               ->group_by('event_id')
                                ->group_by('user_id')
                                ->get('messages');
 
@@ -307,7 +307,7 @@ class Users extends CI_Model {
                             $flag_nooffer = false;
                             foreach ($gonderilen as $send) {
                                 $flag = false;
-                                if ($send['ride_offer_id'] == $got['ride_offer_id'] && $send['user_id'] == $got['user_id']) {
+                                if ($send['event_id'] == $got['event_id'] && $send['user_id'] == $got['user_id']) {
                                     if ($send['received_user_id'] == $got['received_user_id']) {
                                         $verilen += 1;
                                         $flag         = true;

@@ -19,6 +19,20 @@
 **
 ***********************************************
 ***********************************************/
+/*
+body{
+    background: rgba(248, 248, 248, 1) !important;
+    background-image: url(images/grid-18px-masked.png) !important;
+    background-position: top !important;
+    background-repeat: repeat-x !important;
+    background-attachment: fixed !important;
+}
+*/
+body, div, col-sm-, p, a, h1, h2, h3, h3, h5, h5{
+    font-family: 'Ubuntu', sans-serif !important;
+} 
+
+
 /*** for footer  **/
  footer{ color: #888888;
         font-weight: normal;  

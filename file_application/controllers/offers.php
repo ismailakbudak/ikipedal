@@ -196,17 +196,19 @@ class Offers extends CI_Controller {
 			$dLng = -1;
 		}
 		// save search data to database
+		/*
 		$search = array('user_id' => $this->userid,
-			'origin' => $origin,
-			'lat' => $lat,
-			'lng' => $lng,
-			'originStatus' => $originStatus,
-			'destination' => $destination,
-			'dLat' => $dLat,
-			'dLng' => $dLng,
-			'destinationStatus' => $destinationStatus);
+		'origin' => $origin,
+		'lat' => $lat,
+		'lng' => $lng,
+		'originStatus' => $originStatus,
+		'destination' => $destination,
+		'dLat' => $dLat,
+		'dLng' => $dLng,
+		'destinationStatus' => $destinationStatus);
 		$this->load->model('searched');// load  searched model for database action
 		$result = $this->searched->add($search);
+		 */
 		$sessionOrigin = $origin;
 		$sessionDestination = $destination;
 		$origin = explode(",", $origin);
@@ -321,9 +323,10 @@ class Offers extends CI_Controller {
 		$limit = 3;
 		$offset = 0;
 		$results = $this->offersdb->search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $limit, $offset);
-		$counts = $this->offersdb->searchCount($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $limit, $offset);
+		$counts = $this->offersdb->searchCount($origin, $destination, $lat, $lng, $dLat, $dLng, $range);
 		$levels = $this->users->GetUserLevels();
 		if (is_array($results) && is_array($levels)) {
+
 			$on = 'departure_date';
 			$results = array_sort($results, $on, $order = SORT_ASC);
 			$urlString = "?origin=$origin&lat=$lat&lng=$lng&destination=$destination&dLat=$dLat&dLng=$dLng&originStatus=$originStatus&destinationStatus=$destinationStatus&range=$range";
