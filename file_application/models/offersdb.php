@@ -335,8 +335,14 @@ class Offersdb extends CI_Model {
 	 * @return rows or FALSE
 	 *
 	 **/
-	function search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $LIMIT, $OFFSET) {
-
+	function search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $page, $per_page) {
+        
+        $LIMIT = $per_page;
+        if ( strcmp('', trim($page)) == 0 ) {
+        	$page = 1;
+        }
+        $OFFSET = (($page-1) * $per_page);
+         
 		$date = date('Y-m-d H:i:s');// current date
 		// no hangi gruptan geldiğini
 		$range = explode("-", $range);
@@ -378,7 +384,7 @@ class Offersdb extends CI_Model {
 		$where = "( $one OR $oneReverse ) AND
                    R.is_active = 1  AND
                    CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
-		$query = $this->db->select('R.*, U.*, L.*, (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
+		$query = $this->db->select('R.*, R.id AS event_id,  U.*, L.*, (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
                                     (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number ', FALSE)
 		->from('event_paths AS WO')
 		->join('events AS R', 'WO.event_id = R.id')
@@ -386,6 +392,7 @@ class Offersdb extends CI_Model {
 		->join('user_level AS L', 'U.level_id = L.level_id')
 		->where($where)
 		->order_by("R.departure_date", "asc")
+		->distinct()
 		->limit($LIMIT, $OFFSET)
 		->get();
 
@@ -460,6 +467,7 @@ class Offersdb extends CI_Model {
 		->join('user_level AS L', 'U.level_id = L.level_id')
 		->where($where)
 		->order_by("R.departure_date", "asc")
+		->distinct()
 		->get();
 
 		if ($query) {
@@ -483,7 +491,6 @@ class Offersdb extends CI_Model {
 	 *
 	 **/
 	function GetOfferForSearchResult($id) {
-
 		$query = $this->db->select('R.id AS id,
 		                            R.id AS event_id,
 		                            R.is_way ,

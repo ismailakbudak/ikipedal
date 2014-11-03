@@ -26,10 +26,7 @@
                             </li>
                             <li><a id="buttonOfferRide" href="<?php echo new_url() . 'offers/newest';?>"  >
                                    <i class="glyphicon glyphicon-briefcase one"></i> <?=lang('g.offer')?> </a>
-                            </li>
-                            <li><a id="buttonFindRide" href="<?php echo new_url(((strcmp(lang('lang'), "tr") == 0) ? "ara-seyahat" : "search-travel"))?>"   >
-                              <i class=" glyphicon glyphicon-search one"></i> <?=lang('g.search')?></a>
-                            </li>
+                            </li> 
                             <li><a data-toggle="modal" href="#report-problem"   >
                               <i class=" glyphicon glyphicon-flag one"></i> <?=lang('g.problem')?></a>
                             </li>

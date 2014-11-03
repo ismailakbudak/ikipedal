@@ -26,23 +26,21 @@ $this->load->view('include/head');
                               </li>
                               <li><a id="buttonOfferRide"  href="<?php echo new_url() . 'offers/newest';?>"  >
                                      <i class="glyphicon glyphicon-briefcase one"></i> <?=lang('g.offer')?> </a>
-                              </li>
-                              <li>
-                                <a id="buttonFindRide" href="<?php echo new_url(((strcmp(lang('lang'), "tr") == 0) ? "ara-seyahat" : "search-travel"));?>"    >
-                                  <i class=" glyphicon glyphicon-search one"></i> <?=lang('g.search')?></a>
-                              </li>
+                              </li> 
                               <li><a data-toggle="modal" href="#report-problem"   >
                                 <i class=" glyphicon glyphicon-flag one"></i> <?=lang('g.problem')?></a>
                               </li>
+
                            </ul>
-                           <ul class="nav navbar-nav navbar-right ">
-                                <li ><a href="<?php echo new_url("profil")?>"   class="dan glyphicon glyphicon-bell three">
+                           <ul class="nav navbar-nav navbar-right "> 
+                                <li ><a href="<?php echo new_url("profil")?>" >
+                                  <i class="succ glyphicon glyphicon-bell" style='font-size: 20px;width: 30px;' ></i>
                                   <span class="badge btn-warning mybadge2"  ><?php echo $alert_count?></span></a>
-                                </li>
-                                <li ><a href="<?php echo new_url() . 'message'?>"   class="succ glyphicon glyphicon-comment three">
+                                </li> 
+                                <li ><a href="<?php echo new_url() . 'message'?>" > 
+                                    <i class="glyphicon glyphicon-comment" style='font-size: 20px;width: 35px;' > </i>
                                     <span class="badge btn-warning mybadge"  ><?php echo $mesage_count?></span></a>
-                                </li>
-                                <li style="padding:3px; padding-top:5px;">  </li>
+                                </li> 
                                 <li class="dropdown">
                                     <!-- data-toggle="dropdown" href="#" -->
                                     <a class="dropdown-toggle"  data-toggle="dropdown" href="#" id="themes">

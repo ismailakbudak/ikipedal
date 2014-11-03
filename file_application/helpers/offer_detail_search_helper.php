@@ -115,10 +115,8 @@ function tripDateContent($offer, $lang) {
 function wayPoints($offer) {
 	$val = "";
 	if ($offer['is_way']) {
-
 		$str = explode(",", $offer['origin']);
 		$val .= "<strong   class='text-primary text-20'   title='$str[0]' >" . $str[0] . "</strong>→";
-
 		$way_points = explode("?", $offer['way_points']);
 		foreach ($way_points as $way) {
 			$str2 = explode(",", $way);
@@ -132,6 +130,5 @@ function wayPoints($offer) {
 		$str2 = explode(",", $offer['destination']);
 		$val .= "<strong class='text-primary text-20' > <span title='{$offer['origin']}' > " . $str[0] . " </span> → <span title='{$offer['destination']}' > " . $str2[0] . " </span> </strong>";
 	}
-
 	return $val;
 }

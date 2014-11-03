@@ -180,7 +180,7 @@ var place1 = {
       var request = {
         origin: start,
         destination: end,
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: google.maps.TravelMode.WALKING
       };
       directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
@@ -256,7 +256,7 @@ var place1 = {
           request = {
             origin: start,
             destination: end,
-            travelMode: google.maps.TravelMode.DRIVING
+            travelMode: google.maps.TravelMode.WALKING
           };
 
         directionsDisplay = new google.maps.DirectionsRenderer();

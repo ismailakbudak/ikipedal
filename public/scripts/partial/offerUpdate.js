@@ -275,7 +275,7 @@
         origin: start,
         destination: end,
         waypoints: param,
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: google.maps.TravelMode.WALKING
       };
       directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
@@ -409,7 +409,7 @@
           origin: start,
           destination: end,
           waypoints: param,
-          travelMode: google.maps.TravelMode.DRIVING
+          travelMode: google.maps.TravelMode.WALKING
         };
         directionsService.route(request, function(response, status) {
 

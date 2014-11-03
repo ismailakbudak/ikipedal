@@ -70,18 +70,7 @@ class Main extends CI_Controller {
 		$this->load->view('main/works');// load views
 		$this->load->view('include/footer');// load views
 	}
-
-	/**
-	 *  Teklif arama sayfası yüklenir
-	 *
-	 *  @return HTML view
-	 **/
-	public function offers() {
-
-		$this->login->general();// load views
-		$this->load->view('main/search');// load views
-		$this->load->view('include/footer');// load views
-	}
+ 
 
 }
 

@@ -55,6 +55,21 @@ function urlCreate($lang, $origin, $destination, $offer_id, $name = "flag", $tip
 	}
 	return $name;
 }
+
+
+/**
+ *  Create search offer url with date 
+ *
+ *   @param $lang  current language
+ *   @param $date  date with strtotime
+ *   @return url string
+ **/
+function url_create_date( $lang,  $date ) {
+	$name = (strcmp($lang, "tr") == 0) ? 'ara-seyahat-tarih-sonuc' : 'search-travel-date-result';
+	$name .= "/" . $date;
+	return $name;
+}
+
 /**
  *
  *

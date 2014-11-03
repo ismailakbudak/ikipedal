@@ -117,21 +117,9 @@ function writeContent( $offer, $lang ){
   return $val;
 }
 ?>
-<!-- container
-================================== -->
+<!-- container -->
 <div class="container">
-  <div class="row">
-      <? 
-      if (isset($val)) {
-      	echo $val;
-      }
-
-      $alt = "sd";
-      ?>
-  </div>
-  <!-- page-header
-  ================================== -->
-
+  <!-- page-header --> 
   <div class="row">
     <div class="col-lg-12">
       <h3 style="text-align: center; font-weight: bold" > <?=lang('m.adres')?> <?=lang('g.service')?> </h3>
@@ -139,9 +127,7 @@ function writeContent( $offer, $lang ){
       <p class="lead"> <i class=" glyphicon glyphicon-search one" > </i>  <?=lang('m.help')?>   </p>
     </div>
   </div>
-
-  <!-- Navbar
-  ================================================== -->
+  <!-- Navbar  -->
   <div class="bs-docs-section clearfix">
     <div class="row">
       <div class="col-lg-12">
@@ -171,8 +157,7 @@ function writeContent( $offer, $lang ){
     </div> 
     <div class="row" style="display:none "  >
      <div class="col-lg-12">
-        <!--MAP
-        ============================================-->
+        <!--MAP -->
         <div id="map" class="collapse in"  >
            <div id="map-canvas"></div>
         </div>
@@ -194,7 +179,7 @@ function writeContent( $offer, $lang ){
        <?  if (count($offers['last']) == 4) {
                  $offerLast = $offers['last'];
       ?>
-      <div class="col-lg-4" >
+      <div class="col-lg-6" >
          <legend> <?=lang("m.last_activity")?></legend>
          <div   class="well cycle " style="position: relative; overflow: hidden; ">
             <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerLast[0], lang('lang'))?><hr> <?=writeContent($offerLast[1], lang('lang'))?></div>
@@ -202,9 +187,9 @@ function writeContent( $offer, $lang ){
          </div>
       </div>
       <?}if (count($offers['today']) == 4) {
-        $offerToday = $offers['today'];
+           $offerToday = $offers['today'];
         ?>
-      <div class="col-lg-4" >
+      <div class="col-lg-6" >
           <legend>  <?=lang("m.soon")?></legend>
           <div   class="well cycle " style="position: relative; overflow: hidden; ">
                   <div class="content"  style="position: absolute; top: -230px; left: 0px; display: none; z-index: 3; opacity: 1;  "> <?=writeContent($offerToday[0], lang('lang'))?><hr> <?=writeContent($offerToday[1], lang('lang'))?></div>
@@ -228,7 +213,7 @@ function writeContent( $offer, $lang ){
             $count_text .= "{ 'date': '{$new_date}', 
                               'color': '#0A5AFF',
                               'title': '{$title}', 
-                              'link': '" .strtotime($value['departure_date']). "'},"; 
+                              'link': '" . new_url(  url_create_date( lang('lang'), strtotime($value['departure_date'])) ) . "'},"; 
         }   
     }  
 ?>

@@ -53,7 +53,6 @@ class Offers extends CI_Controller {
 	 **/
 	public function create() {
 		if ($this->session->userdata('logged_in')) {
-
 			$this->load->helper("ajax");
 			$this->form->check(lang('oc.trip_type'), 'trip_type', 'required|xss_clean');// check post data
 			$this->form->check(lang('oc.round_trip'), 'round_trip', 'required|xss_clean');// check post data
@@ -169,6 +168,7 @@ class Offers extends CI_Controller {
 			'path' => $name);
 		echo json_encode($result);// JSON output
 	}
+
 	/**
 	 *  Arama verilerini kaydet ve sayfayı yönlendir
 	 *
@@ -186,7 +186,8 @@ class Offers extends CI_Controller {
 		$range = $this->security->xss_clean($this->input->get('range'));// get GET[] data from URL
 		// if origin value is not set, redirect user to search page
 		if (strcmp($originStatus, "1") != 0 || strcmp($origin, "") == 0 || strcmp($lat, "") == 0 || strcmp($lng, "") == 0 || !isset($lat) || !isset($lng) || $lat <= 0 || $lng <= 0)// check origin point is set
-		{redirect("ara-seyahat");
+		{
+			redirect("main");
 		}
 		// check destination data is set
 		if (strcmp($destinationStatus, "1") != 0 || strcmp($destination, "") == 0 || $dLat <= 0 || $dLng <= 0) {
@@ -194,21 +195,7 @@ class Offers extends CI_Controller {
 			$destinationStatus = 0;
 			$dLat = -1;
 			$dLng = -1;
-		}
-		// save search data to database
-		/*
-		$search = array('user_id' => $this->userid,
-		'origin' => $origin,
-		'lat' => $lat,
-		'lng' => $lng,
-		'originStatus' => $originStatus,
-		'destination' => $destination,
-		'dLat' => $dLat,
-		'dLng' => $dLng,
-		'destinationStatus' => $destinationStatus);
-		$this->load->model('searched');// load  searched model for database action
-		$result = $this->searched->add($search);
-		 */
+		} 
 		$sessionOrigin = $origin;
 		$sessionDestination = $destination;
 		$origin = explode(",", $origin);
@@ -260,14 +247,30 @@ class Offers extends CI_Controller {
 			redirect("search-travel-result?$query");
 		}
 	}
+
+	/**
+	 *  Tarihe gore arama verileri
+	 *
+	 *  @return  view
+	 **/
+	public function searchByDate( $null,  $event_date ) {
+		$this->lang->load('main'); 
+		if ( strcmp('',  trim($event_date)) == 0 )// check origin point is set
+		{  
+			redirect("main");
+		}
+		$date = date('Y/m/d',   $event_date );  
+	} 
+
 	/**
 	 * Arama sonuçlarını göster
 	 *
 	 *
 	 * @return HTML views
 	 **/
-	public function search() {
+	public function search($null = '', $page = '1') { 
 		$this->lang->load('main');
+		$this->load->helper("offer_detail_search");
 		$origin = $this->security->xss_clean(trim($this->input->get('origin')));// get GET[] data from URL
 		$lat = $this->security->xss_clean($this->input->get('lat'));// get GET[] data from URL
 		$lng = $this->security->xss_clean($this->input->get('lng'));// get GET[] data from URL
@@ -278,25 +281,6 @@ class Offers extends CI_Controller {
 		$destinationStatus = $this->security->xss_clean($this->input->get('destinationStatus'));// get GET[] data from URL
 		$range = $this->security->xss_clean($this->input->get('range'));// get GET[] data from URL
 		if (strcmp($originStatus, "1") != 0 && strcmp($origin, "") == 0 && $this->session->userdata('offerInfo')) {
-			$this->session->set_userdata('countOffer', $this->session->userdata('countOffer') + 1);
-			if ($this->session->userdata('countOffer') >= 4) {
-				$searchData = array('offerInfo' => 0,
-					'offerAlertSave' => 1,
-					'countOffer' => "",
-					'origin' => "",
-					'lat' => "",
-					'lng' => "",
-					'originStatus' => "",
-					'destination' => "",
-					'dLat' => "",
-					'dLng' => "",
-					'destinationStatus' => "",
-					'place1' => "",
-					'place2' => "",
-					'range' => "");
-				$this->session->unset_userdata($searchData);
-				redirect("ara-seyahat");
-			}
 			$origin = $this->session->userdata('place1');// get GET[] data from URL
 			$lat = $this->session->userdata('lat');// get GET[] data from URL
 			$lng = $this->session->userdata('lng');// get GET[] data from URL
@@ -305,11 +289,11 @@ class Offers extends CI_Controller {
 			$dLat = $this->session->userdata('dLat');// get GET[] data from URL
 			$dLng = $this->session->userdata('dLng');// get GET[] data from URL
 			$destinationStatus = $this->session->userdata('destinationStatus');// get GET[] data from URL
-		}
+		} 
 		// if origin value is not set, redirect user to search page
-		if (strcmp($originStatus, "1") != 0 || strcmp($origin, "") == 0 || strcmp($lat, "") == 0 || strcmp($lng, "") == 0 || !isset($lat) || !isset($lng) || $lat <= 0 || $lng <= 0)// check origin point is set
-		{redirect("ara-seyahat");
-		}
+		if (  strcmp($originStatus, "1") != 0 || strcmp($origin, "") == 0 || strcmp($lat, "") == 0 || strcmp($lng, "") == 0 || !isset($lat) || !isset($lng) || $lat <= 0 || $lng <= 0){  
+			redirect("main");
+		} 
 		// check destination data is set
 		if (strcmp($destinationStatus, "1") != 0 || strcmp($destination, "") == 0 || $dLat <= 0 || $dLng <= 0) {
 			$destination = "";
@@ -320,32 +304,51 @@ class Offers extends CI_Controller {
 		$this->load->model('offersdb');// load offersdb model for database action
 		$this->load->model('users');// load users model for database action
 		$this->load->helper('search');
-		$limit = 3;
-		$offset = 0;
-		$results = $this->offersdb->search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $limit, $offset);
 		$counts = $this->offersdb->searchCount($origin, $destination, $lat, $lng, $dLat, $dLng, $range);
-		$levels = $this->users->GetUserLevels();
-		if (is_array($results) && is_array($levels)) {
 
-			$on = 'departure_date';
-			$results = array_sort($results, $on, $order = SORT_ASC);
-			$urlString = "?origin=$origin&lat=$lat&lng=$lng&destination=$destination&dLat=$dLat&dLng=$dLng&originStatus=$originStatus&destinationStatus=$destinationStatus&range=$range";
-			$urlWithoutRange = "?origin=$origin&lat=$lat&lng=$lng&destination=$destination&dLat=$dLat&dLng=$dLng&originStatus=$originStatus&destinationStatus=$destinationStatus";
-			$data['getDataUrl'] = $urlString;
+		// Pagination
+		$this->load->library('pagination');
+		$config['base_url']         =  new_url('ara-seyahat-sonuc');
+		$config['total_rows']       = $counts;
+		$config['per_page']         = 40;
+		$config['uri_segment']      = 3;
+		$config['num_links']        = 3;
+		$config['use_page_numbers'] = TRUE;
+        $config['first_tag_open']   = $config['last_tag_open']= $config['next_tag_open']= $config['prev_tag_open'] = $config['num_tag_open'] = '<li>';
+        $config['first_tag_close']  = $config['last_tag_close']= $config['next_tag_close']= $config['prev_tag_close'] = $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open']     = "<li><span><b>";
+        $config['cur_tag_close']    = "</b></span></li>";
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk';
+	        $config['next_link'	   ]  = '&gt;';
+	        $config['prev_link'	   ]  = '&lt;';
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First';
+	        $config['next_link'	   ]  = '&gt;';
+	        $config['prev_link'	   ]  = '&lt;';
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }    
+		$this->pagination->initialize($config);
+		$results = $this->offersdb->search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $page, $per_page = $config['per_page']   );
+		if (is_array($results)  ) {
+			$on                      = 'departure_date';
+			$results                 = array_sort($results, $on, $order = SORT_ASC);
+			$urlString               = "?origin=$origin&lat=$lat&lng=$lng&destination=$destination&dLat=$dLat&dLng=$dLng&originStatus=$originStatus&destinationStatus=$destinationStatus&range=$range";
+			$urlWithoutRange         = "?origin=$origin&lat=$lat&lng=$lng&destination=$destination&dLat=$dLat&dLng=$dLng&originStatus=$originStatus&destinationStatus=$destinationStatus";
+			$data['getDataUrl']      = $urlString;
 			$data['urlWithoutRange'] = $urlWithoutRange;
-			$data['range'] = $range;
-			$data['x1'] = $lat;
-			$data['x2'] = $dLat;
-			$data['y1'] = $lng;
-			$data['y2'] = $dLng;
-			$data['status1'] = $originStatus;
-			$data['status2'] = $destinationStatus;
-			$data['offset'] = $limit + $offset;
-			$data['origin'] = $origin;
-			$data['destination'] = $destination;
-			$data['results'] = $results;
-			$data['counts'] = $counts;
-			$data['levels'] = $levels;
+			$data['range']           = $range;
+			$data['x1']              = $lat;
+			$data['x2']              = $dLat;
+			$data['y1']              = $lng;
+			$data['y2']              = $dLng;
+			$data['status1']         = $originStatus;
+			$data['status2']         = $destinationStatus; 
+			$data['origin']          = $origin;
+			$data['destination']     = $destination;
+			$data['results']         = $results;
+			$data['counts']          = $counts; 
 			$this->lang->load('search');// load language file
 			$this->login->general($data);// load views
 			$this->load->view('main/searchResult');// load views
@@ -478,8 +481,7 @@ class Offers extends CI_Controller {
 		$this->data['active_side'] = '';// active sidebar menu
 		$this->load->model('offersdb');// load offersdb model for database action
 		$this->load->model('look_at');// load look_at model for database action
-		$this->load->model('event_paths');// load event_paths model for database action
-		$this->load->model('rutin_trips');// load rutin_trips model for database action
+		$this->load->model('event_paths');// load event_paths model for database action 
 		$this->load->helper("offer");// load helper file for action
 		$where = array('id' => $offerid);
 		$offer = $this->offersdb->GetWhere($where);// get users up-date offers   $user_id, $numrows, $start
@@ -497,15 +499,7 @@ class Offers extends CI_Controller {
 					$offer['look_count'] = $look_count;
 				} else {
 					$offer['look_count'] = array('ride_offer_id' => $offer['id'], 'look' => '0');
-				}
-				if (strcmp($offer['trip_type'], "1") == 0) {// if there is get offer trip days
-					$rutin_trip = $this->rutin_trips->GetOfferDays($offer['id']);// get trip days for this offerid
-					if (is_array($rutin_trip) && count($rutin_trip) > 0) {
-						$offer['rutin_trip'] = $rutin_trip;
-					} else {
-						$offer['rutin_trip'] = array(0 => array('id' => 0, "is_return" => "-1", "day" => ""));
-					}
-				}
+				} 
 				$offer['normal_id'] = $offer['id'];
 				$offer['id'] = $offerid;// encypt again offerid for security
 				$this->data['offer'] = $offer;// load views
