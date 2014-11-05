@@ -69,7 +69,7 @@
                                            <div class="form-group form-padding" >
                                               <input id='inputEventName' name="inputEventName" type="text" class="collapse in form-control border-input" placeholder=" <?=lang('o.event_name')?>">
                                            </div>
-                                           <div class="form-group form-padding" >
+                                           <div class="form-group form-padding" style='display:none' >
                                                 <div class='col-lg-8'>
                                                   <select class="form-control input-sm" id="inputEventType">
                                                       <?

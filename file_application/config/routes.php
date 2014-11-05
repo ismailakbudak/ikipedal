@@ -26,11 +26,16 @@ $route['^en/ara-seyahat-tarih-sonuc(.+)$'] = 'offers/searchByDate/$1';
 $route['^tr/search-travel-date-result(.+)$'] = 'offers/searchByDate/$1';
 $route['^en/search-travel-date-result(.+)$'] = 'offers/searchByDate/$1';
 
+$route['^tr/ara-seyahat-tarih-sonuc$'] = 'offers/searchByDate/$1';
+$route['^en/ara-seyahat-tarih-sonuc$'] = 'offers/searchByDate/$1';
+$route['^tr/search-travel-date-result$'] = 'offers/searchByDate/$1';
+$route['^en/search-travel-date-result$'] = 'offers/searchByDate/$1';
  
 
 // URI like '/en/about' -> use controller 'about'
 $route['^tr/(.+)$'] = "$1";
 $route['^en/(.+)$'] = "$1";
+ 
 
 // '/en' and '/fr' URIs -> use default controller
 $route['^tr$'] = $route['default_controller'];

@@ -256,22 +256,23 @@ class Offersdb extends CI_Model {
 	 *  @parameter user id
 	 *  RETURN rows or FALSE
 	 **/
-	function GetUserOffer($user_id) {
-
-		$date = date('Y-m-d H:i:s');// current date
-		//$where = "CONCAT(`name`,' ',`surname`) LIKE '$name%' AND id != $user_id";
-
+	function GetUserOffer($user_id, $page, $per_page) {
+        $LIMIT = $per_page;
+        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
+        	$page = 1;
+        } 
+        $OFFSET = (($page-1) * $per_page);
+		$date = date('Y-m-d H:i:s'); 
 		$where = "user_id ='$user_id' AND ( CONCAT(departure_date,' ',departure_time) >='{$date}' OR CONCAT(return_date,' ', return_time)  >='{$date}')
                                          AND is_active = 1";
-		$this->db->where($where)
-		     ->order_by("departure_date", "asc")
-		     ->distinct();
-
-		$query = $this->db->get($this->table);
+		$query = $this->db->where($where)
+		                  ->order_by("departure_date", "asc")
+		                  ->distinct()
+		                  ->limit($LIMIT, $OFFSET)
+		                  ->get($this->table);
 		if ($query) {
 			return $query->result_array();
 		} else {
-
 			return FALSE;
 		}
 	}
@@ -284,6 +285,38 @@ class Offersdb extends CI_Model {
 	function GetUserOfferCount($user_id) {
 		$query = $this->db->select('user_id, COUNT(id) AS offers_count  ')
 		              ->where('user_id =', $user_id)
+		              ->where('is_active', 1)
+		              ->group_by('user_id')
+		              ->get($this->table);
+		if ($query) {
+			$result = $query->row_array();
+			if ($result) {
+				return $result;
+			} else {
+				$result['offers_count'] = 0;
+			}
+			return $result;
+		} else {
+
+			return FALSE;
+		}
+	}
+
+
+
+	/**
+	 *  Get user offers count as count
+	 *  @parameter user id
+	 *  RETURN row or FALSE
+	 **/
+	function GetUserOfferPassedCount($user_id) {
+
+		$date = date('Y-m-d H:i:s');// current date
+		$where = "user_id ='$user_id' AND CONCAT(departure_date,' ',departure_time)  <'{$date}' AND CONCAT(return_date,' ', return_time) <'{$date}'
+                                         AND is_active = 1 ";
+
+		$query = $this->db->select('user_id, COUNT(id) AS offers_count  ')
+		              ->where($where)
 		              ->group_by('user_id')
 		              ->get($this->table);
 		if ($query) {
@@ -307,15 +340,19 @@ class Offersdb extends CI_Model {
 	|  RETURN rows or FALSE
 	|
 	 ***/
-	function GetUserOfferOutofDate($user_id) {
-
+	function GetUserOfferOutofDate($user_id, $page, $per_page) {
+        $LIMIT = $per_page;
+        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
+        	$page = 1;
+        } 
+        $OFFSET = (($page-1) * $per_page);
 		$date = date('Y-m-d H:i:s');// current date
 		$where = "user_id ='$user_id' AND CONCAT(departure_date,' ',departure_time)  <'{$date}' AND CONCAT(return_date,' ', return_time) <'{$date}'
                                          AND is_active = 1 ";
-		$this->db->where($where)
-		     ->order_by("departure_date", "asc");
-
-		$query = $this->db->get($this->table);
+		$query = $this->db->where($where)
+		     ->order_by("departure_date", "asc")
+		     ->limit($LIMIT, $OFFSET)
+             ->get($this->table);
 		if ($query) {
 			return $query->result_array();
 		} else {
@@ -338,7 +375,7 @@ class Offersdb extends CI_Model {
 	function search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $page, $per_page) {
         
         $LIMIT = $per_page;
-        if ( strcmp('', trim($page)) == 0 ) {
+        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
         	$page = 1;
         }
         $OFFSET = (($page-1) * $per_page);
@@ -473,6 +510,80 @@ class Offersdb extends CI_Model {
 		if ($query) {
 			$result = $query->result_array();// tek seferlik gidiş seyahatleri
 
+			return count($result);// return search results total count
+		} else {
+
+			return FALSE;
+		}
+	}
+
+
+
+	/***
+	 *
+	 * Search offers
+	 *
+	 * @param $origin is departure point
+	 * @param $destination  is arrivial point
+	 * @param $LIMIT  is how many rows display
+	 * @param $OFFSET is row start point
+	 * @return rows or FALSE
+	 *
+	 **/
+	function searchDate($date, $page, $per_page) {
+        
+        $LIMIT = $per_page;
+        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
+        	$page = 1;
+        } 
+        $OFFSET = (($page-1) * $per_page);
+          
+		$where = "R.is_active = 1  AND 
+		          R.departure_date ='{$date}' ";
+		$query = $this->db->select('R.*, R.id AS event_id,  U.*, L.*, (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
+                                    (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number ', FALSE)
+		->from('events AS R') 
+		->join('users AS U', 'U.id = R.user_id')
+		->join('user_level AS L', 'U.level_id = L.level_id')
+		->where($where) 
+		->distinct()
+		->limit($LIMIT, $OFFSET)
+		->get();
+
+		if ($query) {
+			$result = $query->result_array();// tek seferlik gidiş seyahatleri
+			return $result;// return search results
+		} else {
+			return FALSE;
+		}
+	}
+
+	/***
+	 *
+	 * Search total count of offers
+	 *
+	 * @param $origin is departure point
+	 * @param $destination  is arrivial point
+	 * @param $LIMIT  is how many rows display
+	 * @param $OFFSET is row start point
+	 * @return row or FALSE
+	 *
+	 **/
+	function searchCountDate($date) {
+ 
+		$where = "R.is_active = 1  AND 
+		          R.departure_date ='{$date}' ";
+		$query = $this->db->select('R.*, R.id AS event_id,  U.*, L.*, (SELECT AVG(rate) FROM ratings WHERE received_userid = U.id ) AS average,
+                                    (SELECT COUNT(id) FROM ratings WHERE received_userid = U.id ) AS number ', FALSE)
+		->from('events AS R') 
+		->join('users AS U', 'U.id = R.user_id')
+		->join('user_level AS L', 'U.level_id = L.level_id')
+		->where($where) 
+		->distinct()
+		->order_by("R.id", "desc") 
+		->get();
+		if ($query) {
+			$result = $query->result_array();// tek seferlik gidiş seyahatleri
 			return count($result);// return search results total count
 		} else {
 
@@ -621,10 +732,10 @@ class Offersdb extends CI_Model {
 	 **/
 	function GetOfersForMainCount() { 
         
-        $date = date("Y-m-d H:i:s",strtotime("-1 month"));
+        $date = date("Y-m-d",strtotime("-2 month"));
          
 		$where = "R.is_active = 1  AND
-                  CONCAT(R.departure_date,' ',R.departure_time) >='{$date}' ";
+                  R.departure_date  >='{$date}' ";
 
         // Tarihe gore gruplanmis teklifler
 		$query3 = $this->db->select('COUNT(R.id) AS number,

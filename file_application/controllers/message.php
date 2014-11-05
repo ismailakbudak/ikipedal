@@ -41,6 +41,24 @@ class Message extends CI_Controller {
 	 * @return HTML view
 	 **/
 	public function index() {
+        
+        // Pagination
+		$result = $this->offersdb->GetUserOfferCount($this->userid);
+	    $counts  =  $result['offers_count'];  
+		$this->load->library('pagination');
+		$config['base_url']         =  new_url('offer/index');  
+		$config['total_rows']       = $counts;
+		$config['per_page']         = 20;
+		$config['uri_segment']      = 4;    
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }    
+		$this->pagination->initialize($config); 
+
 		$this->lang->load('message');// load messages language file for main
 		$this->data['active_side'] = '#inbox';// active message menu
 		$inbox_messages = $this->messages->getInbox($this->user_id);// get sent messages

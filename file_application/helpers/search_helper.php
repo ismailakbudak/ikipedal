@@ -172,15 +172,15 @@ function dateConvertSearch($date2, $lang) {
 	$day2 = $today+(60 * 60 * 24 * 2);
 	$day3 = $today+(60 * 60 * 24 * 3);
 	$day4 = $today+(60 * 60 * 24 * 4);
-	if ($date <= $today) {
+	if ($date == $today) {
 		$date = "Today";
-	} else if ($date <= $day1) {
+	} else if ($date == $day1) {
 		$date = "Tomorrow";
-	} else if ($date <= $day2) {
+	} else if ($date == $day2) {
 		$date = "2 days later ";
-	} else if ($date <= $day3) {
+	} else if ($date == $day3) {
 		$date = "3 days later ";
-	} else if ($date <= $day4) {
+	} else if ($date == $day4) {
 		$date = "4 days later ";
 	} else {
 

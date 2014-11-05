@@ -61,38 +61,44 @@ float:left;
   $count = 0;                                   // use for buttonset
   $lang = $this->lang->lang();                  // which language
   if(  strcmp($active_side, "#upcoming") == 0 )
-  echo lang('io.title');
+      echo lang('io.title');
   else
-  echo lang('io.titlePassed');
+     echo lang('io.titlePassed');
   ?>
 </legend>
 <div class="last-offer" >
-  <?
+<?
   foreach ($offers as $value) {
-  echo trip($value, $lang);
+     echo trip($value, $lang);
   }
   if( count($offers) == 0 ){
-  $url_refresh =   (  strcmp($active_side, "#upcoming") == 0 ) ? new_url('offer/index') : new_url('offer/passed')  ;
-  echo " <div class='bs-example'>
-    <div class='alert alert-dismissable alert-info'>
-      <button type='button' class='close' data-dismiss='alert' title='". lang('close') ."' >&times;</button>
-      <h4> ". lang("o.empty") ." <a href='". $url_refresh ."' style='margin:10px' title='". lang('refresh') ."' ><i class='glyphicon glyphicon-refresh'></i> </a> </h4>
-    </div>
-  </div>";
+      $url_refresh =   (  strcmp($active_side, "#upcoming") == 0 ) ? new_url('offer/index') : new_url('offer/passed')  ;
+      echo " <div class='bs-example'>
+        <div class='alert alert-dismissable alert-info'>
+          <button type='button' class='close' data-dismiss='alert' title='". lang('close') ."' >&times;</button>
+          <h4> ". lang("o.empty") ." <a href='". $url_refresh ."' style='margin:10px' title='". lang('refresh') ."' ><i class='glyphicon glyphicon-refresh'></i> </a> </h4>
+        </div>
+      </div>";
   }
-  ?>
-  </div><!--  <div class="last offer" /> -->
-  <!-- Delete offer modal
-  ===============================================================-->
-  <div id="delete-modal" class="modal fade" tabindex="-1" data-id="-1"; data-backdrop="static" data-keyboard="false" style="display: none;">
-    <div class="modal-body">
-      <p><?=lang("io.commit")?></p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" data-dismiss="modal" class="btn width-100"><?=lang("g.cancel")?></button>
-      <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?=lang("g.yes")?></button>
-    </div>
+?>
+</div><!--  <div class="last offer" /> -->
+
+<div class="pagination">
+  <ul>
+    <?= $this->pagination->create_links(); ?>
+  </ul>
+</div>   
+
+<!-- Delete offer modal-->
+<div id="delete-modal" class="modal fade" tabindex="-1" data-id="-1"; data-backdrop="static" data-keyboard="false" style="display: none;">
+  <div class="modal-body">
+    <p><?=lang("io.commit")?></p>
   </div>
-  <div id="loader">  </div>
-  <script type="text/javascript" > er.blank_date = '<?=lang("o.blank_date")?>'; er.same_date = '<?=lang("o.same_date")?>'; er.choose_day = '<?=lang("o.choose_day")?>'; return_days_count = '<?=$count?>'; </script>
-  <script src="<? echo   public_url() . 'scripts/partial/index-offers.js'  ?>"></script>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn width-100"><?=lang("g.cancel")?></button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?=lang("g.yes")?></button>
+  </div>
+</div>
+<div id="loader">  </div>
+<script type="text/javascript" > er.blank_date = '<?=lang("o.blank_date")?>'; er.same_date = '<?=lang("o.same_date")?>'; er.choose_day = '<?=lang("o.choose_day")?>'; return_days_count = '<?=$count?>'; </script>
+<script src="<? echo   public_url() . 'scripts/partial/index-offers.js'  ?>"></script>

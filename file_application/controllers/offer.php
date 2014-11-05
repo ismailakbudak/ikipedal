@@ -36,9 +36,26 @@ class Offer extends CI_Controller {
 	 *
 	 *  @return HTML view
 	 **/
-	public function index() {
+	public function index($page = '1') {
 		$this->data['active_side'] = '#upcoming';// active sidebar menu
-		$offers = $this->offersdb->GetUserOffer($this->userid);// get users up-date offers   $user_id, $numrows, $start
+		
+		$result = $this->offersdb->GetUserOfferCount($this->userid);
+	    $counts  =  $result['offers_count'];  
+		// Pagination
+		$this->load->library('pagination');
+		$config['base_url']         =  new_url('offer/index');  
+		$config['total_rows']       = $counts;
+		$config['per_page']         = 20;
+		$config['uri_segment']      = 4;    
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }    
+		$this->pagination->initialize($config); 
+		$offers = $this->offersdb->GetUserOffer($this->userid, $page, $per_page = $config['per_page']  );// get users up-date offers   $user_id, $numrows, $start
 		if (is_array($offers)) {
 			foreach ($offers as &$value) {
 				//$value['event_paths'] = $this->event_paths->GetOfferWays($value['id']);// get offer waypoints
@@ -63,9 +80,27 @@ class Offer extends CI_Controller {
 	 *
 	 *  @return HTML view
 	 **/
-	public function passed() {
+	public function passed($page = '1') {
+
+		$result = $this->offersdb->GetUserOfferPassedCount($this->userid);
+	    $counts  =  $result['offers_count'];  
+		// Pagination
+		$this->load->library('pagination');
+		$config['base_url']         =  new_url('offer/passed');  
+		$config['total_rows']       = $counts;
+		$config['per_page']         = 20;
+		$config['uri_segment']      = 4;   
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }    
+		$this->pagination->initialize($config); 
+
 		$this->data['active_side'] = '#passed';// active sidebar menu
-		$offers = $this->offersdb->GetUserOfferOutofDate($this->userid);// get users up-date offers $user_id, $numrows, $start
+		$offers = $this->offersdb->GetUserOfferOutofDate($this->userid, $page, $per_page = $config['per_page']);// get users up-date offers $user_id, $numrows, $start
 		if (is_array($offers)) {
 			foreach ($offers as &$value) {
 				$value['event_paths'] = $this->event_paths->GetOfferWays($value['id']);// get offer waypoints
@@ -188,8 +223,7 @@ class Offer extends CI_Controller {
 							'distance' => $distances[0],
 							'time' => $times[0]);
 						$ways_offer[] = $waypoint;
-						for ($i = 0; $i < count($points) - 1;
-							$i++) {
+						for ($i = 0; $i < count($points) - 1; $i++) {
 							$waypoint = array('o_from' => $points[$i],
 								'd_to' => $points[$i + 1],
 								'distance' => $distances[$i + 1],

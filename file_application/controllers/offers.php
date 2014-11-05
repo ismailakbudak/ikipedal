@@ -253,13 +253,56 @@ class Offers extends CI_Controller {
 	 *
 	 *  @return  view
 	 **/
-	public function searchByDate( $null,  $event_date ) {
+	public function searchByDate( $null='', $page = '1' ) {
+		$event_date = $this->security->xss_clean(trim($this->input->get('date')));// get GET[] data from URL
 		$this->lang->load('main'); 
-		if ( strcmp('',  trim($event_date)) == 0 )// check origin point is set
-		{  
+		$this->load->helper("offer_detail_search");
+		if ( strcmp('',  trim($event_date)) == 0 &&  strcmp('',  trim($this->session->userdata('offer_date'))) == 0 ){  
 			redirect("main");
 		}
-		$date = date('Y/m/d',   $event_date );  
+		else if ( strcmp('',  trim($event_date)) != 0 ){
+		    $date = date('Y-m-d',   $event_date );
+		    $search_data = array('offer_date' => $event_date );
+			$this->session->set_userdata($search_data);
+	    }else{
+	    	$event_date = $this->session->userdata('offer_date');
+	    	$date = date('Y-m-d', $event_date);
+	    }  
+
+		$this->load->model('offersdb');// load offersdb model for database action
+		$this->load->model('users');// load users model for database action
+		$this->load->helper('search');
+		$counts = $this->offersdb->searchCountDate($date);
+
+		// Pagination
+		$this->load->library('pagination');
+		$config['base_url']         =  ( strcmp(lang('lang'), 'tr') == 0 ? new_url('ara-seyahat-tarih-sonuc' ) : new_url('search-travel-date-result' ) ); 
+		$config['total_rows']       = $counts;
+		$config['per_page']         = 30;
+		//$config['uri_segment']      = 3; 
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }    
+		$this->pagination->initialize($config);
+		$results = $this->offersdb->searchDate($date, $page,  $per_page = $config['per_page']   );
+		if (is_array($results)  ) {
+			$on                      = 'departure_date';
+			$results                 = array_sort($results, $on, $order = SORT_ASC);
+			$data['getDataUrl']      = $event_date; 
+			$data['results']         = $results;
+			$data['counts']          = $counts; 
+			$this->lang->load('search');// load language file
+			$this->login->general($data);// load views
+			$this->load->view('main/searchResultDate');// load views
+			$this->load->view('include/footer');// load views
+		} else {
+			show_404('offer');
+		} 
+
 	} 
 
 	/**
@@ -308,28 +351,19 @@ class Offers extends CI_Controller {
 
 		// Pagination
 		$this->load->library('pagination');
-		$config['base_url']         =  new_url('ara-seyahat-sonuc');
+		$config['base_url']         =  ( strcmp(lang('lang'), 'tr') == 0 ? new_url('ara-seyahat-sonuc') : new_url('search-travel-result') );   
 		$config['total_rows']       = $counts;
-		$config['per_page']         = 40;
-		$config['uri_segment']      = 3;
-		$config['num_links']        = 3;
-		$config['use_page_numbers'] = TRUE;
-        $config['first_tag_open']   = $config['last_tag_open']= $config['next_tag_open']= $config['prev_tag_open'] = $config['num_tag_open'] = '<li>';
-        $config['first_tag_close']  = $config['last_tag_close']= $config['next_tag_close']= $config['prev_tag_close'] = $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open']     = "<li><span><b>";
-        $config['cur_tag_close']    = "</b></span></li>";
+		$config['per_page']         = 30;
+		//$config['uri_segment']      = 3; 
         if (strcmp(lang('lang'), "tr") == 0) {        
-        	$config['first_link'   ]  = '&lsaquo; İlk';
-	        $config['next_link'	   ]  = '&gt;';
-	        $config['prev_link'	   ]  = '&lt;';
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
 	        $config['last_link'	   ]  = 'Son &rsaquo;';
 	    }else{
-	    	$config['first_link'   ]  = '&lsaquo; First';
-	        $config['next_link'	   ]  = '&gt;';
-	        $config['prev_link'	   ]  = '&lt;';
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
 	        $config['last_link'	   ]  = 'Last &rsaquo;';
 	    }    
 		$this->pagination->initialize($config);
+		
 		$results = $this->offersdb->search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $page, $per_page = $config['per_page']   );
 		if (is_array($results)  ) {
 			$on                      = 'departure_date';

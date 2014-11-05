@@ -27,6 +27,7 @@
 
   $("#inputUpdateOffer").on('click', function() {
  
+    
 
     var totalDistance = $("#totalDistance").text(),
       totalTime = $("#totalTime").text(),
@@ -44,8 +45,7 @@
           TimesWay += '?';
         }
       };
-    }
-
+    } 
     var startPoint = $('#pac-input'),
       destinationPoint = $('#pac-input2'),
       array = $('#iteneraryPanel').find('.wayPoint'),
@@ -281,6 +281,7 @@
         if (status == google.maps.DirectionsStatus.OK) {
           directionsDisplay.setDirections(response);
           /* Toplma mesafeyi yazdırma */
+          /*
           var result = directionsDisplay.getDirections();
           var total = 0,
             minute = 0,
@@ -317,7 +318,56 @@
             text +
             " <div >" + end + "   <<<<<<<<< </div>";
           document.getElementById('total').innerHTML = value;
+          */
 
+            // Toplma mesafeyi yazdırma 
+            var result = directionsDisplay.getDirections(),
+              total = 0,
+              minute = 0,
+              text = "",
+              myroute = result.routes[0],
+              j = 0;
+            for (var i = 0; i < myroute.legs.length; i++) {
+              total += myroute.legs[i].distance.value;
+              minute += parseInt(myroute.legs[i].duration.value);
+              var dil = "";
+              if (param.length == 0) {
+                if (strcmp(er.lang, "en") == 0)
+                  dil = "  " + myroute.legs[i].duration.text.replace('gün', 'day').replace('saat', 'hour').replace('dakika', 'minute');
+                else
+                  dil = "  " + myroute.legs[i].duration.text;
+                text += " <div class='row'> <div class='col-lg-4 time'> " + dil + "</div> " +
+                  " <div class='col-lg-2 distance'>" + myroute.legs[i].distance.value / 1000.0 + "</div> " +
+                  " <div class='col-lg-1'> km </div> " +
+                  " </div>";
+              } else {
+                if (strcmp(er.lang, "en") == 0)
+                  dil = "  " + myroute.legs[i].duration.text.replace('gün', 'day').replace('saat', 'hour').replace('dakika', 'minute');
+                else
+                  dil = "  " + myroute.legs[i].duration.text;
+                text += " <div class='row'> <div class='col-lg-4 time'  > " + dil + "</div> " +
+                  " <div class='col-lg-2 distance'>" + myroute.legs[i].distance.value / 1000.0 + "</div> " +
+                  " <div class='col-lg-1'> km </div> " +
+                  " </div>";
+                if (j < param.length) {
+                  text += " <div  >  >>>>>>>>>  " + param[j]['location'] + "   >>>>>>>>>   </div>";
+                  j += 1;
+                }
+              }
+
+            };
+            var hour = Math.floor(minute / 3600),
+              min = Math.ceil((minute % 3600) / 60);
+            total = total / 1000.0;
+
+            var value = "<div class='col-lg-4'>" +
+              er.total_seyahat + " </div><div style='padding-left: 14px' id='totalDistance'> " + total + ' km ' + "</div> " +
+              "<div class='col-lg-4'>" +
+              er.total_time + "</div> <div id='totalTime' class='col-lg-12'> " + hour + er.saatS + min + er.dakikaS + "</div> </ br>" +
+              " <div class='col-lg-12' >" + start + "   >>>>>>>>> </div>" +
+              "<div class='col-lg-12'>" + text + "</div>" +
+              " <div class='col-lg-12'>" + end + "   <<<<<<<<< </div>";
+            document.getElementById('total').innerHTML = value;
         }
       });
     }
@@ -489,9 +539,7 @@
                 }
               }
 
-            }
-
-
+            };
             var hour = Math.floor(minute / 3600),
               min = Math.ceil((minute % 3600) / 60);
             total = total / 1000.0;

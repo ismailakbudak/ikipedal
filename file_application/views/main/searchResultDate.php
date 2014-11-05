@@ -11,10 +11,10 @@
        <div class="bs-example">
                 <div class="navbar navbar-default" style="padding-bottom:10px" >
                       <div class="col-lg-4">
-                        <input value='<?=$this->session->userdata('origin')?>' id="pac-input" name="inputStart" type="text" class=" form-control" style="margin-top:8px;" placeholder=" <?=lang('m.startlocation')?> ">
+                        <input   id="pac-input" name="inputStart" type="text" class=" form-control" style="margin-top:8px;" placeholder=" <?=lang('m.startlocation')?> ">
                       </div>
                       <div class="col-lg-4">
-                         <input value='<?=$this->session->userdata('destination')?>' id="pac-input2" name="inputEnd" type="text" class="form-control " style="margin-top:8px;" placeholder=" <?=lang('m.destinationlocation')?> ">
+                         <input  id="pac-input2" name="inputEnd" type="text" class="form-control " style="margin-top:8px;" placeholder=" <?=lang('m.destinationlocation')?> ">
                       </div>
                       <div class="col-lg-1">
                         <button id="change-direct"  type="button" class="btn btn-default form-control  margin-6" style="margin-top:8px;" > &#60;   &#62; </button>
@@ -48,12 +48,14 @@
                                  <hr>
                                  <div class="row row-side offers" >
                                     <h3  class="col-lg-4 title" ><strong id="offerCount" class="badge badge-offer" > <?=count($results['offers']) . " </strong>  " . lang("sr.found")?> </h3>
-                                    <div class="col-lg-5 right none-display" id='sorting' style="text-align: left; float: left; font-size: 17px; padding: 0px; padding-top: 27px;" > <img src='<?=public_url("styles/images/ajax-loader-blue.gif")?>' width='25' height='25' > <?=lang('sr.sorting')?> </div>
-                                    <div class="bs-example col-lg-2 right" style="padding: 0px; padding-top:25px">
-                                      <div id="sortBy" class="btn-group btn-group-justified"  style='width:120px;'>
-                                        <a href="#" data-on="date"  class="btn my btn-sm btn-default sort active" data-sort="ASC" title="<?=lang("sr.titleSortDate")?>" > <?=lang("sr.date")?> <i class="glyphicon glyphicon-arrow-down"></i> </a>
-                                      </div>
-                                    </div>
+                                    <? if(false){ 
+                                      "<div class='col-lg-5 right none-display' id='sorting' style='text-align: left; float: left; font-size: 17px; padding: 0px; padding-top: 27px;' > <img src='<?=public_url('styles/images/ajax-loader-blue.gif')?>' width='25' height='25' > <?=lang('sr.sorting')?> </div>
+                                      <div class='bs-example col-lg-2 right' style='padding: 0px; padding-top:25px'>
+                                        <div id='sortBy' class='btn-group btn-group-justified'  style='width:120px;'>
+                                          <a href='#' data-on='date'  class='btn my btn-sm btn-default sort active' data-sort='ASC' title='<?=lang('sr.titleSortDate')?>' > <?=lang('sr.date')?> <i class='glyphicon glyphicon-arrow-down'></i> </a>
+                                        </div>
+                                      </div>";
+                                    }?>
                                  </div>
                                  <div class="row row-side">
                                       <div class="col-lg-12">
@@ -107,16 +109,19 @@
 
                                   </div>
                                    <hr style="margin-top: 10px; margin-bottom: 0px;" >
-                                  <div class='bs-docs-section clearfix trip-date'>
-                                       <div class='row row-side side-info ' >
-                                          <div  class='title' ><?=lang("sr.trip-date")?></div>
-                                       </div>
-                                       <div class='row row-side numbers'>
-                                         <i class="text-success glyphicon glyphicon-calendar two date-text" ></i>
-                                         <input type="text"  class="form-control date input-sm" id="datepicker" placeholder="<?=lang('sr.trip-date')?>">
-                                         <i class="text-danger glyphicon glyphicon-remove-circle  date-delete" style='cursor: pointer;' ></i>
-                                      </div>
-                                  </div>
+                                  <? if(false){ 
+                                           "<div class='bs-docs-section clearfix trip-date'>
+                                                <div class='row row-side side-info ' >
+                                                   <div  class='title' >" . lang("sr.trip-date") . "</div>
+                                                </div>
+                                                <div class='row row-side numbers'>
+                                                  <i class='text-success glyphicon glyphicon-calendar two date-text' ></i>
+                                                  <input type='text'  class='form-control date input-sm' id='datepicker' placeholder=" . lang('sr.trip-date'). ">
+                                                  <i class='text-danger glyphicon glyphicon-remove-circle  date-delete' style='cursor: pointer;' ></i>
+                                               </div>
+                                           </div>";
+                                      }
+                                  ?>
                                   <div class='bs-docs-section clearfix trip-time'>
                                        <br>
                                        <div  class='title ' ><i class="text-info glyphicon glyphicon-time two " style="margin-left:17px;"></i>
@@ -126,8 +131,8 @@
                                       </div>
                                   </div> <? 
 
-                              $countDate = $results['countDate'];
-                              echo dateContentWrite($countDate,  $allCount );
+                              //$countDate = $results['countDate'];
+                              //echo dateContentWrite($countDate,  $allCount );
 
                               $countTimes = $results['countTimes'];
                               echo timesContentWrite($countTimes,  $allCount );
@@ -147,21 +152,7 @@
                                   </div>
                                   <div class='row row-side numbers' style='font-size:14px;'  >
                                          <div class='col-lg-12 title ' style='padding-top:10px;'  ><a class='click' href="<?=new_url("offers/newest")?>"> <?=lang("sr.offerTrip");?> </a></div>
-                                  </div>
-                                  <?
-                                     if(  strcmp( $range, "0-2" ) == 0  ){
-                                        echo " <div class='row row-side numbers' style='font-size:14px;' >
-                                                       <div class='col-lg-12 title ' style='padding-top:10px;'  ><a class='click' href=". new_url("ara-seyahat-sonuc") . $urlWithoutRange ."&range=0-5" ."> ". lang("sr.expend50") ." </a></div>
-                                                </div>
-                                                <div class='row row-side numbers' style='font-size:14px;'  >
-                                                       <div class='col-lg-12 title ' style='padding-top:10px;'  ><a class='click' href=". new_url("ara-seyahat-sonuc") . $urlWithoutRange ."&range=1-0" ."> ". lang("sr.expend100") ."</a></div>
-                                                </div>";
-                                    }else if( strcmp( $range, "0-5" ) == 0  ) {
-                                          echo "<div class='row row-side numbers'>
-                                                       <div class='col-lg-12 title ' style='padding-top:10px;'  ><a class='click' href=". new_url("ara-seyahat-sonuc") . $urlWithoutRange ."&range=1-0" ."> ". lang("sr.expend100") ."</a></div>
-                                                </div>";
-                                    }
-                                  ?>
+                                  </div> 
                               </div>
                            <?}
                      ?>
@@ -176,8 +167,8 @@
   <script src="<?php echo public_url() . 'scripts/partial/searchMap.js'?>"></script>
   <script src="<?php echo public_url() . 'scripts/partial/slider.js'?>"></script>
   <script type="text/javascript">
-       var destination = '<?=$destination?>' ,  loading  = " <img src='<?=public_url()?>styles/images/loading2.gif' width='35' height='35' > <?=lang('loading')?> ",    get = '<?=$getDataUrl?>' ,   optionTimemin = '<?=$min * 60 * 60?>' ,  optionTimemax = '<?=$max * 60 * 60?>' ,   optionSaatMin = '<?=$min?>' ,  optionSaatMax = '<?=$max?>' ;
-       var place1 = { x:'<?=$x1?>', y:'<?=$y1?>', status:'<?=$status1?>' }, place2 = { x:'<?=$x2?>',  y:'<?=$y2?>', status:'<?=$status2?>' };
+       var  loading  = " <img src='<?=public_url()?>styles/images/loading2.gif' width='35' height='35' > <?=lang('loading')?> " ,   optionTimemin = '<?=$min * 60 * 60?>' ,  optionTimemax = '<?=$max * 60 * 60?>' ,   optionSaatMin = '<?=$min?>' ,  optionSaatMax = '<?=$max?>' ;
+       var place1 = { x:'0', y:'0', status:'0' }, place2 = { x:'0',  y:'0', status:'0' };
   </script>
   <script src="<?php echo public_url() . 'scripts/partial/alerts.js'?>"></script>
   <script src="<?php echo public_url() . 'scripts/partial/searchResult.js'?>"></script>
