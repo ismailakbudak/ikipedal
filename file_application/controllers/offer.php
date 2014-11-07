@@ -28,6 +28,7 @@ class Offer extends CI_Controller {
 		$this->load->model('event_paths');// load event_paths model for database action
 		$this->load->model('look_at');// load look_at model for database action 
 		$this->lang->load('offers');// load offer_controller language file
+		$this->per_page = 10;  // number of content for pagination
 	}
 	/*****  for Views method
 	=============================================*/
@@ -45,7 +46,7 @@ class Offer extends CI_Controller {
 		$this->load->library('pagination');
 		$config['base_url']         =  new_url('offer/index');  
 		$config['total_rows']       = $counts;
-		$config['per_page']         = 20;
+		$config['per_page']         = $this->per_page;
 		$config['uri_segment']      = 4;    
         if (strcmp(lang('lang'), "tr") == 0) {        
         	$config['first_link'   ]  = '&lsaquo; İlk'; 
@@ -88,7 +89,7 @@ class Offer extends CI_Controller {
 		$this->load->library('pagination');
 		$config['base_url']         =  new_url('offer/passed');  
 		$config['total_rows']       = $counts;
-		$config['per_page']         = 20;
+		$config['per_page']         = $this->per_page;
 		$config['uri_segment']      = 4;   
         if (strcmp(lang('lang'), "tr") == 0) {        
         	$config['first_link'   ]  = '&lsaquo; İlk'; 

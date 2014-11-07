@@ -258,9 +258,7 @@ class Offersdb extends CI_Model {
 	 **/
 	function GetUserOffer($user_id, $page, $per_page) {
         $LIMIT = $per_page;
-        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
-        	$page = 1;
-        } 
+        $page = is_intger_val($page) ? $page : 1; 
         $OFFSET = (($page-1) * $per_page);
 		$date = date('Y-m-d H:i:s'); 
 		$where = "user_id ='$user_id' AND ( CONCAT(departure_date,' ',departure_time) >='{$date}' OR CONCAT(return_date,' ', return_time)  >='{$date}')
@@ -342,9 +340,7 @@ class Offersdb extends CI_Model {
 	 ***/
 	function GetUserOfferOutofDate($user_id, $page, $per_page) {
         $LIMIT = $per_page;
-        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
-        	$page = 1;
-        } 
+        $page = is_intger_val($page) ? $page : 1;
         $OFFSET = (($page-1) * $per_page);
 		$date = date('Y-m-d H:i:s');// current date
 		$where = "user_id ='$user_id' AND CONCAT(departure_date,' ',departure_time)  <'{$date}' AND CONCAT(return_date,' ', return_time) <'{$date}'
@@ -375,9 +371,7 @@ class Offersdb extends CI_Model {
 	function search($origin, $destination, $lat, $lng, $dLat, $dLng, $range, $page, $per_page) {
         
         $LIMIT = $per_page;
-        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
-        	$page = 1;
-        }
+        $page = is_intger_val($page) ? $page : 1;
         $OFFSET = (($page-1) * $per_page);
          
 		$date = date('Y-m-d H:i:s');// current date
@@ -533,9 +527,7 @@ class Offersdb extends CI_Model {
 	function searchDate($date, $page, $per_page) {
         
         $LIMIT = $per_page;
-        if ( strcmp('', trim($page)) == 0 || !is_int($page) ) {
-        	$page = 1;
-        } 
+        $page = is_intger_val($page) ? $page : 1;
         $OFFSET = (($page-1) * $per_page);
           
 		$where = "R.is_active = 1  AND 

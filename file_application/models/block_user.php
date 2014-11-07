@@ -88,14 +88,39 @@ class Block_User extends CI_Model {
      *  @parameter  user_id
      *  RETURN rows or FALSE
      **/
-    function GetBlockedUsers($user_id) {
+    function GetBlockedUsers($user_id, $page, $per_page) {
+        $LIMIT = $per_page;
+        $page = is_intger_val($page) ? $page : 1; 
+        $OFFSET = (($page-1) * $per_page);
+        $query = $this->db->select('*, block_user.id as block_id, block_user.created_at ')
+                      ->from('block_user')
+                      ->join('users', 'users.id = block_user.blocked_user_id')
+                      ->where('block_user.user_id', $user_id)
+                      ->limit($LIMIT, $OFFSET)
+                      ->get();
+        if ($query) {
+            return $query->result_array();
+        } else {
+
+            return FALSE;
+        }
+
+    }
+
+    /**
+     *  Get blocked user count
+     *  @parameter  user_id
+     *  RETURN rows or FALSE
+     **/
+    function GetBlockedUsersCount($user_id ) {
         $query = $this->db->select('*, block_user.id as block_id, block_user.created_at ')
                       ->from('block_user')
                       ->join('users', 'users.id = block_user.blocked_user_id')
                       ->where('block_user.user_id', $user_id)
                       ->get();
         if ($query) {
-            return $query->result_array();
+            $val = $query->result_array();
+            return is_array($val) ? count($val) : 0;
         } else {
 
             return FALSE;

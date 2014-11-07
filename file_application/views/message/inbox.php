@@ -97,8 +97,15 @@
           </div>
         </div>
 
-       <!-- Delete message modal inbox
-      ===============================================================-->
+        <div class='row' > 
+          <div class="pagination">
+            <ul>
+              <?= $this->pagination->create_links(); ?>
+            </ul>
+          </div>
+        </div>     
+        
+       <!-- Delete message modal inbox -->
       <div id="delete-modal" class="modal fade" tabindex="-1" data-backdrop="static"  data-keyboard="false" data-offer_id="-1"; data-sender_userid="-1";  style="display: none;">
              <div class="modal-body">
                    <p><?=lang("m.commit")?></p>
@@ -108,8 +115,7 @@
                    <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?=lang("g.yes")?></button>
              </div>
       </div>
-       <!-- block user modal inbox
-      ===============================================================-->
+       <!-- block user modal inbox -->
       <div id="block-user-modal-inbox" class="modal fade" tabindex="-1" data-backdrop="static" data-width="440px" data-keyboard="false" data-offer_id="-1"; data-sender_userid="-1";  style="display: none;">
              <div class="modal-body">
                    <legend class="name" ></legend>
@@ -121,5 +127,5 @@
                    <button type="button" data-dismiss="modal" class="btn btn-primary width-100"><?=lang("m.doblock")?></button>
              </div>
       </div>
-      <script src="<?php echo public_url() . 'scripts/partial/messages/inbox.js'?>"></script>
+      <script src="<?= public_url() . 'scripts/partial/messages/inbox.js'?>"></script>
 

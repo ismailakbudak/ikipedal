@@ -1,5 +1,19 @@
 <?php if (!defined('BASEPATH')) {exit('No direct script access allowed');
 }
+
+/**
+ *   Param value is it integer?
+ *
+ *   @param $val 
+ *   @return boolean
+ **/
+function is_intger_val($val){
+   if ( strcmp('', trim($val)) == 0 || !is_numeric($val) || $val < 0 ) {
+        return false;
+   } 
+   return true;
+}
+
 /**
  *    Html view de yer alan veriyi şifrele
  *

@@ -33,6 +33,8 @@ class Message extends CI_Controller {
 		$unreadInbox = $this->messages->unreadInbox($this->user_id);
 		$this->data['unreadInbox'] = is_array($unreadInbox) ? $unreadInbox['number'] : 0;
 		$this->data['unreadSent'] = is_array($unreadSent) ? $unreadSent['number'] : 0;
+		$this->load->library('pagination');
+		$this->per_page = 10;  // number of content for pagination
 	}
 
 	/**
@@ -40,15 +42,12 @@ class Message extends CI_Controller {
 	 *
 	 * @return HTML view
 	 **/
-	public function index() {
-        
+	public function index($page = 1) {
         // Pagination
-		$result = $this->offersdb->GetUserOfferCount($this->userid);
-	    $counts  =  $result['offers_count'];  
-		$this->load->library('pagination');
-		$config['base_url']         =  new_url('offer/index');  
+	    $counts = $this->messages->getInboxCount($this->user_id);
+	    $config['base_url']         =  new_url('message/index');  
 		$config['total_rows']       = $counts;
-		$config['per_page']         = 20;
+		$config['per_page']         = $this->per_page;
 		$config['uri_segment']      = 4;    
         if (strcmp(lang('lang'), "tr") == 0) {        
         	$config['first_link'   ]  = '&lsaquo; İlk'; 
@@ -56,12 +55,11 @@ class Message extends CI_Controller {
 	    }else{
 	    	$config['first_link'   ]  = '&lsaquo; First'; 
 	        $config['last_link'	   ]  = 'Last &rsaquo;';
-	    }    
+	    }     
 		$this->pagination->initialize($config); 
-
-		$this->lang->load('message');// load messages language file for main
+        $this->lang->load('message');// load messages language file for main
 		$this->data['active_side'] = '#inbox';// active message menu
-		$inbox_messages = $this->messages->getInbox($this->user_id);// get sent messages
+		$inbox_messages = $this->messages->getInbox($this->user_id, $page, $per_page = $config['per_page']   );// get sent messages
 		$this->data['inbox'] = $this->checkFoto($inbox_messages);// send data to view
 		$this->loadViewMessage();// load views
 	}
@@ -71,10 +69,25 @@ class Message extends CI_Controller {
 	 *
 	 * @return HTML view
 	 **/
-	public function send() {
+	public function send($page = 1) {
+        // Pagination
+	    $counts = $this->messages->getSentCount($this->user_id);
+	    $config['base_url']         =  new_url('message/send');  
+		$config['total_rows']       = $counts;
+		$config['per_page']         = $this->per_page;
+		$config['uri_segment']      = 4;    
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }     
+		$this->pagination->initialize($config);
+
 		$this->lang->load('message');// load messages language file for main
 		$this->data['active_side'] = '#send';// active message menu
-		$sent_messages = $this->messages->getSent($this->user_id);// get sent messages received_user_id
+		$sent_messages = $this->messages->getSent($this->user_id, $page, $per_page = $config['per_page']  );// get sent messages received_user_id
 		$this->data['sent'] = $this->checkFoto($sent_messages);// send data to view
 		$this->loadViewMessage('message/sent');// load views
 	}
@@ -84,7 +97,7 @@ class Message extends CI_Controller {
 	 *
 	 * @return HTML view
 	 **/
-	public function archieve() {
+	public function archieve( ) { 
 		$this->lang->load('message');// load messages language file for main
 		$this->data['active_side'] = '#archieve';// active message menu
 		$archived_messagesInbox = $this->messages->getArchivedInbox($this->user_id);// get sent messages received_user_id
@@ -99,11 +112,27 @@ class Message extends CI_Controller {
 	 *
 	 * @return HTML view
 	 **/
-	public function block() {
+	public function block($page = 1) {
+        // Pagination
+        $this->load->model('block_user');
+	    $counts = $this->block_user->GetBlockedUsersCount($this->user_id);
+	    $config['base_url']         =  new_url('message/block');  
+		$config['total_rows']       = $counts;
+		$config['per_page']         = $this->per_page;
+		$config['uri_segment']      = 4;    
+        if (strcmp(lang('lang'), "tr") == 0) {        
+        	$config['first_link'   ]  = '&lsaquo; İlk'; 
+	        $config['last_link'	   ]  = 'Son &rsaquo;';
+	    }else{
+	    	$config['first_link'   ]  = '&lsaquo; First'; 
+	        $config['last_link'	   ]  = 'Last &rsaquo;';
+	    }     
+		$this->pagination->initialize($config);
+		
 		$this->lang->load('message');// load messages language file for main
 		$this->data['active_side'] = '#blocked';// active message menu
 		$this->load->model('block_user');// load block_user model
-		$blocks = $this->block_user->GetBlockedUsers($this->user_id);// get blocked user
+		$blocks = $this->block_user->GetBlockedUsers($this->user_id, $page, $per_page = $config['per_page']);// get blocked user
 		$this->data['blocks'] = $this->checkFoto($blocks);
 		$this->loadViewMessage('message/block');// load views
 	}

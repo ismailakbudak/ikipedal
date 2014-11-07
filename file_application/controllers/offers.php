@@ -27,6 +27,7 @@ class Offers extends CI_Controller {
 		} else {
 			$this->userid = 0;
 		}
+		$this->per_page = 30;  // number of content for pagination
 	}
 	/**
 	 * Teklif verme sayfasının ilk bölümü
@@ -278,7 +279,7 @@ class Offers extends CI_Controller {
 		$this->load->library('pagination');
 		$config['base_url']         =  ( strcmp(lang('lang'), 'tr') == 0 ? new_url('ara-seyahat-tarih-sonuc' ) : new_url('search-travel-date-result' ) ); 
 		$config['total_rows']       = $counts;
-		$config['per_page']         = 30;
+		$config['per_page']         = $this->per_page;
 		//$config['uri_segment']      = 3; 
         if (strcmp(lang('lang'), "tr") == 0) {        
         	$config['first_link'   ]  = '&lsaquo; İlk'; 
@@ -353,7 +354,7 @@ class Offers extends CI_Controller {
 		$this->load->library('pagination');
 		$config['base_url']         =  ( strcmp(lang('lang'), 'tr') == 0 ? new_url('ara-seyahat-sonuc') : new_url('search-travel-result') );   
 		$config['total_rows']       = $counts;
-		$config['per_page']         = 30;
+		$config['per_page']         = $this->per_page ;   
 		//$config['uri_segment']      = 3; 
         if (strcmp(lang('lang'), "tr") == 0) {        
         	$config['first_link'   ]  = '&lsaquo; İlk'; 

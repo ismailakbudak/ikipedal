@@ -337,7 +337,10 @@ class Messages extends CI_Model {
 	 *  @parameter  user_id
 	 *  RETURN rows or FALSE
 	 **/
-	function getSent($sender_user_id) {
+	function getSent($sender_user_id, $page, $per_page) {
+		$LIMIT = $per_page;
+        $page = is_intger_val($page) ? $page : 1; 
+        $OFFSET = (($page-1) * $per_page);
 		$query = $this->db->select('*, COUNT("id") as number, messages.created_at,  messages.event_id, users.id as received_userid ')
 		              ->from('messages')
 		              ->join('events', 'events.id = messages.event_id')
@@ -348,11 +351,39 @@ class Messages extends CI_Model {
 		              ->group_by('messages.event_id')
 		              ->group_by('messages.user_id')
 		              ->group_by('messages.readed_sender')
+		              ->order_by('messages.created_at', 'DESC') 
+		              ->limit($LIMIT, $OFFSET)
 		              ->get();
 		if ($query) {
 			return $query->result_array();
 		} else {
 
+			return FALSE;
+		}
+	}
+
+		/**
+	 *  Get user's sent messages
+	 *  @parameter  user_id
+	 *  RETURN rows or FALSE
+	 **/
+	function getSentCount($sender_user_id ) {
+		$query = $this->db->select('*, COUNT("id") as number, messages.created_at,  messages.event_id, users.id as received_userid ')
+		              ->from('messages')
+		              ->join('events', 'events.id = messages.event_id')
+		              ->join('users', 'users.id = messages.received_user_id')
+		              ->where('messages.user_id', $sender_user_id)
+		              ->where('send_visible', "1")
+		              ->where('sender_archived', "0")
+		              ->group_by('messages.event_id')
+		              ->group_by('messages.user_id')
+		              ->group_by('messages.readed_sender')
+		              ->order_by('messages.created_at', 'DESC') 
+		              ->get();
+		if ($query) {
+			$val = $query->result_array();
+			return is_array($val) ? count($val) : 0;
+		} else { 
 			return FALSE;
 		}
 	}
@@ -362,7 +393,10 @@ class Messages extends CI_Model {
 	 *  @parameter  user_id
 	 *  RETURN rows or FALSE
 	 **/
-	function getInbox($received_user_id) {
+	function getInbox($received_user_id, $page, $per_page) {
+		$LIMIT = $per_page;
+        $page = is_intger_val($page) ? $page : 1; 
+        $OFFSET = (($page-1) * $per_page);
 		$query = $this->db->select('*, COUNT("id") as number, messages.created_at, messages.event_id, users.id as sender_userid ')
 		              ->from('messages')
 		              ->join('events', 'events.id = messages.event_id')
@@ -371,8 +405,9 @@ class Messages extends CI_Model {
 		              ->where('receive_visible', "1")
 		              ->where('receive_archived', "0")
 		              ->group_by('messages.event_id')
-		              ->group_by('messages.user_id')
-		              ->group_by('messages.readed_receive')
+		              ->group_by('messages.user_id') 
+		              ->order_by('messages.created_at', 'DESC')
+		              ->limit($LIMIT, $OFFSET)
 		              ->get();
 		if ($query) {
 			return $query->result_array();
@@ -383,11 +418,36 @@ class Messages extends CI_Model {
 	}
 
 	/**
+	 *  Get user's inbox messages count
+	 *  @parameter  user_id
+	 *  RETURN rows or FALSE
+	 **/
+	function getInboxCount( $received_user_id ) {
+		$query = $this->db->select('*, COUNT("id") as number, messages.created_at, messages.event_id, users.id as sender_userid ')
+		              ->from('messages')
+		              ->join('events', 'events.id = messages.event_id')
+		              ->join('users', 'users.id = messages.user_id')
+		              ->where('messages.received_user_id', $received_user_id)
+		              ->where('receive_visible', "1")
+		              ->where('receive_archived', "0")
+		              ->group_by('messages.event_id')
+		              ->group_by('messages.user_id') 
+		              ->order_by('messages.created_at', 'DESC') 
+		              ->get();
+		if ($query) {
+			$val = $query->result_array();
+			return is_array($val) ? count($val) : 0;
+		} else { 
+			return FALSE;
+		}
+	}
+
+	/**
 	 *  Get user's inbox archived messages
 	 *  @parameter  user_id
 	 *  RETURN rows or FALSE
 	 **/
-	function getArchivedInbox($user_id) {
+	function getArchivedInbox($user_id ) {
 		$received_user_id = $user_id;
 		$query = $this->db->select('*, COUNT("id") as number, messages.created_at, messages.event_id, users.id as sender_userid ')
 		              ->from('messages')
@@ -412,7 +472,7 @@ class Messages extends CI_Model {
 	 *  @parameter  user_id
 	 *  RETURN rows or FALSE
 	 **/
-	function getArchivedSend($sender_user_id) {
+	function getArchivedSend($sender_user_id ) {
 		$query = $this->db->select('*, COUNT("id") as number, messages.created_at,  messages.event_id, users.id as received_userid ')
 		              ->from('messages')
 		              ->join('events', 'events.id = messages.event_id')
